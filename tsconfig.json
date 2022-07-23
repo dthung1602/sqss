@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "target": "es2019",
+    "sourceMap": true,
+    "outDir": "build"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "index.ts"
+  ]
+}
