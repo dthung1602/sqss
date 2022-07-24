@@ -33,7 +33,16 @@ WHERE "[title]" = 'help test';
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE "[title]" LIKE '%help test';`;
+WHERE "[title]" LIKE '%help test';
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE ":hover" = TRUE
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "::after" = false;`;
 
 const lexer = new Lexer(sqlString);
 const result = lexer.scan();
