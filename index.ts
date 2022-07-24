@@ -1,3 +1,6 @@
+import { inspect } from "util";
+import { readFileSync } from "fs";
+
 import Lexer from "./lexer";
 import TokenStream from "./token-stream";
 import Parser from "./parser";
@@ -9,7 +12,7 @@ function testLexer() {
 SET "background"  = 'blue',
     "color"       = 'white',
     "font-family" = '"Droid Sans", serif'
-WHERE id = 'target';
+WHERE id = 'target' and (class = 'abc' OR "[title]" is NOT null OR element = 'h1') AND ":hover" is False;
 
 UPDATE styles
 SET "background" = 'blue',
@@ -54,20 +57,19 @@ WHERE "::after" = false;`;
 
     for (const token of result) {
         console.log(token.toString());
+        if (token.toString() === ";") {
+            console.log("----------------------------------------");
+        }
     }
 }
 
 function testParser() {
-    const sql = `UPDATE styles
-SET "background"  = 'blue',
-    "color"       = 'white',
-    "font-family" = '"Droid Sans", serif'
-WHERE id = 'target';`;
+    const sql = readFileSync("./test.sql", "utf-8");
 
     const lexer = new Lexer(sql);
     const stream = new TokenStream(lexer);
     const parser = new Parser(stream);
 
     const root = parser.parse();
-    console.log(root);
+    console.log(inspect(root, true, null, true));
 }

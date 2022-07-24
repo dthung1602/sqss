@@ -11,4 +11,13 @@ style_statement -> identifier = value
 value -> string|true|false|null
 follow_up_style_statement -> empty | , style_statement follow_up_style_statement
 
-where_statement -> empty | WHERE identifier = string
+where_statement -> empty | WHERE compound_condition
+compound_condition -> and_condition | or_condition | atomic_condition
+
+atomic_and_condition -> condition AND condition
+and_condition -> atomic_and_condition AND and_condition
+
+or_condition -> condition OR compound_condition
+
+condition -> ( compound_condition ) | atomic_condition
+atomic_condition -> identifier operator value | identifier not operator value

@@ -1,6 +1,7 @@
 import { trim } from "./utils";
 
 // Keywords
+
 export class TokenUpdate {
     static readonly value = "UPDATE";
 
@@ -25,31 +26,8 @@ export class TokenWhere {
     }
 }
 
-export class TokenIs {
-    static readonly value = "IS";
-
-    toString() {
-        return TokenIs.value;
-    }
-}
-
-export class TokenNot {
-    static readonly value = "NOT";
-
-    toString() {
-        return TokenNot.value;
-    }
-}
-
-export class TokenLike {
-    static readonly value = "LIKE";
-
-    toString() {
-        return TokenLike.value;
-    }
-}
-
 // Special char
+
 export class TokenSemiColon {
     static readonly value = ";";
 
@@ -66,7 +44,31 @@ export class TokenComma {
     }
 }
 
+export class TokenOpenParenthesis {
+    static readonly value = "(";
+
+    toString() {
+        return TokenOpenParenthesis.value;
+    }
+}
+
+export class TokenCloseParenthesis {
+    static readonly value = ")";
+
+    toString() {
+        return TokenCloseParenthesis.value;
+    }
+}
+
 // Operator
+
+export class TokenNot {
+    static readonly value = "NOT";
+
+    toString() {
+        return TokenNot.value;
+    }
+}
 
 export class TokenEqual {
     static readonly value = "=";
@@ -76,7 +78,40 @@ export class TokenEqual {
     }
 }
 
-// Values
+export class TokenLike {
+    static readonly value = "LIKE";
+
+    toString() {
+        return TokenLike.value;
+    }
+}
+
+export class TokenIs {
+    static readonly value = "IS";
+
+    toString() {
+        return TokenIs.value;
+    }
+}
+
+export class TokenAnd {
+    static readonly value = "AND";
+
+    toString() {
+        return TokenAnd.value;
+    }
+}
+
+export class TokenOr {
+    static readonly value = "OR";
+
+    toString() {
+        return TokenOr.value;
+    }
+}
+
+// Identifier
+
 export class TokenIdentifier {
     static readonly regex = /^("[\w-.:[\]]+")|^([\w.]+)/;
     readonly raw: string;
@@ -92,8 +127,10 @@ export class TokenIdentifier {
     }
 }
 
+// Values
+
 export class TokenString {
-    static readonly regex = /^('')|^('.*[^\\]')/;
+    static readonly regex = /^('')|^('.*?[^\\]')/;
     readonly raw: string;
     readonly value: string;
 
@@ -131,9 +168,9 @@ export class TokenFalse {
     }
 }
 
-export type TokenKeyword = TokenUpdate | TokenSet | TokenWhere | TokenIs | TokenNot | TokenLike;
-export type TokenSpecialChar = TokenSemiColon | TokenComma;
-export type TokenOperator = TokenEqual;
-export type TokenValue = TokenString | TokenTrue | TokenFalse;
+export type TokenKeyword = TokenUpdate | TokenSet | TokenWhere;
+export type TokenSpecialChar = TokenSemiColon | TokenComma | TokenOpenParenthesis | TokenCloseParenthesis;
+export type TokenOperator = TokenEqual | TokenIs | TokenNot | TokenLike | TokenAnd | TokenOr;
+export type TokenValue = TokenString | TokenNull | TokenTrue | TokenFalse;
 export type Token = TokenKeyword | TokenSpecialChar | TokenOperator | TokenIdentifier | TokenValue;
 export type TokenClass = { new (...args: any[]): Token };

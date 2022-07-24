@@ -18,3 +18,10 @@ export function trimStart(str: string, ch: string): string {
 
     return start > 0 ? str.substring(start) : str;
 }
+
+export function trunkString(str: string, maxLength: number) {
+    if (str.length > maxLength) {
+        return str.slice(maxLength) + " ...";
+    }
+    return str;
+}

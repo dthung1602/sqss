@@ -34,7 +34,7 @@ export default class TokenStream {
         if (token instanceof tokenClass) {
             return token;
         }
-        throw Error(`Unexpected token ${this.curr()}`);
+        throw Error(`Expecting ${tokenClass.name}, got ${this.curr()}`);
     }
 
     hasEnded(): boolean {

@@ -13,11 +13,19 @@ export class StyleStatement {
 }
 
 export class WhereStatement {
-    public selector: string | null;
-    public value: string | null;
+    constructor(public condition: Condition | null) {}
+}
 
-    constructor(selector?: string, value?: string) {
-        this.selector = selector === undefined ? null : selector;
-        this.value = value === undefined ? null : value;
-    }
+export type Condition = AtomicCondition | AndCondition | OrCondition;
+
+export class AndCondition {
+    constructor(public conditions: Condition[]) {}
+}
+
+export class OrCondition {
+    constructor(public conditions: Condition[]) {}
+}
+
+export class AtomicCondition {
+    constructor(public selector: string, public operator: string, public negate: boolean, public value: Value) {}
 }

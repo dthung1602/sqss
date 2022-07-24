@@ -1,31 +1,40 @@
+import { trunkString } from "./utils";
 import {
     Token,
     TokenUpdate,
     TokenSet,
     TokenWhere,
-    TokenIs,
-    TokenNot,
-    TokenLike,
     TokenSemiColon,
     TokenComma,
+    TokenOpenParenthesis,
+    TokenCloseParenthesis,
+    TokenNot,
     TokenEqual,
+    TokenLike,
+    TokenIs,
+    TokenAnd,
+    TokenOr,
+    TokenIdentifier,
+    TokenString,
     TokenNull,
     TokenTrue,
     TokenFalse,
-    TokenIdentifier,
-    TokenString,
 } from "./token";
 
 const ExactMatchTokens = [
     TokenUpdate,
     TokenSet,
     TokenWhere,
-    TokenIs,
-    TokenNot,
-    TokenLike,
     TokenSemiColon,
     TokenComma,
+    TokenOpenParenthesis,
+    TokenCloseParenthesis,
+    TokenNot,
     TokenEqual,
+    TokenLike,
+    TokenIs,
+    TokenAnd,
+    TokenOr,
     TokenNull,
     TokenTrue,
     TokenFalse,
@@ -57,7 +66,7 @@ export default class Lexer {
         if (result === null) {
             result = this.matchRegex();
             if (result === null) {
-                throw new Error("Invalid syntax");
+                throw new Error(`Invalid syntax: ${trunkString(this.input, 20)}`);
             }
         }
         this.input = this.input.slice(result.shiftLen).trimStart();

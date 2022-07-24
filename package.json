@@ -7,10 +7,12 @@
   "scripts": {
     "lint": "eslint --fix .",
     "build": "tsc",
-    "test": "tsc && node build/index.js"
+    "build-test": "tsc && node build/index.js",
+    "test": "node build/index.js"
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "eslint": "^8.20.0",
