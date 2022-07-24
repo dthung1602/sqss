@@ -1,141 +1,20 @@
-import { trim } from "./utils";
-
-// Keywords
-class TokenUpdate {
-    static readonly value = "UPDATE";
-
-    toString() {
-        return TokenUpdate.value;
-    }
-}
-
-class TokenSet {
-    static readonly value = "SET";
-
-    toString() {
-        return TokenSet.value;
-    }
-}
-
-class TokenWhere {
-    static readonly value = "WHERE";
-
-    toString() {
-        return TokenWhere.value;
-    }
-}
-
-class TokenIs {
-    static readonly value = "IS";
-
-    toString() {
-        return TokenIs.value;
-    }
-}
-
-class TokenNot {
-    static readonly value = "NOT";
-
-    toString() {
-        return TokenNot.value;
-    }
-}
-
-class TokenLike {
-    static readonly value = "LIKE";
-
-    toString() {
-        return TokenLike.value;
-    }
-}
-
-// Special char
-class TokenSemiColon {
-    static readonly value = ";";
-
-    toString() {
-        return TokenSemiColon.value;
-    }
-}
-
-class TokenComma {
-    static readonly value = ",";
-
-    toString() {
-        return TokenComma.value;
-    }
-}
-
-// Operator
-
-class TokenEqual {
-    static readonly value = "=";
-
-    toString() {
-        return TokenEqual.value;
-    }
-}
-
-// Values
-class TokenIdentifier {
-    static readonly regex = /^("[\w-.:[\]]+")|^([\w.]+)/;
-    readonly raw: string;
-    readonly value: string;
-
-    constructor(value: string) {
-        this.raw = value;
-        this.value = trim(value, '"').trim();
-    }
-
-    toString() {
-        return this.value;
-    }
-}
-
-class TokenString {
-    static readonly regex = /^('')|^('.*[^\\]')/;
-    readonly raw: string;
-    readonly value: string;
-
-    constructor(value: string) {
-        this.raw = value;
-        this.value = trim(value, "'").trim();
-    }
-
-    toString() {
-        return this.value;
-    }
-}
-
-class TokenNull {
-    static readonly value = "NULL";
-
-    toString() {
-        return TokenNull.value;
-    }
-}
-
-class TokenTrue {
-    static readonly value = "TRUE";
-
-    toString() {
-        return TokenTrue.value;
-    }
-}
-
-class TokenFalse {
-    static readonly value = "FALSE";
-
-    toString() {
-        return TokenFalse.value;
-    }
-}
-
-type TokenKeyword = TokenUpdate | TokenSet | TokenWhere | TokenIs | TokenNot | TokenLike;
-type TokenSpecialChar = TokenSemiColon | TokenComma;
-type TokenOperator = TokenEqual;
-type TokenValue = TokenIdentifier | TokenString | TokenTrue | TokenFalse;
-type Token = TokenKeyword | TokenSpecialChar | TokenOperator | TokenValue;
+import {
+    Token,
+    TokenUpdate,
+    TokenSet,
+    TokenWhere,
+    TokenIs,
+    TokenNot,
+    TokenLike,
+    TokenSemiColon,
+    TokenComma,
+    TokenEqual,
+    TokenNull,
+    TokenTrue,
+    TokenFalse,
+    TokenIdentifier,
+    TokenString,
+} from "./token";
 
 const ExactMatchTokens = [
     TokenUpdate,
@@ -153,7 +32,7 @@ const ExactMatchTokens = [
 ];
 const RegexMatchTokens = [TokenIdentifier, TokenString];
 
-class Lexer {
+export default class Lexer {
     input: string;
 
     constructor(input: string) {
@@ -212,5 +91,3 @@ class Lexer {
         return null;
     }
 }
-
-export default Lexer;

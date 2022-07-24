@@ -1,0 +1,14 @@
+TERMINALS:
+identifier string true false null
+UPDATE SET WHERE = ; ,
+
+NON-TERMINALS:
+begin -> update_statement
+update_statement -> UPDATE identifier SET style_statements where_statement ;
+
+style_statements -> style_statement follow_up_style_statement
+style_statement -> identifier = value
+value -> string|true|false|null
+follow_up_style_statement -> empty | , style_statement follow_up_style_statement
+
+where_statement -> empty | WHERE identifier = string
