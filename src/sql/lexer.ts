@@ -1,4 +1,4 @@
-import { trunkString } from "./utils";
+import { trunkString } from "../utils";
 import {
     Token,
     TokenUpdate,

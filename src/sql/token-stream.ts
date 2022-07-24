@@ -38,6 +38,6 @@ export default class TokenStream {
     }
 
     hasEnded(): boolean {
-        return this.pos === this.tokens.length;
+        return this.pos === this.tokens.length - 1;
     }
 }

@@ -1,9 +1,9 @@
 import { inspect } from "util";
 import { readFileSync } from "fs";
 
-import Lexer from "./lexer";
-import TokenStream from "./token-stream";
-import Parser from "./parser";
+import Lexer from "./src/sql/lexer";
+import TokenStream from "./src/sql/token-stream";
+import Parser from "./src/sql/parser";
 
 testParser();
 

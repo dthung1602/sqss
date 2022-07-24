@@ -6,8 +6,8 @@
   "description": "Style your HTML with some good old SQL",
   "scripts": {
     "lint": "eslint --fix .",
-    "build": "tsc",
-    "build-test": "tsc && node build/index.js",
+    "build": "rm -rf build && tsc",
+    "build-test": "rm -rf build && tsc && node build/index.js",
     "test": "node build/index.js"
   },
   "dependencies": {},

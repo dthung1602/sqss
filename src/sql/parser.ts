@@ -4,11 +4,10 @@ import {
     AtomicCondition,
     Condition,
     OrCondition,
-    Root,
-    StyleStatement,
+    SqssStyleSheet,
+    StyleAssignment,
     UpdateStatement,
     Value,
-    WhereStatement,
 } from "./ast";
 import {
     TokenComma,
@@ -33,38 +32,43 @@ import {
 export default class Parser {
     constructor(public stream: TokenStream) {}
 
-    parse(): Root {
-        return this.parseUpdateStatement();
+    parse(): SqssStyleSheet {
+        const styleSheet = new SqssStyleSheet();
+        while (!this.stream.hasEnded()) {
+            const update = this.parseUpdateStatement();
+            styleSheet.updates.push(update);
+        }
+        return styleSheet;
     }
 
-    private parseUpdateStatement(): Root {
+    private parseUpdateStatement(): UpdateStatement {
         this.stream.expectedNext(TokenUpdate);
         const table = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
         this.stream.expectedNext(TokenSet);
-        const styleStatements = this.parseStyleStatements();
-        const whereStatements = this.parseWhereStatements();
+        const styleAssignments = this.parseStyleAssignments();
+        const condition = this.parseWhereCondition();
         this.stream.expectedNext(TokenSemiColon);
-        return new Root(new UpdateStatement(table.value, styleStatements, whereStatements));
+        return new UpdateStatement(table.value, styleAssignments, condition);
     }
 
-    private parseStyleStatements(): StyleStatement[] {
-        const statements: StyleStatement[] = [];
+    private parseStyleAssignments(): StyleAssignment[] {
+        const assignments: StyleAssignment[] = [];
         // eslint-disable-next-line no-constant-condition
         while (true) {
-            statements.push(this.parseStyleStatement());
+            assignments.push(this.parseStyleAssignment());
             if (!(this.stream.next() instanceof TokenComma)) {
                 this.stream.back();
                 break;
             }
         }
-        return statements;
+        return assignments;
     }
 
-    private parseStyleStatement(): StyleStatement {
-        const field = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+    private parseStyleAssignment(): StyleAssignment {
+        const property = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
         this.stream.expectedNext(TokenEqual);
         const value = this.parseValue();
-        return new StyleStatement(field.value, value);
+        return new StyleAssignment(property.value, value);
     }
 
     private parseValue(): Value {
@@ -84,12 +88,12 @@ export default class Parser {
         throw new Error(`Expecting a value token, got ${token}`);
     }
 
-    private parseWhereStatements(): WhereStatement {
+    private parseWhereCondition(): Condition | null {
         const token = this.stream.next();
         if (token === null) {
-            return new WhereStatement(null);
+            return null;
         }
-        return new WhereStatement(this.parseCondition());
+        return this.parseCondition();
     }
 
     private parseCondition(): Condition {

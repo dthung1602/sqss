@@ -1,4 +1,4 @@
-import { trim } from "./utils";
+import { trim } from "../utils";
 
 // Keywords
 
