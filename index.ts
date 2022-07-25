@@ -4,6 +4,7 @@ import { readFileSync } from "fs";
 import Lexer from "./src/sql/lexer";
 import TokenStream from "./src/sql/token-stream";
 import Parser from "./src/sql/parser";
+import Transverser from "./src/sql/transverser";
 
 testParser();
 
@@ -72,4 +73,7 @@ function testParser() {
 
     const root = parser.parse();
     console.log(inspect(root, true, null, true));
+
+    const transverser = new Transverser(root);
+    transverser.transverse();
 }

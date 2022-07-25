@@ -3,6 +3,7 @@ import {
     AndCondition,
     AtomicCondition,
     Condition,
+    Operator,
     OrCondition,
     SqssStyleSheet,
     StyleAssignment,
@@ -162,7 +163,7 @@ export default class Parser {
         return not;
     }
 
-    private parseOperator(): string {
+    private parseOperator(): Operator {
         const token = this.stream.next();
         for (const cls of [TokenEqual, TokenLike, TokenIs]) {
             if (token instanceof cls) {

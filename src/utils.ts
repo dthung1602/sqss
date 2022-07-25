@@ -25,3 +25,45 @@ export function trunkString(str: string, maxLength: number) {
     }
     return str;
 }
+
+export function assertEqual(value: unknown, expected: unknown) {
+    if (value !== expected) {
+        throw new Error(`Expected ${expected}, got ${value}`);
+    }
+}
+
+export function isSimpleSelector(str: string): boolean {
+    return ["id", "class", "element"].includes(str);
+}
+
+const ATTR_NAME_REGEX = /\[.+]/;
+
+export function isAttrSelector(str: string): boolean {
+    return Boolean(str.match(ATTR_NAME_REGEX));
+}
+
+const PSEUDO_ELEMENT_REGEX = /::[^:]+/;
+
+export function isPseudoElementSelector(str: string): boolean {
+    return Boolean(str.match(PSEUDO_ELEMENT_REGEX));
+}
+
+const PSEUDO_CLASS_REGEX = /:[^:]+/;
+
+export function isPseudoClassSelector(str: string): boolean {
+    return Boolean(str.match(PSEUDO_CLASS_REGEX));
+}
+
+const KEBAB_CASE_REGEX = /^-?-?[a-z]+(-[a-z]+)*$/;
+
+export function isKebabCase(str: string): boolean {
+    return Boolean(str.match(KEBAB_CASE_REGEX));
+}
+
+export function isString(value: unknown) {
+    return value instanceof String || typeof value === "string";
+}
+
+export function isBool(value: unknown) {
+    return value instanceof Boolean || typeof value === "boolean";
+}

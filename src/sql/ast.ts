@@ -1,6 +1,7 @@
 export type Value = string | boolean | null;
 export type Condition = AtomicCondition | AndCondition | OrCondition;
-export type Node = SqssStyleSheet | UpdateStatement | StyleAssignment | Condition;
+export type Operator = "IS" | "LIKE" | "=";
+export type SqssNode = SqssStyleSheet | UpdateStatement | StyleAssignment | Condition;
 
 export class SqssStyleSheet {
     constructor(public updates: UpdateStatement[] = []) {}
@@ -23,5 +24,5 @@ export class OrCondition {
 }
 
 export class AtomicCondition {
-    constructor(public selector: string, public operator: string, public negate: boolean, public value: Value) {}
+    constructor(public selector: string, public operator: Operator, public negate: boolean, public value: Value) {}
 }
