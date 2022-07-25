@@ -1,59 +1,75 @@
 type CSSValue = string | boolean;
 
-export class CSSStyleSheet {
-    constructor(public rules: StyleRule[]) {}
+export abstract class CSSNode {}
+
+export class CSSStyleSheet extends CSSNode {
+    constructor(public rules: StyleRule[]) {
+        super();
+    }
 }
 
-export class StyleRule {
-    constructor(public selectors: CombinedSelector[], public styles: StyleDeclaration[]) {}
+export class StyleRule extends CSSNode {
+    constructor(public selectors: CombinedSelector[], public styles: StyleDeclaration[]) {
+        super();
+    }
 }
 
-export class StyleDeclaration {
-    constructor(public property: string, public value: CSSValue) {}
+export class StyleDeclaration extends CSSNode {
+    constructor(public property: string, public value: CSSValue) {
+        super();
+    }
 }
 
-export class CombinedSelector {
-    constructor(public selectors: AtomicSelector[]) {}
+export class CombinedSelector extends CSSNode {
+    constructor(public selectors: AtomicSelector[]) {
+        super();
+    }
 }
 
-export type AtomicSelector =
-    | ElementSelector
-    | IdSelector
-    | ClassSelector
-    | AttributeSelector
-    | PseudoClassSelector
-    | PseudoElementSelector
-    | NotSelector
-    | AllSelector;
+export abstract class AtomicSelector extends CSSNode {}
 
-export class ElementSelector {
-    constructor(public value: string) {}
+export class ElementSelector extends AtomicSelector {
+    constructor(public value: string) {
+        super();
+    }
 }
 
-export class IdSelector {
-    constructor(public value: string) {}
+export class IdSelector extends AtomicSelector {
+    constructor(public value: string) {
+        super();
+    }
 }
 
-export class ClassSelector {
-    constructor(public value: string) {}
+export class ClassSelector extends AtomicSelector {
+    constructor(public value: string) {
+        super();
+    }
 }
 
 export type AttributeOperator = "" | "=" | "^=" | "$=" | "*=";
 
-export class AttributeSelector {
-    constructor(public attribute: string, public operator: AttributeOperator, public value: string) {}
+export class AttributeSelector extends AtomicSelector {
+    constructor(public attribute: string, public operator: AttributeOperator, public value: string) {
+        super();
+    }
 }
 
-export class PseudoClassSelector {
-    constructor(public value: string) {}
+export class PseudoClassSelector extends AtomicSelector {
+    constructor(public value: string) {
+        super();
+    }
 }
 
-export class PseudoElementSelector {
-    constructor(public value: string) {}
+export class PseudoElementSelector extends AtomicSelector {
+    constructor(public value: string) {
+        super();
+    }
 }
 
-export class NotSelector {
-    constructor(public selector: CombinedSelector) {}
+export class NotSelector extends AtomicSelector {
+    constructor(public selector: CombinedSelector) {
+        super();
+    }
 }
 
-export class AllSelector {}
+export class AllSelector extends AtomicSelector {}

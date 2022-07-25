@@ -40,4 +40,12 @@ export default class TokenStream {
     hasEnded(): boolean {
         return this.pos === this.tokens.length - 1;
     }
+
+    snapShot(): number {
+        return this.pos;
+    }
+
+    restoreSnapShot(snapshot: number) {
+        this.pos = snapshot;
+    }
 }

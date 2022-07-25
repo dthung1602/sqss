@@ -1,3 +1,7 @@
+//=============================================
+//                  STRING
+//=============================================
+
 // Copied from https://stackoverflow.com/a/55292366/7342188
 export function trim(str: string, ch: string): string {
     return trimStart(trimEnd(str, ch), ch);
@@ -26,11 +30,23 @@ export function trunkString(str: string, maxLength: number) {
     return str;
 }
 
-export function assertEqual(value: unknown, expected: unknown) {
+//=============================================
+//                  ASSERT
+//=============================================
+
+export function assertEqual(value: unknown, expected: unknown, message = "") {
     if (value !== expected) {
-        throw new Error(`Expected ${expected}, got ${value}`);
+        throw new Error(message || `Expected ${expected}, got ${value}`);
     }
 }
+
+export function assertTrue(value: unknown, message = "") {
+    assertEqual(value, true, message);
+}
+
+//=============================================
+//               CSS SELECTOR
+//=============================================
 
 export function isSimpleSelector(str: string): boolean {
     return ["id", "class", "element"].includes(str);
@@ -53,6 +69,10 @@ const PSEUDO_CLASS_REGEX = /:[^:]+/;
 export function isPseudoClassSelector(str: string): boolean {
     return Boolean(str.match(PSEUDO_CLASS_REGEX));
 }
+
+//=============================================
+//                 GENERIC
+//=============================================
 
 const KEBAB_CASE_REGEX = /^-?-?[a-z]+(-[a-z]+)*$/;
 

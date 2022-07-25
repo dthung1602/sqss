@@ -1,28 +1,57 @@
-export type Value = string | boolean | null;
-export type Condition = AtomicCondition | AndCondition | OrCondition;
-export type Operator = "IS" | "LIKE" | "=";
-export type SqssNode = SqssStyleSheet | UpdateStatement | StyleAssignment | Condition;
+export abstract class SqssNode {}
 
-export class SqssStyleSheet {
-    constructor(public updates: UpdateStatement[] = []) {}
+export class SqssStyleSheet extends SqssNode {
+    constructor(public updates: UpdateStatement[] = []) {
+        super();
+    }
 }
 
-export class UpdateStatement {
-    constructor(public table: string, public assignments: StyleAssignment[], public where: Condition | null) {}
+export class UpdateStatement extends SqssNode {
+    constructor(public table: string, public assignments: StyleAssignment[], public where: Condition | null) {
+        super();
+    }
 }
 
-export class StyleAssignment {
-    constructor(public property: string, public value: Value) {}
+export class StyleAssignment extends SqssNode {
+    constructor(public property: string, public value: string | boolean) {
+        super();
+    }
 }
 
-export class AndCondition {
-    constructor(public conditions: Condition[]) {}
+export abstract class Condition extends SqssNode {}
+
+export class AndCondition extends Condition {
+    constructor(public conditions: Condition[]) {
+        super();
+    }
 }
 
-export class OrCondition {
-    constructor(public conditions: Condition[]) {}
+export class OrCondition extends Condition {
+    constructor(public conditions: Condition[]) {
+        super();
+    }
 }
 
-export class AtomicCondition {
-    constructor(public selector: string, public operator: Operator, public negate: boolean, public value: Value) {}
+export abstract class AtomicCondition extends Condition {
+    protected constructor(public selector: string, public negate: boolean, public value: string | boolean | null) {
+        super();
+    }
+}
+
+export class EqualCondition extends AtomicCondition {
+    constructor(public selector: string, public negate: boolean, public value: string | boolean | null) {
+        super(selector, negate, value);
+    }
+}
+
+export class IsCondition extends AtomicCondition {
+    constructor(public selector: string, public negate: boolean, public value: boolean | null) {
+        super(selector, negate, value);
+    }
+}
+
+export class LikeCondition extends AtomicCondition {
+    constructor(public selector: string, public negate: boolean, public value: string) {
+        super(selector, negate, value);
+    }
 }

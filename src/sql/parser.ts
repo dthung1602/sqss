@@ -1,34 +1,36 @@
-import TokenStream from "./token-stream";
 import {
     AndCondition,
     AtomicCondition,
     Condition,
-    Operator,
+    EqualCondition,
+    IsCondition,
+    LikeCondition,
     OrCondition,
     SqssStyleSheet,
     StyleAssignment,
     UpdateStatement,
-    Value,
 } from "./ast";
 import {
+    TokenAnd,
+    TokenCloseParenthesis,
     TokenComma,
     TokenEqual,
     TokenFalse,
     TokenIdentifier,
+    TokenIs,
     TokenLike,
     TokenNot,
+    TokenNotEqual,
     TokenNull,
-    TokenIs,
+    TokenOpenParenthesis,
+    TokenOr,
+    TokenSemiColon,
     TokenSet,
     TokenString,
     TokenTrue,
     TokenUpdate,
-    TokenOpenParenthesis,
-    TokenCloseParenthesis,
-    TokenAnd,
-    TokenOr,
-    TokenSemiColon,
 } from "./token";
+import TokenStream from "./token-stream";
 
 export default class Parser {
     constructor(public stream: TokenStream) {}
@@ -68,25 +70,8 @@ export default class Parser {
     private parseStyleAssignment(): StyleAssignment {
         const property = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
         this.stream.expectedNext(TokenEqual);
-        const value = this.parseValue();
+        const value = this.parseCSSValue();
         return new StyleAssignment(property.value, value);
-    }
-
-    private parseValue(): Value {
-        const token = this.stream.next();
-        if (token instanceof TokenString) {
-            return token.value;
-        }
-        if (token instanceof TokenTrue) {
-            return true;
-        }
-        if (token instanceof TokenFalse) {
-            return false;
-        }
-        if (token instanceof TokenNull) {
-            return null;
-        }
-        throw new Error(`Expecting a value token, got ${token}`);
     }
 
     private parseWhereCondition(): Condition | null {
@@ -106,6 +91,7 @@ export default class Parser {
             return condition;
         }
 
+        // AND operator has higher precedence than OR
         const conditions: Condition[] = [];
         do {
             conditions.push(this.parseAndAtomicCondition());
@@ -119,7 +105,7 @@ export default class Parser {
         return new OrCondition(conditions);
     }
 
-    private parseAndAtomicCondition(): AndCondition | AtomicCondition {
+    private parseAndAtomicCondition(): Condition {
         const conditions: Condition[] = [];
         let nextToken;
         do {
@@ -146,15 +132,44 @@ export default class Parser {
     }
 
     private parseAtomicCondition(): AtomicCondition {
+        for (const parseFunc of [this.parseEqualCondition, this.parseLikeCondition, this.parseIsCondition]) {
+            const snapshot = this.stream.snapShot();
+            try {
+                return parseFunc.bind(this)();
+            } catch (e) {
+                this.stream.restoreSnapShot(snapshot);
+            }
+        }
+        throw new Error("Cannot parse condition");
+    }
+
+    private parseEqualCondition(): EqualCondition {
         const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
-        let negate = this.parseNot();
-        const operator = this.parseOperator();
-        if (!negate) {
-            negate = this.parseNot();
+        const operator = this.stream.next();
+        let negate = false;
+        if (operator instanceof TokenNotEqual) {
+            negate = true;
+        } else if (!(operator instanceof TokenEqual)) {
+            throw new Error(`Expecting = or !=, got ${operator}`);
         }
         const value = this.parseValue();
+        return new EqualCondition(selector.value, negate, value);
+    }
 
-        return new AtomicCondition(selector.value, operator, negate, value);
+    private parseLikeCondition(): LikeCondition {
+        const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+        const negate = this.parseNot();
+        this.stream.expectedNext(TokenLike);
+        const value = this.stream.expectedNext(TokenString) as TokenString;
+        return new LikeCondition(selector.value, negate, value.value);
+    }
+
+    private parseIsCondition(): IsCondition {
+        const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+        this.stream.expectedNext(TokenIs);
+        const negate = this.parseNot();
+        const value = this.parseNonStringValue();
+        return new IsCondition(selector.value, negate, value);
     }
 
     private parseNot(): boolean {
@@ -163,13 +178,48 @@ export default class Parser {
         return not;
     }
 
-    private parseOperator(): Operator {
+    private parseValue(): string | boolean | null {
         const token = this.stream.next();
-        for (const cls of [TokenEqual, TokenLike, TokenIs]) {
-            if (token instanceof cls) {
-                return cls.value;
-            }
+        if (token instanceof TokenString) {
+            return token.value;
         }
-        throw new Error(`Expecting an operator, got ${token}`);
+        if (token instanceof TokenTrue) {
+            return true;
+        }
+        if (token instanceof TokenFalse) {
+            return false;
+        }
+        if (token instanceof TokenNull) {
+            return null;
+        }
+        throw new Error(`Expecting a value token, got ${token}`);
+    }
+
+    private parseNonStringValue(): boolean | null {
+        const token = this.stream.next();
+        if (token instanceof TokenTrue) {
+            return true;
+        }
+        if (token instanceof TokenFalse) {
+            return false;
+        }
+        if (token instanceof TokenNull) {
+            return null;
+        }
+        throw new Error(`Expecting a value token, got ${token}`);
+    }
+
+    private parseCSSValue(): string | boolean {
+        const token = this.stream.next();
+        if (token instanceof TokenString) {
+            return token.value;
+        }
+        if (token instanceof TokenTrue) {
+            return true;
+        }
+        if (token instanceof TokenFalse) {
+            return false;
+        }
+        throw new Error(`Expecting a CSS value token, got ${token}`);
     }
 }

@@ -78,6 +78,14 @@ export class TokenEqual {
     }
 }
 
+export class TokenNotEqual {
+    static readonly value = "!=";
+
+    toString() {
+        return TokenEqual.value;
+    }
+}
+
 export class TokenLike {
     static readonly value = "LIKE";
 
@@ -170,7 +178,7 @@ export class TokenFalse {
 
 export type TokenKeyword = TokenUpdate | TokenSet | TokenWhere;
 export type TokenSpecialChar = TokenSemiColon | TokenComma | TokenOpenParenthesis | TokenCloseParenthesis;
-export type TokenOperator = TokenEqual | TokenIs | TokenNot | TokenLike | TokenAnd | TokenOr;
+export type TokenOperator = TokenEqual | TokenNotEqual | TokenIs | TokenNot | TokenLike | TokenAnd | TokenOr;
 export type TokenValue = TokenString | TokenNull | TokenTrue | TokenFalse;
 export type Token = TokenKeyword | TokenSpecialChar | TokenOperator | TokenIdentifier | TokenValue;
 export type TokenClass = { new (...args: any[]): Token };
