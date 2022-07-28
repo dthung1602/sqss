@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { readFileSync } from "fs";
 import { inspect } from "util";
 
+import { SqssNode } from "./src/sql/ast";
 import Lexer from "./src/sql/lexer";
 import Parser from "./src/sql/parser";
+import SemanticAnalyzer from "./src/sql/semantic-analyzer ";
 import TokenStream from "./src/sql/token-stream";
 import Transverser from "./src/transverser";
 
@@ -74,6 +77,7 @@ function testParser() {
     const root = parser.parse();
     console.log(inspect(root, true, null, true));
 
-    const transverser = new Transverser(root);
-    transverser.transverse();
+    const semanticAnalyzer = new SemanticAnalyzer();
+    const transverser = new Transverser<SqssNode, void, null>(SqssNode, root, semanticAnalyzer);
+    transverser.transverse(null);
 }

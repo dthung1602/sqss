@@ -1,4 +1,4 @@
-export abstract class SqssNode {}
+export class SqssNode {}
 
 export class SqssStyleSheet extends SqssNode {
     constructor(public updates: UpdateStatement[] = []) {
