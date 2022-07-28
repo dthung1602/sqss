@@ -32,7 +32,12 @@ export default class Transverser<Node, Val, Ctx> {
         }
 
         // @ts-ignore
-        const postVisit = this.visitor[`postVisit${node.constructor.name}`];
+        const name = `postVisit${node.constructor.name}`;
+        // @ts-ignore
+        const postVisit = this.visitor[name];
+        if (!(postVisit instanceof Function)) {
+            throw new Error(`Expecting ${name} to be a function, found ${postVisit} `);
+        }
         return postVisit.bind(this.visitor)(node, context, data);
     }
 }

@@ -10,7 +10,7 @@ export class CSSStyleSheet extends CSSNode {
 }
 
 export class StyleRule extends CSSNode {
-    constructor(public selectors: Selector[], public styles: StyleDeclaration[]) {
+    constructor(public selector: Selector, public styles: StyleDeclaration[]) {
         super();
     }
 }
@@ -30,7 +30,7 @@ export class AndSelector extends Selector {
 }
 
 export class OrSelector extends Selector {
-    constructor(public selectors: AtomicSelector | AndSelector[]) {
+    constructor(public selectors: (AtomicSelector | AndSelector)[]) {
         super();
     }
 }

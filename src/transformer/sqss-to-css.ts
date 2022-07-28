@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {
+    AllSelector,
     AndSelector,
     AtomicSelector,
     AttributeOperator,
@@ -41,7 +42,8 @@ export default class SQSSToCSSTransformer implements SQSSVisitor<CSSNode, void> 
     }
 
     postVisitUpdateStatement(node: UpdateStatement, context: void, data: STCAgg<UpdateStatement>): StyleRule {
-        return new StyleRule(data.where, data.assignments as StyleDeclaration[]);
+        const where = data.where === null ? new AllSelector() : data.where;
+        return new StyleRule(where, data.assignments as StyleDeclaration[]);
     }
 
     postVisitStyleAssignment(node: StyleAssignment, context: void, data: STCAgg<StyleAssignment>): StyleDeclaration {

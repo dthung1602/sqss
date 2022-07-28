@@ -3,6 +3,7 @@ import { readFileSync } from "fs";
 import { inspect } from "util";
 
 import { CSSNode } from "./src/css/ast";
+import Generator from "./src/css/generator";
 import { SqssNode } from "./src/sql/ast";
 import Lexer from "./src/sql/lexer";
 import Parser from "./src/sql/parser";
@@ -101,4 +102,9 @@ function testParser() {
     const transpiler = new SQSSToCSSTransformer();
     const cssTree: CSSNode = new Transverser<SqssNode, CSSNode, void>(SqssNode, root, transpiler).transverse();
     printTree(cssTree, "CSS TREE");
+
+    const cssGenerator = new Generator();
+    const css: string = new Transverser<CSSNode, string, void>(CSSNode, cssTree, cssGenerator).transverse();
+    console.log("\nFINAL CSS TEXT:\n");
+    console.log(css);
 }

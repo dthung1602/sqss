@@ -4,4 +4,4 @@ SET "background"  = 'blue',
     "font-family" = '"Droid Sans", serif'
 WHERE "::after" is not true
   AND ("[title]" LIKE '%abc%' or ":after" is not false or "id" = 'xyz')
-  and (element = '1fakjdf' or id = '123');
+  and (element = 'h2' or id = 'myid123');
