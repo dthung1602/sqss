@@ -95,7 +95,7 @@ function testParser() {
     printTree(root, "AFTER SIMPLIFY NEGATION");
 
     const flatten = new FlattenCondition();
-    new Transverser<SqssNode, void, void>(SqssNode, root, flatten).transverse();
+    new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, flatten).transverse();
     printTree(root, "AFTER FLATTEN");
 
     const transpiler = new SQSSToCSSTransformer();
