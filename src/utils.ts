@@ -52,19 +52,19 @@ export function isSimpleSelector(str: string): boolean {
     return ["id", "class", "element"].includes(str);
 }
 
-const ATTR_NAME_REGEX = /\[.+]/;
+const ATTR_NAME_REGEX = /^\[.+]$/;
 
 export function isAttrSelector(str: string): boolean {
     return Boolean(str.match(ATTR_NAME_REGEX));
 }
 
-const PSEUDO_ELEMENT_REGEX = /::[^:]+/;
+const PSEUDO_ELEMENT_REGEX = /^::[^:]+$/;
 
 export function isPseudoElementSelector(str: string): boolean {
     return Boolean(str.match(PSEUDO_ELEMENT_REGEX));
 }
 
-const PSEUDO_CLASS_REGEX = /:[^:]+/;
+const PSEUDO_CLASS_REGEX = /^:[^:]+$/;
 
 export function isPseudoClassSelector(str: string): boolean {
     return Boolean(str.match(PSEUDO_CLASS_REGEX));

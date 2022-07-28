@@ -10,7 +10,7 @@ export class CSSStyleSheet extends CSSNode {
 }
 
 export class StyleRule extends CSSNode {
-    constructor(public selectors: CombinedSelector[], public styles: StyleDeclaration[]) {
+    constructor(public selectors: Selector[], public styles: StyleDeclaration[]) {
         super();
     }
 }
@@ -21,13 +21,21 @@ export class StyleDeclaration extends CSSNode {
     }
 }
 
-export class CombinedSelector extends CSSNode {
+export abstract class Selector extends CSSNode {}
+
+export class AndSelector extends Selector {
     constructor(public selectors: AtomicSelector[]) {
         super();
     }
 }
 
-export abstract class AtomicSelector extends CSSNode {}
+export class OrSelector extends Selector {
+    constructor(public selectors: AtomicSelector | AndSelector[]) {
+        super();
+    }
+}
+
+export abstract class AtomicSelector extends Selector {}
 
 export class ElementSelector extends AtomicSelector {
     constructor(public value: string) {
@@ -56,19 +64,19 @@ export class AttributeSelector extends AtomicSelector {
 }
 
 export class PseudoClassSelector extends AtomicSelector {
-    constructor(public value: string) {
+    constructor(public klass: string, public value: boolean) {
         super();
     }
 }
 
 export class PseudoElementSelector extends AtomicSelector {
-    constructor(public value: string) {
+    constructor(public element: string, public value: boolean) {
         super();
     }
 }
 
 export class NotSelector extends AtomicSelector {
-    constructor(public selector: CombinedSelector) {
+    constructor(public selector: AtomicSelector) {
         super();
     }
 }

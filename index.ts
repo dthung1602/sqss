@@ -9,6 +9,7 @@ import Parser from "./src/sql/parser";
 import SemanticAnalyzer from "./src/sql/semantic-analyzer ";
 import TokenStream from "./src/sql/token-stream";
 import SqssConditionSimplifier from "./src/transformer/sqss-condition-simplifier";
+import SQSSToCSSTransformer from "./src/transformer/sqss-to-css";
 import Transverser from "./src/transverser";
 
 testParser();
@@ -70,7 +71,7 @@ WHERE "::after" = false;`;
 }
 
 function printTree(root: SqssNode | CSSNode, message: string) {
-    console.log(message + ": ");
+    console.log("\n" + message + ": \n");
     console.log(inspect(root, true, null, true));
     console.log("--------------------------------------------------------------------------------------------------\n");
 }
@@ -91,4 +92,8 @@ function testParser() {
     const simplifier = new SqssConditionSimplifier();
     new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, simplifier).transverse();
     printTree(root, "AFTER SIMPLIFY");
+
+    const transpiler = new SQSSToCSSTransformer();
+    const cssTree: CSSNode = new Transverser<SqssNode, CSSNode, void>(SqssNode, root, transpiler).transverse();
+    printTree(cssTree, "CSS TREE");
 }

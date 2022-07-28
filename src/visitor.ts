@@ -1,8 +1,8 @@
 import {
     AllSelector,
+    AndSelector,
     AttributeSelector,
     ClassSelector,
-    CombinedSelector,
     CSSNode,
     CSSStyleSheet,
     ElementSelector,
@@ -59,7 +59,7 @@ export type SQSSVisitor<Val, Ctx> = PrePostHook<"AndCondition", AndCondition, Sq
 export type CSSVisitor<Val, Ctx> = PrePostHook<"CSSStyleSheet", CSSStyleSheet, CSSNode, Val, Ctx> &
     PrePostHook<"StyleRule", StyleRule, CSSNode, Val, Ctx> &
     PrePostHook<"StyleDeclaration", StyleDeclaration, CSSNode, Val, Ctx> &
-    PrePostHook<"CombinedSelector", CombinedSelector, CSSNode, Val, Ctx> &
+    PrePostHook<"CombinedSelector", AndSelector, CSSNode, Val, Ctx> &
     PrePostHook<"ElementSelector", ElementSelector, CSSNode, Val, Ctx> &
     PrePostHook<"IdSelector", IdSelector, CSSNode, Val, Ctx> &
     PrePostHook<"ClassSelector", ClassSelector, CSSNode, Val, Ctx> &
