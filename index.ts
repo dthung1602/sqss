@@ -8,7 +8,8 @@ import Lexer from "./src/sql/lexer";
 import Parser from "./src/sql/parser";
 import SemanticAnalyzer from "./src/sql/semantic-analyzer ";
 import TokenStream from "./src/sql/token-stream";
-import SqssConditionSimplifier from "./src/transformer/sqss-condition-simplifier";
+import FlattenCondition from "./src/transformer/flatten-condition";
+import NegationSimplifier from "./src/transformer/negation-simplifier";
 import SQSSToCSSTransformer from "./src/transformer/sqss-to-css";
 import Transverser from "./src/transverser";
 
@@ -89,9 +90,13 @@ function testParser() {
     const semanticAnalyzer = new SemanticAnalyzer();
     new Transverser<SqssNode, void, null>(SqssNode, root, semanticAnalyzer).transverse(null);
 
-    const simplifier = new SqssConditionSimplifier();
-    new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, simplifier).transverse();
-    printTree(root, "AFTER SIMPLIFY");
+    const negationSimplifier = new NegationSimplifier();
+    new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, negationSimplifier).transverse();
+    printTree(root, "AFTER SIMPLIFY NEGATION");
+
+    const flatten = new FlattenCondition();
+    new Transverser<SqssNode, void, void>(SqssNode, root, flatten).transverse();
+    printTree(root, "AFTER FLATTEN");
 
     const transpiler = new SQSSToCSSTransformer();
     const cssTree: CSSNode = new Transverser<SqssNode, CSSNode, void>(SqssNode, root, transpiler).transverse();
