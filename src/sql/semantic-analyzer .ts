@@ -11,7 +11,7 @@ import {
     isSimpleSelector,
     isString,
 } from "../utils";
-import { Agg } from "../visitor";
+import { Agg, SQSSVisitor } from "../visitor";
 import {
     AndCondition,
     EqualCondition,
@@ -26,7 +26,7 @@ import {
 
 type SAAgg<N> = Agg<N, SqssNode, void>;
 
-export default class SemanticAnalyzer {
+export default class SemanticAnalyzer implements SQSSVisitor<void, null> {
     postVisitSqssStyleSheet(node: SqssStyleSheet, context: null, data: SAAgg<SqssStyleSheet>) {}
 
     preVisitUpdateStatement(node: UpdateStatement, context: null): null {

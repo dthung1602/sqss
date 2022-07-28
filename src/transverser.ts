@@ -33,6 +33,6 @@ export default class Transverser<Node, Val, Ctx> {
 
         // @ts-ignore
         const postVisit = this.visitor[`postVisit${node.constructor.name}`];
-        return postVisit.bind(this.visitor)(data, context);
+        return postVisit.bind(this.visitor)(node, context, data);
     }
 }

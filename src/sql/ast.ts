@@ -1,3 +1,4 @@
+// FIXME why abstract not work
 export class SqssNode {}
 
 export class SqssStyleSheet extends SqssNode {

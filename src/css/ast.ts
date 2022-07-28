@@ -1,6 +1,7 @@
 type CSSValue = string | boolean;
 
-export abstract class CSSNode {}
+// FIXME why abstract not work
+export class CSSNode {}
 
 export class CSSStyleSheet extends CSSNode {
     constructor(public rules: StyleRule[]) {

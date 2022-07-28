@@ -2,11 +2,13 @@
 import { readFileSync } from "fs";
 import { inspect } from "util";
 
+import { CSSNode } from "./src/css/ast";
 import { SqssNode } from "./src/sql/ast";
 import Lexer from "./src/sql/lexer";
 import Parser from "./src/sql/parser";
 import SemanticAnalyzer from "./src/sql/semantic-analyzer ";
 import TokenStream from "./src/sql/token-stream";
+import SqssConditionSimplifier from "./src/transformer/sqss-condition-simplifier";
 import Transverser from "./src/transverser";
 
 testParser();
@@ -67,6 +69,12 @@ WHERE "::after" = false;`;
     }
 }
 
+function printTree(root: SqssNode | CSSNode, message: string) {
+    console.log(message + ": ");
+    console.log(inspect(root, true, null, true));
+    console.log("--------------------------------------------------------------------------------------------------\n");
+}
+
 function testParser() {
     const sql = readFileSync("./test.sql", "utf-8");
 
@@ -75,9 +83,12 @@ function testParser() {
     const parser = new Parser(stream);
 
     const root = parser.parse();
-    console.log(inspect(root, true, null, true));
+    printTree(root, "ORIGINAL TREE");
 
     const semanticAnalyzer = new SemanticAnalyzer();
-    const transverser = new Transverser<SqssNode, void, null>(SqssNode, root, semanticAnalyzer);
-    transverser.transverse(null);
+    new Transverser<SqssNode, void, null>(SqssNode, root, semanticAnalyzer).transverse(null);
+
+    const simplifier = new SqssConditionSimplifier();
+    new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, simplifier).transverse();
+    printTree(root, "AFTER SIMPLIFY");
 }
