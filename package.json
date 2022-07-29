@@ -5,7 +5,7 @@
   "description": "Style your HTML with some good old SQL",
   "repository": "https://github.com/dthung1602/sqss.git",
   "author": "dthung1602 <dthung1602@gmail.com>",
-  "license": "MIT",
+  "license": "WTFPL",
   "scripts": {
     "lint": "eslint --fix .",
     "build": "rm -rf build && tsc",
