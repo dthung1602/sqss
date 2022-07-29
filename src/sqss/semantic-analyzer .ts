@@ -10,6 +10,7 @@ import {
     isPseudoElementSelector,
     isSimpleSelector,
     isString,
+    xor,
 } from "../utils";
 import { Agg, SQSSVisitor } from "../visitor";
 import {
@@ -50,8 +51,13 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
             assertTrue(isString(node.value), "The value of element/id/class must be a string");
             return;
         }
-        if (isPseudoClassSelector(node.selector) || isPseudoElementSelector(node.selector)) {
-            assertTrue(isBool(node.value), "The value of pseudo class and pseudo element must be a boolean");
+        if (isPseudoClassSelector(node.selector)) {
+            assertTrue(isBool(node.value), "The value of pseudo class must be a boolean");
+            return;
+        }
+        if (isPseudoElementSelector(node.selector)) {
+            assertTrue(isBool(node.value), "The value of pseudo element must be a boolean");
+            assertTrue(xor(node.value as boolean, node.negate), "The value of pseudo element must be evaluate to true");
             return;
         }
         throw new Error(`Cannot recognize selector ${node.selector}`);

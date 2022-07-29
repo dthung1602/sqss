@@ -122,3 +122,7 @@ export function printTree(root: SqssNode | CSSNode, message: string) {
     console.log(inspect(root, true, null, true));
     console.log("--------------------------------------------------------------------------------------------------\n");
 }
+
+export function xor(a: boolean, b: boolean): boolean {
+    return (a && !b) || (!a && b);
+}

@@ -1,0 +1,15 @@
+::after {
+    background: red;
+}
+
+::after {
+    background: yellowgreen;
+}
+
+::after {
+    background: green;
+}
+
+::after {
+    background: purple;
+}

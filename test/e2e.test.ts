@@ -3,7 +3,7 @@ import { join as joinPath } from "path";
 
 import { transpileSQSSToCSS } from "../src";
 
-const BASIC_SELECT = ["attribute"];
+const BASIC_SELECT = ["basic", "class", "element", "id", "attribute", "pseudo-class", "pseudo-element"];
 
 async function getResourceContent(...path: string[]): Promise<string> {
     const finalPath = joinPath(__dirname, "resources", ...path);
@@ -19,7 +19,7 @@ describe("End to end testing", () => {
         }
     });
 
-    it.each(BASIC_SELECT)("should transpile basic select correctly", async (fileName: string) => {
+    it.each(BASIC_SELECT)("should transpile basic update queries correctly", async (fileName: string) => {
         const sqss = await getResourceContent(fileName + ".sql");
         const expectedCSS = await getResourceContent(fileName + ".css");
         const css = transpileSQSSToCSS(sqss);

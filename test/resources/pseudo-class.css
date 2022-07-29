@@ -1,0 +1,31 @@
+:hover {
+    background: red;
+}
+
+:not(:hover) {
+    background: orange;
+}
+
+:not(:hover) {
+    background: yellow;
+}
+
+:hover {
+    background: yellowgreen;
+}
+
+:hover {
+    background: green;
+}
+
+:not(:hover) {
+    background: cyan;
+}
+
+:not(:hover) {
+    background: blue;
+}
+
+:hover {
+    background: purple;
+}
