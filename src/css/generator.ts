@@ -5,6 +5,7 @@ import { Agg, CSSVisitor } from "../visitor";
 import {
     AllSelector,
     AndSelector,
+    AtomicSelector,
     AttributeSelector,
     ClassSelector,
     CSSNode,
@@ -20,6 +21,11 @@ import {
 } from "./ast";
 
 type GAgg<N> = Agg<N, CSSNode, string>;
+type AtomicSelectorConstructor = { new (...args: any[]): AtomicSelector };
+type CSSStrWithType = {
+    type: AtomicSelectorConstructor;
+    css: string;
+};
 
 export default class Generator implements CSSVisitor<string, void> {
     postVisitCSSStyleSheet(node: CSSStyleSheet, context: void, data: GAgg<CSSStyleSheet>): string {
@@ -40,12 +46,35 @@ export default class Generator implements CSSVisitor<string, void> {
     }
 
     postVisitAndSelector(node: AndSelector, context: void, data: GAgg<AndSelector>): string {
-        // TODO sort
-        return data.selectors.join("");
+        const cssWithTypes: CSSStrWithType[] = node.selectors.map((sel, i) => ({
+            type: sel.constructor as AtomicSelectorConstructor,
+            css: data.selectors[i],
+        }));
+        cssWithTypes.sort(Generator.selectorOrder);
+        return cssWithTypes.map((x) => x.css).join("");
+    }
+
+    private static selectorOrder(a: CSSStrWithType, b: CSSStrWithType): number {
+        const order = [
+            AllSelector,
+            ElementSelector,
+            IdSelector,
+            ClassSelector,
+            PseudoClassSelector,
+            AttributeSelector,
+            NotSelector,
+            PseudoElementSelector,
+        ];
+        return order.indexOf(a.type) - order.indexOf(b.type);
     }
 
     postVisitOrSelector(node: OrSelector, context: void, data: GAgg<OrSelector>): string {
-        return data.selectors.join(", ");
+        const MAX_LINE_LENGTH = 120;
+        let result = data.selectors.join(", ");
+        if (result.length > MAX_LINE_LENGTH) {
+            result = data.selectors.join(",\n");
+        }
+        return result;
     }
 
     postVisitElementSelector(node: ElementSelector, context: void, data: GAgg<ElementSelector>): string {

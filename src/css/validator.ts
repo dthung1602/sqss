@@ -34,7 +34,14 @@ export default class Validator implements CSSVisitor<void, void> {
         }
     }
 
-    postVisitAndSelector(node: AndSelector, context: void, data: VAgg<AndSelector>) {}
+    postVisitAndSelector(node: AndSelector, context: void, data: VAgg<AndSelector>) {
+        for (const cls of [ElementSelector, IdSelector]) {
+            const s = node.selectors.filter((s) => s instanceof cls);
+            if (s.length > 1) {
+                throw new Error(`More than one selector of ${cls.name} combined is not valid`);
+            }
+        }
+    }
 
     postVisitOrSelector(node: OrSelector, context: void, data: VAgg<OrSelector>) {}
 

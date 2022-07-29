@@ -42,7 +42,7 @@ export default class SQSSToCSSTransformer implements SQSSVisitor<CSSNode, void> 
     }
 
     postVisitUpdateStatement(node: UpdateStatement, context: void, data: STCAgg<UpdateStatement>): StyleRule {
-        const where = data.where === null ? new AllSelector() : data.where;
+        const where = data.where ? data.where : new AllSelector();
         return new StyleRule(where, data.assignments as StyleDeclaration[]);
     }
 

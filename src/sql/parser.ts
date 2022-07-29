@@ -29,6 +29,7 @@ import {
     TokenString,
     TokenTrue,
     TokenUpdate,
+    TokenWhere,
 } from "./token";
 import TokenStream from "./token-stream";
 
@@ -76,10 +77,11 @@ export default class Parser {
 
     private parseWhereCondition(): Condition | null {
         const token = this.stream.next();
-        if (token === null) {
-            return null;
+        if (token instanceof TokenWhere) {
+            return this.parseCondition();
         }
-        return this.parseCondition();
+        this.stream.back();
+        return null;
     }
 
     private parseCondition(): Condition {
