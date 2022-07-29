@@ -24,7 +24,7 @@ import {
     SqssStyleSheet,
     StyleAssignment,
     UpdateStatement,
-} from "./sql/ast";
+} from "./sqss/ast";
 
 export type Agg<Node, BaseNode, Val> = {
     [Key in keyof Node]: Node[Key] extends (infer N)[]

@@ -29,14 +29,14 @@ import {
     SqssStyleSheet,
     StyleAssignment,
     UpdateStatement,
-} from "../sql/ast";
+} from "../sqss/ast";
 import { isPseudoClassSelector, isPseudoElementSelector, trim, trimStart } from "../utils";
 import { Agg, SQSSVisitor } from "../visitor";
 
 type STCAgg<N> = Agg<N, SqssNode, CSSNode>;
 type SimpleSelector = { new (...args: any[]): Exclude<AtomicSelector, AttributeSelector> };
 
-export default class SQSSToCSSTransformer implements SQSSVisitor<CSSNode, void> {
+export default class Transpiler implements SQSSVisitor<CSSNode, void> {
     postVisitSqssStyleSheet(node: SqssStyleSheet, context: void, data: STCAgg<SqssStyleSheet>): CSSStyleSheet {
         return new CSSStyleSheet(data.updates as StyleRule[]);
     }
@@ -79,7 +79,7 @@ export default class SQSSToCSSTransformer implements SQSSVisitor<CSSNode, void> 
     postVisitLikeCondition(node: LikeCondition, context: void, data: STCAgg<LikeCondition>): AtomicSelector {
         const attrSelector = new AttributeSelector(
             node.selector.slice(1, node.selector.length - 1),
-            SQSSToCSSTransformer.getAttributeSelectorOperator(node.value),
+            Transpiler.getAttributeSelectorOperator(node.value),
             trim(node.value, "%"),
         );
         if (node.negate) {

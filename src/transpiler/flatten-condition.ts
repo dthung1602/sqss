@@ -12,7 +12,7 @@ import {
     SqssStyleSheet,
     StyleAssignment,
     UpdateStatement,
-} from "../sql/ast";
+} from "../sqss/ast";
 import { cartesian, isBool, isPseudoClassSelector, isPseudoElementSelector } from "../utils";
 import { Agg, SQSSVisitor } from "../visitor";
 

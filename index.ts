@@ -2,75 +2,27 @@
 import { readFileSync } from "fs";
 import { inspect } from "util";
 
+import { transpileSQSSToCSS } from "./src";
 import { CSSNode } from "./src/css/ast";
 import Generator from "./src/css/generator";
 import Validator from "./src/css/validator";
-import { SqssNode } from "./src/sql/ast";
-import Lexer from "./src/sql/lexer";
-import Parser from "./src/sql/parser";
-import SemanticAnalyzer from "./src/sql/semantic-analyzer ";
-import TokenStream from "./src/sql/token-stream";
-import FlattenCondition from "./src/transformer/flatten-condition";
-import NegationSimplifier from "./src/transformer/negation-simplifier";
-import SQSSToCSSTransformer from "./src/transformer/sqss-to-css";
+import { SqssNode } from "./src/sqss/ast";
+import Lexer from "./src/sqss/lexer";
+import Parser from "./src/sqss/parser";
+import SemanticAnalyzer from "./src/sqss/semantic-analyzer ";
+import TokenStream from "./src/sqss/token-stream";
+import FlattenCondition from "./src/transpiler/flatten-condition";
+import NegationSimplifier from "./src/transpiler/negation-simplifier";
+import Transpiler from "./src/transpiler/transpiler";
 import Transverser from "./src/transverser";
 
-testParser();
+testEveryThing();
+// testStepByStep();
 
-function testLexer() {
-    const sqlString = `UPDATE styles
-SET "background"  = 'blue',
-    "color"       = 'white',
-    "font-family" = '"Droid Sans", serif'
-WHERE id = 'target' and (class = 'abc' OR "[title]" is NOT null OR element = 'h1') AND ":hover" is False;
-
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE class = 'target';
-
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE element = 'div';
-
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white';
-
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE "[title]" IS NOT NULL;
-
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE "[title]" = 'help test';
-
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE "[title]" LIKE '%help test';
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE ":hover" = TRUE
-
-UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE "::after" = false;`;
-
-    const lexer = new Lexer(sqlString);
-    const result = lexer.scan();
-
-    for (const token of result) {
-        console.log(token.toString());
-        if (token.toString() === ";") {
-            console.log("----------------------------------------");
-        }
-    }
+function testEveryThing() {
+    const sqss = readFileSync("./test.sql", "utf-8");
+    const css = transpileSQSSToCSS(sqss);
+    console.log(css);
 }
 
 function printTree(root: SqssNode | CSSNode, message: string) {
@@ -79,10 +31,10 @@ function printTree(root: SqssNode | CSSNode, message: string) {
     console.log("--------------------------------------------------------------------------------------------------\n");
 }
 
-function testParser() {
-    const sql = readFileSync("./test.sql", "utf-8");
+function testStepByStep() {
+    const sqss = readFileSync("./test.sql", "utf-8");
 
-    const lexer = new Lexer(sql);
+    const lexer = new Lexer(sqss);
     const stream = new TokenStream(lexer);
     const parser = new Parser(stream);
 
@@ -90,7 +42,7 @@ function testParser() {
     printTree(root, "ORIGINAL TREE");
 
     const semanticAnalyzer = new SemanticAnalyzer();
-    new Transverser<SqssNode, void, null>(SqssNode, root, semanticAnalyzer).transverse(null);
+    new Transverser<SqssNode, void, void>(SqssNode, root, semanticAnalyzer).transverse();
 
     const negationSimplifier = new NegationSimplifier();
     new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, negationSimplifier).transverse();
@@ -100,7 +52,7 @@ function testParser() {
     new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, flatten).transverse();
     printTree(root, "AFTER FLATTEN");
 
-    const transpiler = new SQSSToCSSTransformer();
+    const transpiler = new Transpiler();
     const cssTree: CSSNode = new Transverser<SqssNode, CSSNode, void>(SqssNode, root, transpiler).transverse();
     printTree(cssTree, "CSS TREE");
 

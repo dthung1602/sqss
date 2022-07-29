@@ -26,66 +26,63 @@ import {
 
 type SAAgg<N> = Agg<N, SqssNode, void>;
 
-export default class SemanticAnalyzer implements SQSSVisitor<void, null> {
-    postVisitSqssStyleSheet(node: SqssStyleSheet, context: null, data: SAAgg<SqssStyleSheet>) {}
+export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
+    postVisitSqssStyleSheet(node: SqssStyleSheet, context: void, data: SAAgg<SqssStyleSheet>) {}
 
-    preVisitUpdateStatement(node: UpdateStatement, context: null): null {
+    preVisitUpdateStatement(node: UpdateStatement, context: void) {
         assertEqual(node.table, "styles", "Must update table `styles`");
-        return null;
     }
 
-    postVisitUpdateStatement(node: UpdateStatement, context: null, data: SAAgg<UpdateStatement>) {}
+    postVisitUpdateStatement(node: UpdateStatement, context: void, data: SAAgg<UpdateStatement>) {}
 
-    preVisitStyleAssignment(node: StyleAssignment, context: null): null {
+    preVisitStyleAssignment(node: StyleAssignment, context: void) {
         assertTrue(isKebabCase(node.property), "CSS properties must be in kebab-case");
-        return null;
     }
 
-    postVisitStyleAssignment(node: StyleAssignment, context: null, data: SAAgg<StyleAssignment>) {}
+    postVisitStyleAssignment(node: StyleAssignment, context: void, data: SAAgg<StyleAssignment>) {}
 
-    postVisitAndCondition(node: AndCondition, context: null, data: SAAgg<AndCondition>) {}
+    postVisitAndCondition(node: AndCondition, context: void, data: SAAgg<AndCondition>) {}
 
-    postVisitOrCondition(node: OrCondition, context: null, data: SAAgg<OrCondition>) {}
+    postVisitOrCondition(node: OrCondition, context: void, data: SAAgg<OrCondition>) {}
 
-    preVisitEqualCondition(node: EqualCondition, context: null): null {
+    preVisitEqualCondition(node: EqualCondition, context: void) {
         if (isSimpleSelector(node.selector) || isAttrSelector(node.selector)) {
             assertTrue(isString(node.value), "The value of element/id/class must be a string");
-            return null;
+            return;
         }
         if (isPseudoClassSelector(node.selector) || isPseudoElementSelector(node.selector)) {
             assertTrue(isBool(node.value), "The value of pseudo class and pseudo element must be a boolean");
-            return null;
+            return;
         }
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
 
-    postVisitEqualCondition(node: EqualCondition, context: null, data: SAAgg<EqualCondition>) {}
+    postVisitEqualCondition(node: EqualCondition, context: void, data: SAAgg<EqualCondition>) {}
 
-    preVisitLikeCondition(node: LikeCondition, context: null): null {
+    preVisitLikeCondition(node: LikeCondition, context: void) {
         assertTrue(isAttrSelector(node.selector), "Like comparison is only applicable for attribute selector");
         assertTrue(
             node.value.startsWith("%") || node.value.endsWith("%"),
             "The value of like comparison must either start or end with '%'",
         );
-        return null;
     }
 
-    postVisitLikeCondition(node: LikeCondition, context: null, data: SAAgg<LikeCondition>) {}
+    postVisitLikeCondition(node: LikeCondition, context: void, data: SAAgg<LikeCondition>) {}
 
-    preVisitIsCondition(node: IsCondition, context: null): null {
+    preVisitIsCondition(node: IsCondition, context: void) {
         if (isAttrSelector(node.selector)) {
             assertTrue(node.value === null, "For attribute selector, right hand side of IS must be null");
-            return null;
+            return;
         }
         if (isPseudoClassSelector(node.selector) || isPseudoElementSelector(node.selector)) {
             assertTrue(
                 isBool(node.value),
                 "For pseudo class and pseudo element, right hand side of IS must be boolean",
             );
-            return null;
+            return;
         }
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
 
-    postVisitIsCondition(node: IsCondition, context: null, data: SAAgg<IsCondition>) {}
+    postVisitIsCondition(node: IsCondition, context: void, data: SAAgg<IsCondition>) {}
 }
