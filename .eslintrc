@@ -4,13 +4,18 @@
   "plugins": [
     "@typescript-eslint",
     "prettier",
-    "simple-import-sort"
+    "simple-import-sort",
+    "jest"
   ],
+  "env": {
+    "jest/globals": true
+  },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended"
   ],
   "ignorePatterns": [
     "node_modules",

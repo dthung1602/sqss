@@ -4,6 +4,7 @@
 
 # Build
 build
+coverage
 
 # Dependency directories
 node_modules/

@@ -42,7 +42,7 @@ export default class Generator implements CSSVisitor<string, void> {
         context: void,
         data: Agg<StyleDeclaration, CSSNode, string>,
     ): string {
-        return `${node.property} = ${node.value}`;
+        return `${node.property}: ${node.value}`;
     }
 
     postVisitAndSelector(node: AndSelector, context: void, data: GAgg<AndSelector>): string {
