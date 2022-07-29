@@ -30,6 +30,20 @@ export function trunkString(str: string, maxLength: number) {
     return str;
 }
 
+export function containAnyStr(str: string, subStrs: string[]): null | string {
+    for (const s of subStrs) {
+        if (str.includes(s)) return s;
+    }
+    return null;
+}
+
+export function startsWith(str: string, startStrs: string[]): null | string {
+    for (const s of startStrs) {
+        if (str.startsWith(s)) return s;
+    }
+    return null;
+}
+
 //=============================================
 //                  ASSERT
 //=============================================

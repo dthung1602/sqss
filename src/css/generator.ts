@@ -22,11 +22,11 @@ import {
 type GAgg<N> = Agg<N, CSSNode, string>;
 
 export default class Generator implements CSSVisitor<string, void> {
-    postVisitCSSStyleSheet(node: CSSStyleSheet, context: void, data: Agg<CSSStyleSheet, CSSNode, string>): string {
+    postVisitCSSStyleSheet(node: CSSStyleSheet, context: void, data: GAgg<CSSStyleSheet>): string {
         return data.rules.join("\n\n");
     }
 
-    postVisitStyleRule(node: StyleRule, context: void, data: Agg<StyleRule, CSSNode, string>): string {
+    postVisitStyleRule(node: StyleRule, context: void, data: GAgg<StyleRule>): string {
         const styles = data.styles.join(`;\n    `);
         return `${data.selector} {\n    ${styles};\n}`;
     }
@@ -39,12 +39,12 @@ export default class Generator implements CSSVisitor<string, void> {
         return `${node.property} = ${node.value}`;
     }
 
-    postVisitAndSelector(node: AndSelector, context: void, data: Agg<AndSelector, CSSNode, string>): string {
+    postVisitAndSelector(node: AndSelector, context: void, data: GAgg<AndSelector>): string {
         // TODO sort
         return data.selectors.join("");
     }
 
-    postVisitOrSelector(node: OrSelector, context: void, data: Agg<OrSelector, CSSNode, string>): string {
+    postVisitOrSelector(node: OrSelector, context: void, data: GAgg<OrSelector>): string {
         return data.selectors.join(", ");
     }
 

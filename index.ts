@@ -4,6 +4,7 @@ import { inspect } from "util";
 
 import { CSSNode } from "./src/css/ast";
 import Generator from "./src/css/generator";
+import Validator from "./src/css/validator";
 import { SqssNode } from "./src/sql/ast";
 import Lexer from "./src/sql/lexer";
 import Parser from "./src/sql/parser";
@@ -102,6 +103,10 @@ function testParser() {
     const transpiler = new SQSSToCSSTransformer();
     const cssTree: CSSNode = new Transverser<SqssNode, CSSNode, void>(SqssNode, root, transpiler).transverse();
     printTree(cssTree, "CSS TREE");
+
+    const validator = new Validator();
+    new Transverser<CSSNode, void, void>(CSSNode, cssTree, validator).transverse();
+    printTree(cssTree, "CSS TREE NORMALIZED");
 
     const cssGenerator = new Generator();
     const css: string = new Transverser<CSSNode, string, void>(CSSNode, cssTree, cssGenerator).transverse();
