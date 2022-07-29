@@ -14,7 +14,7 @@ export class UpdateStatement extends SqssNode {
 }
 
 export class StyleAssignment extends SqssNode {
-    constructor(public property: string, public value: string | boolean) {
+    constructor(public property: string, public value: string) {
         super();
     }
 }

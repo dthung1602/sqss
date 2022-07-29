@@ -1,3 +1,5 @@
+import { inspect } from "util";
+
 import Lexer from "./lexer";
 import { Token, TokenClass } from "./token";
 
@@ -34,7 +36,7 @@ export default class TokenStream {
         if (token instanceof tokenClass) {
             return token;
         }
-        throw Error(`Expecting ${tokenClass.name}, got ${this.curr()}`);
+        throw Error(`Expecting ${tokenClass.name}, got ${inspect(this.curr())}`);
     }
 
     hasEnded(): boolean {

@@ -73,6 +73,8 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
                 return new ClassSelector(node.value as string);
         }
         if (isAttrSelector(node.selector)) {
+            if (node.value === null)
+                return new AttributeSelector(node.selector.slice(1, node.selector.length - 1), "", "");
             return new AttributeSelector(node.selector.slice(1, node.selector.length - 1), "=", node.value as string);
         }
         if (isPseudoElementSelector(node.selector)) {

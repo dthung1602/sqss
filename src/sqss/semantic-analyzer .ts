@@ -30,14 +30,8 @@ type SAAgg<N> = Agg<N, SqssNode, void>;
 export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
     postVisitSqssStyleSheet(node: SqssStyleSheet, context: void, data: SAAgg<SqssStyleSheet>) {}
 
-    preVisitUpdateStatement(node: UpdateStatement, context: void) {
+    postVisitUpdateStatement(node: UpdateStatement, context: void, data: SAAgg<UpdateStatement>) {
         assertEqual(node.table, "styles", "Must update table styles");
-    }
-
-    postVisitUpdateStatement(node: UpdateStatement, context: void, data: SAAgg<UpdateStatement>) {}
-
-    preVisitStyleAssignment(node: StyleAssignment, context: void) {
-        assertTrue(isKebabCase(node.property), "CSS properties must be in kebab-case");
     }
 
     postVisitStyleAssignment(node: StyleAssignment, context: void, data: SAAgg<StyleAssignment>) {}
@@ -46,9 +40,13 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
 
     postVisitOrCondition(node: OrCondition, context: void, data: SAAgg<OrCondition>) {}
 
-    preVisitEqualCondition(node: EqualCondition, context: void) {
-        if (isSimpleSelector(node.selector) || isAttrSelector(node.selector)) {
+    postVisitEqualCondition(node: EqualCondition, context: void, data: SAAgg<EqualCondition>) {
+        if (isSimpleSelector(node.selector)) {
             assertTrue(isString(node.value), "The value of element/id/class must be a string");
+            return;
+        }
+        if (isAttrSelector(node.selector)) {
+            assertTrue(!isBool(node.value), "The value of attribute must be a string/null");
             return;
         }
         if (isPseudoClassSelector(node.selector)) {
@@ -63,23 +61,11 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
 
-    postVisitEqualCondition(node: EqualCondition, context: void, data: SAAgg<EqualCondition>) {
-        if (isAttrSelector(node.selector)) {
-            assertTrue(isString(node.value), "Attribute selector must equal a string");
-        }
-    }
-
-    preVisitLikeCondition(node: LikeCondition, context: void) {
+    postVisitLikeCondition(node: LikeCondition, context: void, data: SAAgg<LikeCondition>) {
         assertTrue(isAttrSelector(node.selector), "Like comparison is only applicable for attribute selector");
-        assertTrue(
-            node.value.startsWith("%") || node.value.endsWith("%"),
-            "The value of like comparison must either start or end with '%'",
-        );
     }
 
-    postVisitLikeCondition(node: LikeCondition, context: void, data: SAAgg<LikeCondition>) {}
-
-    preVisitIsCondition(node: IsCondition, context: void) {
+    postVisitIsCondition(node: IsCondition, context: void, data: SAAgg<IsCondition>) {
         if (isAttrSelector(node.selector)) {
             assertTrue(node.value === null, "For attribute selector, right hand side of IS must be null");
             return;
@@ -93,6 +79,4 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
         }
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
-
-    postVisitIsCondition(node: IsCondition, context: void, data: SAAgg<IsCondition>) {}
 }

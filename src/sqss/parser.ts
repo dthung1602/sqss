@@ -71,8 +71,8 @@ export default class Parser {
     private parseStyleAssignment(): StyleAssignment {
         const property = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
         this.stream.expectedNext(TokenEqual);
-        const value = this.parseCSSValue();
-        return new StyleAssignment(property.value, value);
+        const value = this.stream.expectedNext(TokenString) as TokenString;
+        return new StyleAssignment(property.value, value.value);
     }
 
     private parseWhereCondition(): Condition | null {
@@ -209,19 +209,5 @@ export default class Parser {
             return null;
         }
         throw new Error(`Expecting a value token, got ${token}`);
-    }
-
-    private parseCSSValue(): string | boolean {
-        const token = this.stream.next();
-        if (token instanceof TokenString) {
-            return token.value;
-        }
-        if (token instanceof TokenTrue) {
-            return true;
-        }
-        if (token instanceof TokenFalse) {
-            return false;
-        }
-        throw new Error(`Expecting a CSS value token, got ${token}`);
     }
 }

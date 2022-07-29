@@ -1,11 +1,12 @@
-Expecting TokenUpdate, got styles
-Expecting TokenIdentifier, got SET
+Expecting TokenUpdate, got TokenIdentifier { raw: 'styles', value: 'styles' }
+Expecting TokenIdentifier, got TokenSet {}
 Must update table styles
-Expecting TokenSet, got ;
-Expecting TokenIdentifier, got ;
-Expecting TokenSet, got background
-Expecting TokenIdentifier, got background
-Expecting a CSS value token, got blue
+Expecting TokenSet, got TokenSemiColon {}
+Expecting TokenIdentifier, got TokenSemiColon {}
+Expecting TokenSet, got TokenIdentifier { raw: 'background', value: 'background' }
+Expecting TokenIdentifier, got TokenString { raw: "'background'", value: 'background' }
+Expecting TokenString, got TokenIdentifier { raw: '"blue"', value: 'blue' }
 Expecting TokenSemiColon, got undefined
-Expecting TokenIdentifier, got WHERE
+Expecting TokenIdentifier, got TokenWhere {}
 Invalid syntax: ';
+Invalid syntax: ???

@@ -118,6 +118,7 @@ export function cartesian<T>(...allEntries: T[][]): T[][] {
 }
 
 export function printTree(root: SqssNode | CSSNode, message: string) {
+    // TODO inspect is available only for node, need to remove
     console.log("\n" + message + ": \n");
     console.log(inspect(root, true, null, true));
     console.log("--------------------------------------------------------------------------------------------------\n");

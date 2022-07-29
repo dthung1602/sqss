@@ -9,3 +9,4 @@ UPDATE table SET "background" = "blue";
 UPDATE styles SET "background" = 'blue'
 UPDATE styles SET WHERE id = 'abc'
 UPDATE table SET 'background" = 'blue';
+???
