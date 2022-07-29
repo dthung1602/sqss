@@ -57,7 +57,11 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
 
-    postVisitEqualCondition(node: EqualCondition, context: void, data: SAAgg<EqualCondition>) {}
+    postVisitEqualCondition(node: EqualCondition, context: void, data: SAAgg<EqualCondition>) {
+        if (isAttrSelector(node.selector)) {
+            assertTrue(isString(node.value), "Attribute selector must equal a string");
+        }
+    }
 
     preVisitLikeCondition(node: LikeCondition, context: void) {
         assertTrue(isAttrSelector(node.selector), "Like comparison is only applicable for attribute selector");

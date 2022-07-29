@@ -3,7 +3,7 @@ import { join as joinPath } from "path";
 
 import { transpileSQSSToCSS } from "../src";
 
-const BASIC_SELECT = ["basic", "id", "class", "element"];
+const BASIC_SELECT = ["attribute"];
 
 async function getResourceContent(...path: string[]): Promise<string> {
     const finalPath = joinPath(__dirname, "resources", ...path);
@@ -11,9 +11,9 @@ async function getResourceContent(...path: string[]): Promise<string> {
 }
 
 describe("End to end testing", () => {
-    it("should throw errors on SQL syntax and semantic errors", async () => {
-        const sqss = (await getResourceContent("sql-error.sql")).split("\n");
-        const expectedErrs = (await getResourceContent("sql-error.txt")).split("\n");
+    it("should throw errors on SQL syntax errors", async () => {
+        const sqss = (await getResourceContent("sql-syntax-error.sql")).split("\n");
+        const expectedErrs = (await getResourceContent("sql-syntax-error.txt")).split("\n");
         for (let i = 0; i < sqss.length; i++) {
             expect(() => transpileSQSSToCSS(sqss[i])).toThrow(expectedErrs[i]);
         }

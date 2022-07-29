@@ -30,7 +30,7 @@ import {
     StyleAssignment,
     UpdateStatement,
 } from "../sqss/ast";
-import { isPseudoClassSelector, isPseudoElementSelector, trim, trimStart } from "../utils";
+import { isAttrSelector, isPseudoClassSelector, isPseudoElementSelector, trim, trimStart } from "../utils";
 import { Agg, SQSSVisitor } from "../visitor";
 
 type STCAgg<N> = Agg<N, SqssNode, CSSNode>;
@@ -59,6 +59,11 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
     }
 
     postVisitEqualCondition(node: EqualCondition, context: void, data: STCAgg<EqualCondition>): AtomicSelector {
+        const selector = Transpiler.getSelectorForEqualCondition(node);
+        return node.negate ? new NotSelector(selector) : selector;
+    }
+
+    private static getSelectorForEqualCondition(node: EqualCondition): AtomicSelector {
         switch (node.selector) {
             case "element":
                 return new ElementSelector(node.value as string);
@@ -66,6 +71,9 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
                 return new IdSelector(node.value as string);
             case "class":
                 return new ClassSelector(node.value as string);
+        }
+        if (isAttrSelector(node.selector)) {
+            return new AttributeSelector(node.selector.slice(1, node.selector.length - 1), "=", node.value as string);
         }
         if (isPseudoElementSelector(node.selector)) {
             return new PseudoElementSelector(trimStart(node.selector, ":"), node.value as boolean);

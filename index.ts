@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { readFileSync } from "fs";
-import { inspect } from "util";
 
 import { transpileSQSSToCSS } from "./src";
 import { CSSNode } from "./src/css/ast";
@@ -15,6 +14,7 @@ import FlattenCondition from "./src/transpiler/flatten-condition";
 import NegationSimplifier from "./src/transpiler/negation-simplifier";
 import Transpiler from "./src/transpiler/transpiler";
 import Transverser from "./src/transverser";
+import { printTree } from "./src/utils";
 
 testEveryThing();
 // testStepByStep();
@@ -23,12 +23,6 @@ function testEveryThing() {
     const sqss = readFileSync("./test.sql", "utf-8");
     const css = transpileSQSSToCSS(sqss);
     console.log(css);
-}
-
-function printTree(root: SqssNode | CSSNode, message: string) {
-    console.log("\n" + message + ": \n");
-    console.log(inspect(root, true, null, true));
-    console.log("--------------------------------------------------------------------------------------------------\n");
 }
 
 function testStepByStep() {

@@ -8,6 +8,10 @@ WHERE id = 'target';
 
 UPDATE styles
 SET "background"  = 'blue'
+WHERE id != 'target';
+
+UPDATE styles
+SET "background"  = 'blue'
 WHERE id = 'with_and-';
 
 UPDATE styles

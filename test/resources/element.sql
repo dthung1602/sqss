@@ -8,6 +8,10 @@ WHERE element = 'div';
 
 UPDATE styles
 SET "background" = 'blue'
+WHERE element != 'div';
+
+UPDATE styles
+SET "background" = 'blue'
 WHERE element = '  H3 ';
 
 UPDATE styles

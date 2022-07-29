@@ -1,0 +1,49 @@
+[title="help text"] {
+    background: blue;
+    color: white;
+}
+
+:not([title="help text"]) {
+    background: blue;
+    color: white;
+}
+
+[title^="help text"] {
+    background: blue;
+    color: white;
+}
+
+:not([title^="help text"]) {
+    background: blue;
+    color: white;
+}
+
+[title$="help text"] {
+    background: blue;
+    color: white;
+}
+
+:not([title$="help text"]) {
+    background: blue;
+    color: white;
+}
+
+[title*="help text"] {
+    background: blue;
+    color: white;
+}
+
+:not([title*="help text"]) {
+    background: blue;
+    color: white;
+}
+
+:not([title]) {
+    background: blue;
+    color: white;
+}
+
+[title] {
+    background: blue;
+    color: white;
+}

@@ -3,6 +3,11 @@
 //=============================================
 
 // Copied from https://stackoverflow.com/a/55292366/7342188
+import { inspect } from "util";
+
+import { CSSNode } from "./css/ast";
+import { SqssNode } from "./sqss/ast";
+
 export function trim(str: string, ch: string): string {
     return trimStart(trimEnd(str, ch), ch);
 }
@@ -110,4 +115,10 @@ export function cartesian<T>(...allEntries: T[][]): T[][] {
                 .reduce((subResults, result) => [...subResults, ...result], []),
         [[]],
     );
+}
+
+export function printTree(root: SqssNode | CSSNode, message: string) {
+    console.log("\n" + message + ": \n");
+    console.log(inspect(root, true, null, true));
+    console.log("--------------------------------------------------------------------------------------------------\n");
 }

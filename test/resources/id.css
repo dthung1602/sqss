@@ -6,6 +6,10 @@
     background: blue;
 }
 
+:not(#target) {
+    background: blue;
+}
+
 #with_and- {
     background: blue;
 }

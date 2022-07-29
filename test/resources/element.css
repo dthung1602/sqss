@@ -6,6 +6,10 @@ div {
     background: blue;
 }
 
+:not(div) {
+    background: blue;
+}
+
 h3 {
     background: blue;
 }

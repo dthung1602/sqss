@@ -3,5 +3,7 @@ import { toAST } from "./sqss";
 import { transpile } from "./transpiler";
 
 export function transpileSQSSToCSS(sqss: string): string {
-    return toCSSString(transpile(toAST(sqss)));
+    const sqssNode = toAST(sqss);
+    const cssNode = transpile(sqssNode);
+    return toCSSString(cssNode);
 }
