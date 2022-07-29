@@ -1,27 +1,27 @@
 UPDATE styles
 SET "background"  = 'blue'
-WHERE "id" = 'target';
+WHERE "class" = 'target';
 
 UPDATE styles
 SET "background"  = 'blue'
-WHERE id = 'target';
+WHERE class = 'target';
 
 UPDATE styles
 SET "background"  = 'blue'
-WHERE id = 'with_and-';
+WHERE class = 'with_and-';
 
 UPDATE styles
 SET "background"  = 'blue'
-WHERE id = '--prefix';
+WHERE class = '--prefix';
 
 UPDATE styles
 SET "background"  = 'blue'
-WHERE id = '__prefix';
+WHERE class = '__prefix';
 
 UPDATE styles
 SET "background"  = 'blue'
-WHERE id = '😀😀😀';
+WHERE class = '😀😀😀';
 
 UPDATE styles
 SET "background"  = 'blue'
-WHERE id = 'AÁâ';
+WHERE class = 'AÁâ';

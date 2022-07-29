@@ -1,0 +1,11 @@
+Expecting TokenUpdate, got styles
+Expecting TokenIdentifier, got SET
+Must update table styles
+Expecting TokenSet, got ;
+Expecting TokenIdentifier, got ;
+Expecting TokenSet, got background
+Expecting TokenIdentifier, got background
+Expecting a CSS value token, got blue
+Expecting TokenSemiColon, got undefined
+Expecting TokenIdentifier, got WHERE
+Invalid syntax: ';

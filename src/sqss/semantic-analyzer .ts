@@ -30,7 +30,7 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
     postVisitSqssStyleSheet(node: SqssStyleSheet, context: void, data: SAAgg<SqssStyleSheet>) {}
 
     preVisitUpdateStatement(node: UpdateStatement, context: void) {
-        assertEqual(node.table, "styles", "Must update table `styles`");
+        assertEqual(node.table, "styles", "Must update table styles");
     }
 
     postVisitUpdateStatement(node: UpdateStatement, context: void, data: SAAgg<UpdateStatement>) {}

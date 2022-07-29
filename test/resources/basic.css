@@ -1,0 +1,32 @@
+* {
+    background: blue;
+}
+
+* {
+    background: blue;
+}
+
+* {
+    background: blue;
+    color: white;
+}
+
+* {
+    background: blue;
+    color: white;
+    border-radius: 13rem;
+    -mozilla-custom-something: calc(100% - 8px);
+    --webkit-custom-something: auto;
+}
+
+* {
+    background: blue;
+}
+
+* {
+    background: blue;
+}
+
+* {
+    background: blue;
+}
