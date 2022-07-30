@@ -4,6 +4,7 @@ import {
     TokenAnd,
     TokenCloseParenthesis,
     TokenComma,
+    TokenComment,
     TokenEqual,
     TokenFalse,
     TokenIdentifier,
@@ -41,7 +42,7 @@ const ExactMatchTokens = [
     TokenTrue,
     TokenFalse,
 ];
-const RegexMatchTokens = [TokenIdentifier, TokenString];
+const RegexMatchTokens = [TokenIdentifier, TokenString, TokenComment];
 
 export default class Lexer {
     input: string;

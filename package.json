@@ -11,7 +11,8 @@
     "build": "rm -rf build && tsc",
     "test": "jest",
     "coverage": "jest --collect-coverage",
-    "runIndex": "node build/index.js"
+    "runIndex": "node build/index.js",
+    "buildRunIndex": "yarn run build && node build/index.js"
   },
   "jest": {
     "testTimeout": 10000,

@@ -1,15 +1,16 @@
 // @ts-ignore
 import inspect from "../inspect";
 import Lexer from "./lexer";
-import { Token, TokenClass } from "./token";
+import { Token, TokenClass, TokenComment } from "./token";
 
 export default class TokenStream {
     private readonly tokens: Token[];
     private pos: number;
 
     constructor(lexer: Lexer) {
-        // TODO lazy scan
+        // TODO lazy scan, handle comment properly
         this.tokens = lexer.scan();
+        this.tokens = this.tokens.filter((tok) => !(tok instanceof TokenComment));
         this.pos = -1;
     }
 

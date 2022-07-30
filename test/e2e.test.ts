@@ -14,6 +14,8 @@ const BASIC_SELECT = [
     "and",
     "or",
     "and-or",
+    "comment",
+    "empty",
 ];
 
 async function getResourceContent(...path: string[]): Promise<string> {
