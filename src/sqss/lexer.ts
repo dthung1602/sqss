@@ -13,6 +13,7 @@ import {
     TokenNot,
     TokenNotEqual,
     TokenNull,
+    TokenNumber,
     TokenOpenParenthesis,
     TokenOr,
     TokenSemiColon,
@@ -42,7 +43,7 @@ const ExactMatchTokens = [
     TokenTrue,
     TokenFalse,
 ];
-const RegexMatchTokens = [TokenIdentifier, TokenString, TokenComment];
+const RegexMatchTokens = [TokenNumber, TokenIdentifier, TokenString, TokenComment];
 
 export default class Lexer {
     input: string;
@@ -79,7 +80,9 @@ export default class Lexer {
     private matchExact(): { token: Token; shiftLen: number } | null {
         for (const TokenClass of ExactMatchTokens) {
             const len = TokenClass.value.length;
-            if (this.input.slice(0, len).toUpperCase() === TokenClass.value) {
+            const str = this.input.slice(0, len).toUpperCase();
+            const after = this.input.slice(len, len + 1);
+            if (str === TokenClass.value && (Lexer.isWord(str) ? Lexer.isSeparator(after) : true)) {
                 return {
                     token: new TokenClass(),
                     shiftLen: len,
@@ -87,6 +90,14 @@ export default class Lexer {
             }
         }
         return null;
+    }
+
+    private static isWord(s: string): boolean {
+        return Boolean(s.match(/^\w/u));
+    }
+
+    private static isSeparator(s: string): boolean {
+        return Boolean(s.match(/^\W/u));
     }
 
     private matchRegex(): { token: Token; shiftLen: number } | null {

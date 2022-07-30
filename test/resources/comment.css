@@ -1,4 +1,4 @@
 #target {
     color: red;
-    --moz-extension: --not-a-comment
+    --moz-extension: --not-a-comment;
 }

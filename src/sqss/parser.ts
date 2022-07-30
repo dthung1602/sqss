@@ -1,16 +1,18 @@
 import {
-    AndCondition,
-    AtomicCondition,
-    Condition,
-    EqualCondition,
-    IsCondition,
-    LikeCondition,
-    OrCondition,
+    AndExpression,
+    ComparisonExpression,
+    EqualExpression,
+    Expression,
+    FuncCallExpression,
+    IsExpression,
+    LikeExpression,
+    OrExpression,
     SqssStyleSheet,
     StyleAssignment,
     UpdateStatement,
 } from "./ast";
 import {
+    Token,
     TokenAnd,
     TokenCloseParenthesis,
     TokenComma,
@@ -22,6 +24,7 @@ import {
     TokenNot,
     TokenNotEqual,
     TokenNull,
+    TokenNumber,
     TokenOpenParenthesis,
     TokenOr,
     TokenSemiColon,
@@ -32,6 +35,8 @@ import {
     TokenWhere,
 } from "./token";
 import TokenStream from "./token-stream";
+
+type FuncArg = string | boolean | number | null;
 
 export default class Parser {
     constructor(public stream: TokenStream) {}
@@ -50,9 +55,9 @@ export default class Parser {
         const table = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
         this.stream.expectedNext(TokenSet);
         const styleAssignments = this.parseStyleAssignments();
-        const condition = this.parseWhereCondition();
+        const expression = this.parseWhereClause();
         this.stream.expectedNext(TokenSemiColon);
-        return new UpdateStatement(table.value, styleAssignments, condition);
+        return new UpdateStatement(table.value, styleAssignments, expression);
     }
 
     private parseStyleAssignments(): StyleAssignment[] {
@@ -75,59 +80,59 @@ export default class Parser {
         return new StyleAssignment(property.value, value.value);
     }
 
-    private parseWhereCondition(): Condition | null {
+    private parseWhereClause(): Expression | null {
         const token = this.stream.next();
         if (token instanceof TokenWhere) {
-            return this.parseCondition();
+            return this.parseExpression();
         }
         this.stream.back();
         return null;
     }
 
-    private parseCondition(): Condition {
+    private parseExpression(): Expression {
         // AND operator has higher precedence than OR
         let nextToken;
-        const conditions: Condition[] = [];
+        const expressions: Expression[] = [];
         do {
-            conditions.push(this.parseAndAtomicCondition());
+            expressions.push(this.parseAndComparisonExpression());
             nextToken = this.stream.next();
         } while (nextToken instanceof TokenOr);
         this.stream.back();
 
-        if (conditions.length === 1) {
-            return conditions[0];
+        if (expressions.length === 1) {
+            return expressions[0];
         }
-        return new OrCondition(conditions);
+        return new OrExpression(expressions);
     }
 
-    private parseAndAtomicCondition(): Condition {
-        const conditions: Condition[] = [];
+    private parseAndComparisonExpression(): Expression {
+        const expressions: Expression[] = [];
         let nextToken;
         do {
-            conditions.push(this.parseAtomicOrCompoundCondition());
+            expressions.push(this.parseComparisonOrCompoundExpression());
             nextToken = this.stream.next();
         } while (nextToken instanceof TokenAnd);
         this.stream.back();
 
-        if (conditions.length === 1) {
-            return conditions[0];
+        if (expressions.length === 1) {
+            return expressions[0];
         }
-        return new AndCondition(conditions);
+        return new AndExpression(expressions);
     }
 
-    private parseAtomicOrCompoundCondition(): AtomicCondition | Condition {
+    private parseComparisonOrCompoundExpression(): ComparisonExpression | Expression {
         const nextToken = this.stream.peek();
         if (nextToken instanceof TokenOpenParenthesis) {
             this.stream.next();
-            const condition = this.parseCondition();
+            const expression = this.parseExpression();
             this.stream.expectedNext(TokenCloseParenthesis);
-            return condition;
+            return expression;
         }
-        return this.parseAtomicCondition();
+        return this.parseComparisonExpression();
     }
 
-    private parseAtomicCondition(): AtomicCondition {
-        for (const parseFunc of [this.parseEqualCondition, this.parseLikeCondition, this.parseIsCondition]) {
+    private parseComparisonExpression(): ComparisonExpression {
+        for (const parseFunc of [this.parseEqualExpression, this.parseLikeExpression, this.parseIsExpression]) {
             const snapshot = this.stream.snapShot();
             try {
                 return parseFunc.bind(this)();
@@ -135,11 +140,11 @@ export default class Parser {
                 this.stream.restoreSnapShot(snapshot);
             }
         }
-        throw new Error("Cannot parse condition");
+        throw new Error("Cannot parse expression");
     }
 
-    private parseEqualCondition(): EqualCondition {
-        const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+    private parseEqualExpression(): EqualExpression {
+        const selector = this.parseComparisonExpressionLeftHandSide();
         const operator = this.stream.next();
         let negate = false;
         if (operator instanceof TokenNotEqual) {
@@ -148,23 +153,60 @@ export default class Parser {
             throw new Error(`Expecting = or !=, got ${operator}`);
         }
         const value = this.parseValue();
-        return new EqualCondition(selector.value, negate, value);
+        return new EqualExpression(selector, negate, value);
     }
 
-    private parseLikeCondition(): LikeCondition {
-        const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+    private parseLikeExpression(): LikeExpression {
+        const selector = this.parseComparisonExpressionLeftHandSide();
         const negate = this.parseNot();
         this.stream.expectedNext(TokenLike);
         const value = this.stream.expectedNext(TokenString) as TokenString;
-        return new LikeCondition(selector.value, negate, value.value);
+        return new LikeExpression(selector, negate, value.value);
     }
 
-    private parseIsCondition(): IsCondition {
-        const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+    private parseIsExpression(): IsExpression {
+        const selector = this.parseComparisonExpressionLeftHandSide();
         this.stream.expectedNext(TokenIs);
         const negate = this.parseNot();
         const value = this.parseNonStringValue();
-        return new IsCondition(selector.value, negate, value);
+        return new IsExpression(selector, negate, value);
+    }
+
+    private parseComparisonExpressionLeftHandSide(): string | FuncCallExpression {
+        const snapshot = this.stream.snapShot();
+        try {
+            return this.parseFuncCallExpression();
+        } catch (e) {
+            this.stream.restoreSnapShot(snapshot);
+            const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+            return selector.value;
+        }
+    }
+
+    private parseFuncCallExpression(): FuncCallExpression {
+        const name = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+        this.stream.expectedNext(TokenOpenParenthesis);
+        const args = this.parseFuncArgs();
+        this.stream.expectedNext(TokenCloseParenthesis);
+        return new FuncCallExpression(name.value, args);
+    }
+
+    private parseFuncArgs(): FuncArg[] {
+        if (this.stream.peek() instanceof TokenCloseParenthesis) return [];
+        const args = [this.parseFuncArg()];
+        while (this.stream.peek() instanceof TokenComma) {
+            this.stream.next();
+            args.push(this.parseFuncArg());
+        }
+        return args;
+    }
+
+    private parseFuncArg(): FuncArg {
+        const token = this.stream.next();
+        if (token instanceof TokenString || token instanceof TokenIdentifier || token instanceof TokenNumber) {
+            return token.value;
+        }
+        return this.parseNonStringValue(token);
     }
 
     private parseNot(): boolean {
@@ -190,8 +232,8 @@ export default class Parser {
         throw new Error(`Expecting a value token, got ${token}`);
     }
 
-    private parseNonStringValue(): boolean | null {
-        const token = this.stream.next();
+    private parseNonStringValue(token?: Token): boolean | null {
+        token = token || this.stream.next();
         if (token instanceof TokenTrue) {
             return true;
         }

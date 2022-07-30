@@ -23,10 +23,11 @@ const inspect: (obj: any) => string = (object) => {
 
 function isPrimitive(val: any): boolean {
     return (
-        ["null", "number", "string", "undefined", "boolean"].includes(typeof val) ||
+        ["number", "string", "undefined", "boolean"].includes(typeof val) ||
         val instanceof Number ||
         val instanceof String ||
-        val instanceof Boolean
+        val instanceof Boolean ||
+        val === null
     );
 }
 

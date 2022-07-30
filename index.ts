@@ -10,14 +10,14 @@ import Lexer from "./src/sqss/lexer";
 import Parser from "./src/sqss/parser";
 import SemanticAnalyzer from "./src/sqss/semantic-analyzer ";
 import TokenStream from "./src/sqss/token-stream";
-import FlattenCondition from "./src/transpiler/flatten-condition";
+import FlattenExpression from "./src/transpiler/flatten-expression";
 import NegationSimplifier from "./src/transpiler/negation-simplifier";
 import Transpiler from "./src/transpiler/transpiler";
 import Transverser from "./src/transverser";
 import { printTree } from "./src/utils";
 
-testEveryThing();
-// testStepByStep();
+// testEveryThing();
+testStepByStep();
 
 function testEveryThing() {
     const sqss = readFileSync("./test.sql", "utf-8");
@@ -42,7 +42,7 @@ function testStepByStep() {
     new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, negationSimplifier).transverse();
     printTree(root, "AFTER SIMPLIFY NEGATION");
 
-    const flatten = new FlattenCondition();
+    const flatten = new FlattenExpression();
     new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, flatten).transverse();
     printTree(root, "AFTER FLATTEN");
 

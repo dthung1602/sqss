@@ -8,7 +8,7 @@ export class SqssStyleSheet extends SqssNode {
 }
 
 export class UpdateStatement extends SqssNode {
-    constructor(public table: string, public assignments: StyleAssignment[], public where: Condition | null) {
+    constructor(public table: string, public assignments: StyleAssignment[], public where: Expression | null) {
         super();
     }
 }
@@ -19,40 +19,56 @@ export class StyleAssignment extends SqssNode {
     }
 }
 
-export abstract class Condition extends SqssNode {}
+export abstract class Expression extends SqssNode {}
 
-export class AndCondition extends Condition {
-    constructor(public conditions: Condition[]) {
+export class AndExpression extends Expression {
+    constructor(public expressions: Expression[]) {
         super();
     }
 }
 
-export class OrCondition extends Condition {
-    constructor(public conditions: Condition[]) {
+export class OrExpression extends Expression {
+    constructor(public expressions: Expression[]) {
         super();
     }
 }
 
-export abstract class AtomicCondition extends Condition {
-    protected constructor(public selector: string, public negate: boolean, public value: string | boolean | null) {
+export abstract class AtomicExpression extends Expression {}
+
+export abstract class ComparisonExpression extends AtomicExpression {
+    protected constructor(
+        public selector: string | FuncCallExpression,
+        public negate: boolean,
+        public value: string | boolean | null,
+    ) {
         super();
     }
 }
 
-export class EqualCondition extends AtomicCondition {
-    constructor(public selector: string, public negate: boolean, public value: string | boolean | null) {
+export class EqualExpression extends ComparisonExpression {
+    constructor(
+        public selector: string | FuncCallExpression,
+        public negate: boolean,
+        public value: string | boolean | null,
+    ) {
         super(selector, negate, value);
     }
 }
 
-export class IsCondition extends AtomicCondition {
-    constructor(public selector: string, public negate: boolean, public value: boolean | null) {
+export class IsExpression extends ComparisonExpression {
+    constructor(public selector: string | FuncCallExpression, public negate: boolean, public value: boolean | null) {
         super(selector, negate, value);
     }
 }
 
-export class LikeCondition extends AtomicCondition {
-    constructor(public selector: string, public negate: boolean, public value: string) {
+export class LikeExpression extends ComparisonExpression {
+    constructor(public selector: string | FuncCallExpression, public negate: boolean, public value: string) {
         super(selector, negate, value);
+    }
+}
+
+export class FuncCallExpression extends AtomicExpression {
+    constructor(public name: string, public args: (string | boolean | number | null)[]) {
+        super();
     }
 }

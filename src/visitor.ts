@@ -15,11 +15,12 @@ import {
     StyleRule,
 } from "./css/ast";
 import {
-    AndCondition,
-    EqualCondition,
-    IsCondition,
-    LikeCondition,
-    OrCondition,
+    AndExpression,
+    EqualExpression,
+    FuncCallExpression,
+    IsExpression,
+    LikeExpression,
+    OrExpression,
     SqssNode,
     SqssStyleSheet,
     StyleAssignment,
@@ -48,11 +49,12 @@ type PrePostHook<Name extends string, Node, BaseNode, Val, Ctx> = {
     [P in PrePostStr<Name>]?: PrePostFunc<P, Name, Node, BaseNode, Val, Ctx>;
 };
 
-export type SQSSVisitor<Val, Ctx> = PrePostHook<"AndCondition", AndCondition, SqssNode, Val, Ctx> &
-    PrePostHook<"EqualCondition", EqualCondition, SqssNode, Val, Ctx> &
-    PrePostHook<"IsCondition", IsCondition, SqssNode, Val, Ctx> &
-    PrePostHook<"LikeCondition", LikeCondition, SqssNode, Val, Ctx> &
-    PrePostHook<"OrCondition", OrCondition, SqssNode, Val, Ctx> &
+export type SQSSVisitor<Val, Ctx> = PrePostHook<"AndExpression", AndExpression, SqssNode, Val, Ctx> &
+    PrePostHook<"EqualExpression", EqualExpression, SqssNode, Val, Ctx> &
+    PrePostHook<"FuncCallExpression", FuncCallExpression, SqssNode, Val, Ctx> &
+    PrePostHook<"IsExpression", IsExpression, SqssNode, Val, Ctx> &
+    PrePostHook<"LikeExpression", LikeExpression, SqssNode, Val, Ctx> &
+    PrePostHook<"OrExpression", OrExpression, SqssNode, Val, Ctx> &
     PrePostHook<"SqssStyleSheet", SqssStyleSheet, SqssNode, Val, Ctx> &
     PrePostHook<"StyleAssignment", StyleAssignment, SqssNode, Val, Ctx> &
     PrePostHook<"UpdateStatement", UpdateStatement, SqssNode, Val, Ctx>;

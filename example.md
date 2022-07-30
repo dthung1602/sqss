@@ -99,7 +99,7 @@ WHERE "[title]" LIKE '%help test%'
     color: white;
 }
 
-[title*='%help test%'] {
+[title*='help test'] {
     background: blue;
     color: white;
 }
@@ -137,17 +137,17 @@ WHERE "::after" = TRUE
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE NthChild(node, 2) == TRUE
+WHERE IS_NTH_CHILD(node, 2) == TRUE
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE FirstChild(node) == TRUE
+WHERE IS_FIRST_CHILD(node) == TRUE
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE LastChild(node) == TRUE
+WHERE IS_LAST_CHILD(node) == TRUE
 ```
 
 ```css
@@ -156,12 +156,12 @@ WHERE LastChild(node) == TRUE
     color: white;
 }
 
-:first-child() {
+:first-child {
     background: blue;
     color: white;
 }
 
-:last-child() {
+:last-child {
     background: blue;
     color: white;
 }
@@ -173,7 +173,7 @@ WHERE LastChild(node) == TRUE
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE INCLUDE(class, 'target', 'another', 'yet-another')
+WHERE class = 'target' AND class = 'another' AND class = 'yet-another'
 ```
 
 ```css
@@ -207,7 +207,7 @@ UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
 WHERE element = 'a'
-  AND INCLUDE(class, 'target', 'another', 'yet-another')
+  AND class = 'target' and class = 'another' and class = 'yet-another'
   AND "[href]" != '/'
 AND ":hover" = TRUE
 ```
@@ -223,8 +223,8 @@ a.target.another.yet-another:not([href='/']):hover {
 
 ```sql
 UPDATE styles
-    JOIN styles AS ancestor1 ON ANY(ANCESTORS(node)) = ancestor1.node
-    JOIN styles AS ancestor2 ON ANY(ANCESTORS(ancestor1.node)) = ancestor2.node
+    JOIN styles AS ancestor1 ON IS_ANCESTOR(ancestor1.node, node) 
+    JOIN styles AS ancestor2 ON IS_ANCESTOR(ancestor2.node, ancestor1.node)
 SET "background" = 'blue',
         "color" = 'white'
 WHERE class = 'inside'
@@ -232,21 +232,21 @@ WHERE class = 'inside'
   AND ancestor2.class = 'outside'
 
 UPDATE styles
-    JOIN styles AS prt ON PARENT(node) = prt.node
+    JOIN styles AS prt ON IS_PARENT(prt.node, node)
 SET "background" = 'blue',
     "color" = 'white'
 WHERE class = 'inside'
   AND prt.class = 'outside'
 
 UPDATE styles
-    JOIN styles AS pre ON NEXT(pre.node) = node
+    JOIN styles AS pre ON IS_PREV(pre.node, node)
     SET "background" = 'blue',
         "color" = 'white'
 WHERE class = 'target'
   AND pre.class = 'before'
 
 UPDATE styles
-    JOIN styles AS pre ON ANY(NEXTS(pre.node)) = node
+    JOIN styles AS pre ON COMES_BEFORE(pre.node, node)
     SET "background" = 'blue',
         "color" = 'white'
 WHERE class = 'target'

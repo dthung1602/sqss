@@ -1,4 +1,4 @@
-import { trim, trimStart } from "../utils";
+import { trim } from "../utils";
 
 // Keywords
 
@@ -100,6 +100,17 @@ export class TokenFalse {
     static readonly value = "FALSE";
 }
 
+export class TokenNumber {
+    static readonly regex = /^\d+(\.\d+)?/;
+    readonly raw: string;
+    readonly value: number;
+
+    constructor(value: string) {
+        this.raw = value;
+        this.value = parseFloat(value);
+    }
+}
+
 // Other
 
 export class TokenComment {
@@ -116,6 +127,6 @@ export class TokenComment {
 export type TokenKeyword = TokenUpdate | TokenSet | TokenWhere;
 export type TokenSpecialChar = TokenSemiColon | TokenComma | TokenOpenParenthesis | TokenCloseParenthesis;
 export type TokenOperator = TokenEqual | TokenNotEqual | TokenIs | TokenNot | TokenLike | TokenAnd | TokenOr;
-export type TokenValue = TokenString | TokenNull | TokenTrue | TokenFalse;
+export type TokenValue = TokenString | TokenNull | TokenTrue | TokenFalse | TokenNumber;
 export type Token = TokenKeyword | TokenSpecialChar | TokenOperator | TokenIdentifier | TokenValue | TokenComment;
 export type TokenClass = { new (...args: any[]): Token };

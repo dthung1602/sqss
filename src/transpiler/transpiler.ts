@@ -20,11 +20,12 @@ import {
     StyleRule,
 } from "../css/ast";
 import {
-    AndCondition,
-    EqualCondition,
-    IsCondition,
-    LikeCondition,
-    OrCondition,
+    AndExpression,
+    EqualExpression,
+    FuncCallExpression,
+    IsExpression,
+    LikeExpression,
+    OrExpression,
     SqssNode,
     SqssStyleSheet,
     StyleAssignment,
@@ -50,20 +51,20 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
         return new StyleDeclaration(node.property, node.value);
     }
 
-    postVisitAndCondition(node: AndCondition, context: void, data: STCAgg<AndCondition>): AndSelector {
-        return new AndSelector(data.conditions);
+    postVisitAndExpression(node: AndExpression, context: void, data: STCAgg<AndExpression>): AndSelector {
+        return new AndSelector(data.expressions);
     }
 
-    postVisitOrCondition(node: OrCondition, context: void, data: STCAgg<OrCondition>): OrSelector {
-        return new OrSelector(data.conditions);
+    postVisitOrExpression(node: OrExpression, context: void, data: STCAgg<OrExpression>): OrSelector {
+        return new OrSelector(data.expressions);
     }
 
-    postVisitEqualCondition(node: EqualCondition, context: void, data: STCAgg<EqualCondition>): AtomicSelector {
-        const selector = Transpiler.getSelectorForEqualCondition(node);
+    postVisitEqualExpression(node: EqualExpression, context: void, data: STCAgg<EqualExpression>): AtomicSelector {
+        const selector = Transpiler.getSelectorForEqualExpression(node);
         return node.negate ? new NotSelector(selector) : selector;
     }
 
-    private static getSelectorForEqualCondition(node: EqualCondition): AtomicSelector {
+    private static getSelectorForEqualExpression(node: EqualExpression): AtomicSelector {
         switch (node.selector) {
             case "element":
                 return new ElementSelector(node.value as string);
@@ -71,6 +72,9 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
                 return new IdSelector(node.value as string);
             case "class":
                 return new ClassSelector(node.value as string);
+        }
+        if (node.selector instanceof FuncCallExpression) {
+            throw new Error("Not implemented");
         }
         if (isAttrSelector(node.selector)) {
             if (node.value === null)
@@ -86,7 +90,10 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
         throw new Error(`Unknown selector: ${node.selector}`);
     }
 
-    postVisitLikeCondition(node: LikeCondition, context: void, data: STCAgg<LikeCondition>): AtomicSelector {
+    postVisitLikeExpression(node: LikeExpression, context: void, data: STCAgg<LikeExpression>): AtomicSelector {
+        if (node.selector instanceof FuncCallExpression) {
+            throw new Error("Not implemented");
+        }
         const attrSelector = new AttributeSelector(
             node.selector.slice(1, node.selector.length - 1),
             Transpiler.getAttributeSelectorOperator(node.value),
@@ -98,12 +105,19 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
         return attrSelector;
     }
 
-    postVisitIsCondition(node: IsCondition, context: void, data: STCAgg<IsCondition>): AtomicSelector {
+    postVisitIsExpression(node: IsExpression, context: void, data: STCAgg<IsExpression>): AtomicSelector {
+        if (node.selector instanceof FuncCallExpression) {
+            throw new Error("Not implemented");
+        }
         const attrSelector = new AttributeSelector(node.selector.slice(1, node.selector.length - 1), "", "");
         if (node.negate) {
             return new NotSelector(attrSelector);
         }
         return attrSelector;
+    }
+
+    postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: STCAgg<FuncCallExpression>): CSSNode {
+        throw new Error("Not implemented");
     }
 
     private static getAttributeSelectorOperator(value: string): AttributeOperator {

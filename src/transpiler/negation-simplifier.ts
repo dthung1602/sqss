@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {
-    AndCondition,
-    Condition,
-    EqualCondition,
-    IsCondition,
-    LikeCondition,
-    OrCondition,
+    AndExpression,
+    EqualExpression,
+    Expression,
+    FuncCallExpression,
+    IsExpression,
+    LikeExpression,
+    OrExpression,
     SqssNode,
     SqssStyleSheet,
     StyleAssignment,
@@ -35,26 +36,26 @@ export default class NegationSimplifier implements SQSSVisitor<ReplaceNode, void
         return null;
     }
 
-    postVisitAndCondition(node: AndCondition, context: void, data: NSAgg<AndCondition>): null {
-        return this.replaceCondition(node, data);
+    postVisitAndExpression(node: AndExpression, context: void, data: NSAgg<AndExpression>): null {
+        return this.replaceExpression(node, data);
     }
 
-    postVisitOrCondition(node: OrCondition, context: void, data: NSAgg<OrCondition>): null {
-        return this.replaceCondition(node, data);
+    postVisitOrExpression(node: OrExpression, context: void, data: NSAgg<OrExpression>): null {
+        return this.replaceExpression(node, data);
     }
 
-    private replaceCondition<C extends OrCondition | AndCondition>(node: C, data: NSAgg<C>): null {
-        if (Array.isArray(data.conditions)) {
-            data.conditions.forEach((newNode, i) => {
-                if (newNode instanceof Condition) {
-                    node.conditions[i] = newNode;
+    private replaceExpression<C extends OrExpression | AndExpression>(node: C, data: NSAgg<C>): null {
+        if (Array.isArray(data.expressions)) {
+            data.expressions.forEach((newNode, i) => {
+                if (newNode instanceof Expression) {
+                    node.expressions[i] = newNode;
                 }
             });
         }
         return null;
     }
 
-    postVisitEqualCondition(node: EqualCondition, context: void, data: NSAgg<EqualCondition>): ReplaceNode {
+    postVisitEqualExpression(node: EqualExpression, context: void, data: NSAgg<EqualExpression>): ReplaceNode {
         if (node.negate && isBool(node.value)) {
             node.negate = false;
             node.value = !node.value;
@@ -62,15 +63,19 @@ export default class NegationSimplifier implements SQSSVisitor<ReplaceNode, void
         return null;
     }
 
-    postVisitLikeCondition(node: LikeCondition, context: void, data: NSAgg<LikeCondition>): null {
+    postVisitLikeExpression(node: LikeExpression, context: void, data: NSAgg<LikeExpression>): null {
         return null;
     }
 
-    postVisitIsCondition(node: IsCondition, context: void, data: NSAgg<IsCondition>): ReplaceNode {
+    postVisitIsExpression(node: IsExpression, context: void, data: NSAgg<IsExpression>): ReplaceNode {
         if (isBool(node.value)) {
             const value = node.negate ? !node.value : node.value;
-            return new EqualCondition(node.selector, false, value);
+            return new EqualExpression(node.selector, false, value);
         }
+        return null;
+    }
+
+    postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: NSAgg<FuncCallExpression>): null {
         return null;
     }
 }

@@ -5,7 +5,6 @@ import {
     assertTrue,
     isAttrSelector,
     isBool,
-    isKebabCase,
     isPseudoClassSelector,
     isPseudoElementSelector,
     isSimpleSelector,
@@ -14,11 +13,12 @@ import {
 } from "../utils";
 import { Agg, SQSSVisitor } from "../visitor";
 import {
-    AndCondition,
-    EqualCondition,
-    IsCondition,
-    LikeCondition,
-    OrCondition,
+    AndExpression,
+    EqualExpression,
+    FuncCallExpression,
+    IsExpression,
+    LikeExpression,
+    OrExpression,
     SqssNode,
     SqssStyleSheet,
     StyleAssignment,
@@ -36,11 +36,15 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
 
     postVisitStyleAssignment(node: StyleAssignment, context: void, data: SAAgg<StyleAssignment>) {}
 
-    postVisitAndCondition(node: AndCondition, context: void, data: SAAgg<AndCondition>) {}
+    postVisitAndExpression(node: AndExpression, context: void, data: SAAgg<AndExpression>) {}
 
-    postVisitOrCondition(node: OrCondition, context: void, data: SAAgg<OrCondition>) {}
+    postVisitOrExpression(node: OrExpression, context: void, data: SAAgg<OrExpression>) {}
 
-    postVisitEqualCondition(node: EqualCondition, context: void, data: SAAgg<EqualCondition>) {
+    postVisitEqualExpression(node: EqualExpression, context: void, data: SAAgg<EqualExpression>) {
+        if (node.selector instanceof FuncCallExpression) {
+            assertTrue(isBool(node.value) || node.value === null, "Function must be compare against bool/null");
+            return;
+        }
         if (isSimpleSelector(node.selector)) {
             assertTrue(isString(node.value), "The value of element/id/class must be a string");
             return;
@@ -61,22 +65,32 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
 
-    postVisitLikeCondition(node: LikeCondition, context: void, data: SAAgg<LikeCondition>) {
-        assertTrue(isAttrSelector(node.selector), "Like comparison is only applicable for attribute selector");
+    postVisitLikeExpression(node: LikeExpression, context: void, data: SAAgg<LikeExpression>) {
+        assertTrue(!(node.selector instanceof FuncCallExpression), "Like is not applicable to function call");
+        assertTrue(
+            isAttrSelector(node.selector as string),
+            "Like comparison is only applicable for attribute selector",
+        );
     }
 
-    postVisitIsCondition(node: IsCondition, context: void, data: SAAgg<IsCondition>) {
+    postVisitIsExpression(node: IsExpression, context: void, data: SAAgg<IsExpression>) {
+        if (
+            node.selector instanceof FuncCallExpression ||
+            isPseudoClassSelector(node.selector) ||
+            isPseudoElementSelector(node.selector)
+        ) {
+            assertTrue(
+                isBool(node.value),
+                "For pseudo class, pseudo element and function call, right hand side of IS must be boolean",
+            );
+            return;
+        }
         if (isAttrSelector(node.selector)) {
             assertTrue(node.value === null, "For attribute selector, right hand side of IS must be null");
             return;
         }
-        if (isPseudoClassSelector(node.selector) || isPseudoElementSelector(node.selector)) {
-            assertTrue(
-                isBool(node.value),
-                "For pseudo class and pseudo element, right hand side of IS must be boolean",
-            );
-            return;
-        }
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
+
+    postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: SAAgg<FuncCallExpression>) {}
 }
