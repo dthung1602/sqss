@@ -107,7 +107,7 @@ export default class Generator implements CSSVisitor<string, void> {
         context: void,
         data: GAgg<PseudoElementSelector>,
     ): string {
-        return node.value ? `::${node.element}` : "";
+        return `::${node.element}`;
     }
 
     postVisitNotSelector(node: NotSelector, context: void, data: GAgg<NotSelector>): string {
