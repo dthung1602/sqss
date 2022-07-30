@@ -1,5 +1,5 @@
-import { inspect } from "util";
-
+// @ts-ignore
+import inspect from "../inspect";
 import Lexer from "./lexer";
 import { Token, TokenClass } from "./token";
 

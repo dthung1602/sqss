@@ -3,9 +3,8 @@
 //=============================================
 
 // Copied from https://stackoverflow.com/a/55292366/7342188
-import { inspect } from "util";
-
 import { CSSNode } from "./css/ast";
+import inspect from "./inspect";
 import { SqssNode } from "./sqss/ast";
 
 export function trim(str: string, ch: string): string {
@@ -120,7 +119,7 @@ export function cartesian<T>(...allEntries: T[][]): T[][] {
 export function printTree(root: SqssNode | CSSNode, message: string) {
     // TODO inspect is available only for node, need to remove
     console.log("\n" + message + ": \n");
-    console.log(inspect(root, true, null, true));
+    console.log(inspect(root));
     console.log("--------------------------------------------------------------------------------------------------\n");
 }
 
