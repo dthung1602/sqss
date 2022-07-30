@@ -3,7 +3,7 @@ import { join as joinPath } from "path";
 
 import { transpileSQSSToCSS } from "../src";
 
-const BASIC_SELECT = ["basic", "class", "element", "id", "attribute", "pseudo-class", "pseudo-element"];
+const BASIC_SELECT = ["basic", "class", "element", "id", "attribute", "pseudo-class", "pseudo-element", "and"];
 
 async function getResourceContent(...path: string[]): Promise<string> {
     const finalPath = joinPath(__dirname, "resources", ...path);

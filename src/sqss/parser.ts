@@ -85,15 +85,8 @@ export default class Parser {
     }
 
     private parseCondition(): Condition {
-        let nextToken = this.stream.peek();
-        if (nextToken instanceof TokenOpenParenthesis) {
-            this.stream.next();
-            const condition = this.parseCondition();
-            this.stream.expectedNext(TokenCloseParenthesis);
-            return condition;
-        }
-
         // AND operator has higher precedence than OR
+        let nextToken;
         const conditions: Condition[] = [];
         do {
             conditions.push(this.parseAndAtomicCondition());
