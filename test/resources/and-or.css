@@ -1,0 +1,21 @@
+h3#target.center, .page-title::before, [title="some text"], :hover {
+    background: red;
+}
+
+h3.center, #target.center, .page-title, ::before, :hover[title="some text"] {
+    background: yellow;
+}
+
+h3.center.page-title, #target.center.page-title, :hover::before, :hover[title="some text"] {
+    background: green;
+}
+
+h3#target.page-title,
+h3#target::before,
+h3#target[title="some text"],
+h3.center.page-title,
+h3.center::before,
+h3.center[title="some text"],
+:hover {
+    background: blue;
+}

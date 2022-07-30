@@ -1,0 +1,27 @@
+h3, #target, .center, .page-title, ::before, [title="some text"], :hover {
+    background: red;
+}
+
+:hover, [title="some text"], .center, ::before, #target, h3, .page-title {
+    background: orangered;
+}
+
+h3, #target, .center, .page-title, ::before, [title="some text"], :hover {
+    background: orange;
+}
+
+h3 {
+    background: red;
+}
+
+h3, .center {
+    background: red;
+}
+
+h3, .center, #target {
+    background: red;
+}
+
+h3, .center, #target, .page-title {
+    background: red;
+}
