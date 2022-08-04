@@ -5,6 +5,7 @@ import {
     assertTrue,
     isAttrSelector,
     isBool,
+    isNonNegativeInteger,
     isPseudoClassSelector,
     isPseudoElementSelector,
     isSimpleSelector,
@@ -92,5 +93,31 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
         throw new Error(`Cannot recognize selector ${node.selector}`);
     }
 
-    postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: SAAgg<FuncCallExpression>) {}
+    postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: SAAgg<FuncCallExpression>) {
+        assertTrue(functionNames.includes(node.name), `Invalid function name ${node.name}`);
+        const validators = functionSignatures[node.name as keyof typeof functionSignatures];
+        validators.forEach((validate, idx) => {
+            if (!validate(node.args[idx])) {
+                throw new Error(`Argument ${idx + 1} of ${node.name} is invalid: ${node.args[idx]}`);
+            }
+        });
+    }
+}
+
+const functionSignatures: Record<string, ((x: unknown) => boolean)[]> = {
+    IS_FIRST_CHILD: [isNodeIdentifier],
+    IS_LAST_CHILD: [isNodeIdentifier],
+    IS_NTH_CHILD: [isNodeIdentifier, isNonNegativeInteger],
+    IS_NTH_LAST_CHILD: [isNodeIdentifier, isNonNegativeInteger],
+    // TODO
+    IS_ANCESTOR: [],
+    IS_PARENT: [],
+    IS_PREV: [],
+    COMES_BEFORE: [],
+};
+
+const functionNames = Object.keys(functionSignatures);
+
+function isNodeIdentifier(node: unknown) {
+    return node === "node";
 }

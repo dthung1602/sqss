@@ -11,8 +11,12 @@ import {
     CSSNode,
     CSSStyleSheet,
     ElementSelector,
+    FirstChild,
     IdSelector,
+    LastChild,
     NotSelector,
+    NthChild,
+    NthLastChild,
     OrSelector,
     PseudoClassSelector,
     PseudoElementSelector,
@@ -60,11 +64,11 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
     }
 
     postVisitEqualExpression(node: EqualExpression, context: void, data: STCAgg<EqualExpression>): AtomicSelector {
-        const selector = Transpiler.getSelectorForEqualExpression(node);
+        const selector = Transpiler.getSelectorForEqualExpression(node, data);
         return node.negate ? new NotSelector(selector) : selector;
     }
 
-    private static getSelectorForEqualExpression(node: EqualExpression): AtomicSelector {
+    private static getSelectorForEqualExpression(node: EqualExpression, data: STCAgg<EqualExpression>): AtomicSelector {
         switch (node.selector) {
             case "element":
                 return new ElementSelector(node.value as string);
@@ -74,7 +78,7 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
                 return new ClassSelector(node.value as string);
         }
         if (node.selector instanceof FuncCallExpression) {
-            throw new Error("Not implemented");
+            return data.selector;
         }
         if (isAttrSelector(node.selector)) {
             if (node.value === null)
@@ -117,7 +121,18 @@ export default class Transpiler implements SQSSVisitor<CSSNode, void> {
     }
 
     postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: STCAgg<FuncCallExpression>): CSSNode {
-        throw new Error("Not implemented");
+        switch (node.name) {
+            case "IS_FIRST_CHILD":
+                return new FirstChild();
+            case "IS_LAST_CHILD":
+                return new LastChild();
+            case "IS_NTH_CHILD":
+                return new NthChild(node.args[1] as number);
+            case "IS_NTH_LAST_CHILD":
+                return new NthLastChild(node.args[1] as number);
+            default:
+                throw new Error(`Haven't implemented function ${node.name} yet`);
+        }
     }
 
     private static getAttributeSelectorOperator(value: string): AttributeOperator {

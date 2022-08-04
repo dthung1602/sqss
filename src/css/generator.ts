@@ -11,8 +11,12 @@ import {
     CSSNode,
     CSSStyleSheet,
     ElementSelector,
+    FirstChild,
     IdSelector,
+    LastChild,
     NotSelector,
+    NthChild,
+    NthLastChild,
     OrSelector,
     PseudoClassSelector,
     PseudoElementSelector,
@@ -61,6 +65,10 @@ export default class Generator implements CSSVisitor<string, void> {
             IdSelector,
             ClassSelector,
             PseudoClassSelector,
+            FirstChild,
+            LastChild,
+            NthChild,
+            NthLastChild,
             AttributeSelector,
             NotSelector,
             PseudoElementSelector,
@@ -119,5 +127,21 @@ export default class Generator implements CSSVisitor<string, void> {
 
     postVisitAllSelector(node: AllSelector, context: void, data: GAgg<AllSelector>): string {
         return "*";
+    }
+
+    postVisitFirstChild(node: AllSelector, context: void, data: GAgg<FirstChild>): string {
+        return ":fist-child";
+    }
+
+    postVisitLastChild(node: AllSelector, context: void, data: GAgg<LastChild>): string {
+        return ":last-child";
+    }
+
+    postVisitNthChild(node: NthChild, context: void, data: GAgg<NthChild>): string {
+        return `:nth-child(${node.n})`;
+    }
+
+    postVisitNthLastChild(node: NthLastChild, context: void, data: GAgg<NthLastChild>) {
+        return `:nth-last-child(${node.n})`;
     }
 }

@@ -101,7 +101,7 @@ export class TokenFalse {
 }
 
 export class TokenNumber {
-    static readonly regex = /^\d+(\.\d+)?/;
+    static readonly regex = /^-?\d+(\.\d+)?/;
     readonly raw: string;
     readonly value: number;
 

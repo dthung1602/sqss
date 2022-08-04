@@ -6,8 +6,12 @@ import {
     CSSNode,
     CSSStyleSheet,
     ElementSelector,
+    FirstChild,
     IdSelector,
+    LastChild,
     NotSelector,
+    NthChild,
+    NthLastChild,
     OrSelector,
     PseudoClassSelector,
     PseudoElementSelector,
@@ -71,6 +75,10 @@ export type CSSVisitor<Val, Ctx> = PrePostHook<"CSSStyleSheet", CSSStyleSheet, C
     PrePostHook<"PseudoClassSelector", PseudoClassSelector, CSSNode, Val, Ctx> &
     PrePostHook<"PseudoElementSelector", PseudoElementSelector, CSSNode, Val, Ctx> &
     PrePostHook<"NotSelector", NotSelector, CSSNode, Val, Ctx> &
-    PrePostHook<"AllSelector", AllSelector, CSSNode, Val, Ctx>;
+    PrePostHook<"AllSelector", AllSelector, CSSNode, Val, Ctx> &
+    PrePostHook<"FirstChild", FirstChild, CSSNode, Val, Ctx> &
+    PrePostHook<"LastChild", LastChild, CSSNode, Val, Ctx> &
+    PrePostHook<"NthChild", NthChild, CSSNode, Val, Ctx> &
+    PrePostHook<"NthLastChild", NthLastChild, CSSNode, Val, Ctx>;
 
 export type Visitor<Val, Ctx> = SQSSVisitor<Val, Ctx> | CSSVisitor<Val, Ctx>;

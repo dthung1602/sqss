@@ -14,7 +14,7 @@ import {
     StyleAssignment,
     UpdateStatement,
 } from "../sqss/ast";
-import { isBool, isPseudoClassSelector, isPseudoElementSelector } from "../utils";
+import { isBool, isPseudoClassSelector, isPseudoElementSelector, xor } from "../utils";
 import { Agg, SQSSVisitor } from "../visitor";
 
 type ReplaceNode = SqssNode | null;
@@ -56,9 +56,9 @@ export default class NegationSimplifier implements SQSSVisitor<ReplaceNode, void
     }
 
     postVisitEqualExpression(node: EqualExpression, context: void, data: NSAgg<EqualExpression>): ReplaceNode {
-        if (node.negate && isBool(node.value)) {
-            node.negate = false;
-            node.value = !node.value;
+        if (isBool(node.value)) {
+            node.negate = !xor(node.negate, node.value as boolean);
+            node.value = true;
         }
         return null;
     }

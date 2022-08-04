@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { FuncCallExpression } from "../sqss/ast";
 import { assertTrue, containAnyStr, isKebabCase, startsWith } from "../utils";
 import { Agg, CSSVisitor } from "../visitor";
 import {
@@ -11,8 +12,12 @@ import {
     CSSNode,
     CSSStyleSheet,
     ElementSelector,
+    FirstChild,
     IdSelector,
+    LastChild,
     NotSelector,
+    NthChild,
+    NthLastChild,
     OrSelector,
     PseudoClassSelector,
     PseudoElementSelector,
@@ -91,6 +96,14 @@ export default class Validator implements CSSVisitor<void, void> {
     postVisitNotSelector(node: NotSelector, context: void, data: VAgg<NotSelector>) {}
 
     postVisitAllSelector(node: AllSelector, context: void, data: VAgg<AllSelector>) {}
+
+    postVisitFirstChild(node: AllSelector, context: void, data: VAgg<FirstChild>) {}
+
+    postVisitLastChild(node: AllSelector, context: void, data: VAgg<LastChild>) {}
+
+    postVisitNthChild(node: NthChild, context: void, data: VAgg<NthChild>) {}
+
+    postVisitNthLastChild(node: NthLastChild, context: void, data: VAgg<NthLastChild>) {}
 }
 
 // from https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes

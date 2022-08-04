@@ -1,12 +1,12 @@
+import { CSSNode } from "./css/ast";
+import inspect from "./inspect";
+import { SqssNode } from "./sqss/ast";
+
 //=============================================
 //                  STRING
 //=============================================
 
 // Copied from https://stackoverflow.com/a/55292366/7342188
-import { CSSNode } from "./css/ast";
-import inspect from "./inspect";
-import { SqssNode } from "./sqss/ast";
-
 export function trim(str: string, ch: string): string {
     return trimStart(trimEnd(str, ch), ch);
 }
@@ -98,12 +98,16 @@ export function isKebabCase(str: string): boolean {
     return Boolean(str.match(KEBAB_CASE_REGEX));
 }
 
-export function isString(value: unknown) {
+export function isString(value: unknown): boolean {
     return value instanceof String || typeof value === "string";
 }
 
-export function isBool(value: unknown) {
+export function isBool(value: unknown): boolean {
     return value instanceof Boolean || typeof value === "boolean";
+}
+
+export function isNonNegativeInteger(value: unknown): boolean {
+    return (value instanceof Number || typeof value === "number") && value > 0 && Math.floor(value as number) === value;
 }
 
 export function cartesian<T>(...allEntries: T[][]): T[][] {

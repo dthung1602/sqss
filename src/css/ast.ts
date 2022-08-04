@@ -82,3 +82,19 @@ export class NotSelector extends AtomicSelector {
 }
 
 export class AllSelector extends AtomicSelector {}
+
+export class FirstChild extends AtomicSelector {}
+
+export class LastChild extends AtomicSelector {}
+
+export class NthChild extends AtomicSelector {
+    constructor(public n: number) {
+        super();
+    }
+}
+
+export class NthLastChild extends AtomicSelector {
+    constructor(public n: number) {
+        super();
+    }
+}
