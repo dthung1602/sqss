@@ -23,6 +23,7 @@ import {
     EqualExpression,
     FuncCallExpression,
     IsExpression,
+    JoinClause,
     LikeExpression,
     OrExpression,
     SqssNode,
@@ -57,6 +58,7 @@ export type SQSSVisitor<Val, Ctx> = PrePostHook<"AndExpression", AndExpression, 
     PrePostHook<"EqualExpression", EqualExpression, SqssNode, Val, Ctx> &
     PrePostHook<"FuncCallExpression", FuncCallExpression, SqssNode, Val, Ctx> &
     PrePostHook<"IsExpression", IsExpression, SqssNode, Val, Ctx> &
+    PrePostHook<"JoinClause", JoinClause, SqssNode, Val, Ctx> &
     PrePostHook<"LikeExpression", LikeExpression, SqssNode, Val, Ctx> &
     PrePostHook<"OrExpression", OrExpression, SqssNode, Val, Ctx> &
     PrePostHook<"SqssStyleSheet", SqssStyleSheet, SqssNode, Val, Ctx> &

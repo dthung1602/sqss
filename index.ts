@@ -8,7 +8,7 @@ import Validator from "./src/css/validator";
 import { SqssNode } from "./src/sqss/ast";
 import Lexer from "./src/sqss/lexer";
 import Parser from "./src/sqss/parser";
-import SemanticAnalyzer from "./src/sqss/semantic-analyzer ";
+import SemanticAnalyzer, { SAContext } from "./src/sqss/semantic-analyzer ";
 import TokenStream from "./src/sqss/token-stream";
 import FlattenExpression from "./src/transpiler/flatten-expression";
 import NegationSimplifier from "./src/transpiler/negation-simplifier";
@@ -36,7 +36,7 @@ function testStepByStep() {
     printTree(root, "ORIGINAL TREE");
 
     const semanticAnalyzer = new SemanticAnalyzer();
-    new Transverser<SqssNode, void, void>(SqssNode, root, semanticAnalyzer).transverse();
+    new Transverser<SqssNode, void, SAContext>(SqssNode, root, semanticAnalyzer).transverse({});
 
     const negationSimplifier = new NegationSimplifier();
     new Transverser<SqssNode, SqssNode | null, void>(SqssNode, root, negationSimplifier).transverse();

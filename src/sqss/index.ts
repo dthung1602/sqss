@@ -3,7 +3,7 @@ import * as ast from "./ast";
 import { SqssNode } from "./ast";
 import Lexer from "./lexer";
 import Parser from "./parser";
-import SemanticAnalyzer from "./semantic-analyzer ";
+import SemanticAnalyzer, { SAContext } from "./semantic-analyzer ";
 import * as token from "./token";
 import TokenStream from "./token-stream";
 
@@ -19,7 +19,7 @@ export function parse(tokenStream: TokenStream): ast.SqssNode {
 
 export function analyze(sqssNode: SqssNode) {
     const semanticAnalyzer = new SemanticAnalyzer();
-    new Transverser<SqssNode, void, void>(SqssNode, sqssNode, semanticAnalyzer).transverse();
+    new Transverser<SqssNode, void, SAContext>(SqssNode, sqssNode, semanticAnalyzer).transverse({});
 }
 
 export function toAST(sqss: string): ast.SqssNode {

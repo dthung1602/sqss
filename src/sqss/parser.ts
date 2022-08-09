@@ -5,6 +5,7 @@ import {
     Expression,
     FuncCallExpression,
     IsExpression,
+    JoinClause,
     LikeExpression,
     OrExpression,
     SqssStyleSheet,
@@ -14,17 +15,20 @@ import {
 import {
     Token,
     TokenAnd,
+    TokenAs,
     TokenCloseParenthesis,
     TokenComma,
     TokenEqual,
     TokenFalse,
     TokenIdentifier,
     TokenIs,
+    TokenJoin,
     TokenLike,
     TokenNot,
     TokenNotEqual,
     TokenNull,
     TokenNumber,
+    TokenOn,
     TokenOpenParenthesis,
     TokenOr,
     TokenSemiColon,
@@ -53,11 +57,32 @@ export default class Parser {
     private parseUpdateStatement(): UpdateStatement {
         this.stream.expectedNext(TokenUpdate);
         const table = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+        const joins = this.parseJoinClauses();
         this.stream.expectedNext(TokenSet);
         const styleAssignments = this.parseStyleAssignments();
         const expression = this.parseWhereClause();
         this.stream.expectedNext(TokenSemiColon);
-        return new UpdateStatement(table.value, styleAssignments, expression);
+        return new UpdateStatement(table.value, joins, styleAssignments, expression);
+    }
+
+    private parseJoinClauses(): JoinClause[] {
+        const joins: JoinClause[] = [];
+        let nextToken = this.stream.peek();
+        while (nextToken instanceof TokenJoin) {
+            joins.push(this.parseJoinClause());
+            nextToken = this.stream.peek();
+        }
+        return joins;
+    }
+
+    private parseJoinClause(): JoinClause {
+        this.stream.expectedNext(TokenJoin);
+        const table = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+        this.stream.expectedNext(TokenAs);
+        const alias = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
+        this.stream.expectedNext(TokenOn);
+        const expression = this.parseExpression();
+        return new JoinClause(table.value, alias.value, expression);
     }
 
     private parseStyleAssignments(): StyleAssignment[] {

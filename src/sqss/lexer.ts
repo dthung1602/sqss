@@ -2,6 +2,7 @@ import { trunkString } from "../utils";
 import {
     Token,
     TokenAnd,
+    TokenAs,
     TokenCloseParenthesis,
     TokenComma,
     TokenComment,
@@ -9,11 +10,13 @@ import {
     TokenFalse,
     TokenIdentifier,
     TokenIs,
+    TokenJoin,
     TokenLike,
     TokenNot,
     TokenNotEqual,
     TokenNull,
     TokenNumber,
+    TokenOn,
     TokenOpenParenthesis,
     TokenOr,
     TokenSemiColon,
@@ -42,6 +45,9 @@ const ExactMatchTokens = [
     TokenNull,
     TokenTrue,
     TokenFalse,
+    TokenJoin,
+    TokenAs,
+    TokenOn,
 ];
 const RegexMatchTokens = [TokenNumber, TokenIdentifier, TokenString, TokenComment];
 

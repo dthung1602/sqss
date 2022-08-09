@@ -8,7 +8,18 @@ export class SqssStyleSheet extends SqssNode {
 }
 
 export class UpdateStatement extends SqssNode {
-    constructor(public table: string, public assignments: StyleAssignment[], public where: Expression | null) {
+    constructor(
+        public table: string,
+        public joins: JoinClause[],
+        public assignments: StyleAssignment[],
+        public where: Expression | null,
+    ) {
+        super();
+    }
+}
+
+export class JoinClause extends SqssNode {
+    constructor(public table: string, public alias: string, public on: Expression) {
         super();
     }
 }

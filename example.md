@@ -223,8 +223,8 @@ a.target.another.yet-another:not([href='/']):hover {
 
 ```sql
 UPDATE styles
-    JOIN styles AS ancestor1 ON IS_ANCESTOR(ancestor1.node, node) 
-    JOIN styles AS ancestor2 ON IS_ANCESTOR(ancestor2.node, ancestor1.node)
+    JOIN styles AS ancestor1 ON IS_ANCESTOR(ancestor1.node, node) = true
+    JOIN styles AS ancestor2 ON IS_ANCESTOR(ancestor2.node, ancestor1.node) = true
 SET "background" = 'blue',
         "color" = 'white'
 WHERE class = 'inside'
@@ -232,21 +232,21 @@ WHERE class = 'inside'
   AND ancestor2.class = 'outside'
 
 UPDATE styles
-    JOIN styles AS prt ON IS_PARENT(prt.node, node)
+    JOIN styles AS prt ON IS_PARENT(prt.node, node) = true
 SET "background" = 'blue',
     "color" = 'white'
 WHERE class = 'inside'
   AND prt.class = 'outside'
 
 UPDATE styles
-    JOIN styles AS pre ON IS_PREV(pre.node, node)
+    JOIN styles AS pre ON IS_PREV(pre.node, node) = true
     SET "background" = 'blue',
         "color" = 'white'
 WHERE class = 'target'
   AND pre.class = 'before'
 
 UPDATE styles
-    JOIN styles AS pre ON COMES_BEFORE(pre.node, node)
+    JOIN styles AS pre ON COMES_BEFORE(pre.node, node) = true
     SET "background" = 'blue',
         "color" = 'white'
 WHERE class = 'target'

@@ -1,4 +1,8 @@
 UPDATE styles
-SET "background" = 'blue',
-    "color"      = 'white'
-WHERE IS_NTH_LAST_CHILD(node, 2) != FALSE and IS_FIRST_CHILD(node) = false;
+    JOIN styles AS ancestor1 ON IS_ANCESTOR(ancestor1.node, node) = true
+    JOIN styles AS ancestor2 ON IS_ANCESTOR(ancestor2.node, ancestor1.node) = true
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE class = 'inside'
+  AND ancestor1.class = 'middle'
+  AND ancestor2.class = 'outside';

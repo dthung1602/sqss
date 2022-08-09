@@ -14,6 +14,18 @@ export class TokenWhere {
     static readonly value = "WHERE";
 }
 
+export class TokenJoin {
+    static readonly value = "JOIN";
+}
+
+export class TokenAs {
+    static readonly value = "AS";
+}
+
+export class TokenOn {
+    static readonly value = "ON";
+}
+
 // Special char
 
 export class TokenSemiColon {
@@ -124,7 +136,7 @@ export class TokenComment {
     }
 }
 
-export type TokenKeyword = TokenUpdate | TokenSet | TokenWhere;
+export type TokenKeyword = TokenUpdate | TokenSet | TokenWhere | TokenJoin | TokenAs | TokenOn;
 export type TokenSpecialChar = TokenSemiColon | TokenComma | TokenOpenParenthesis | TokenCloseParenthesis;
 export type TokenOperator = TokenEqual | TokenNotEqual | TokenIs | TokenNot | TokenLike | TokenAnd | TokenOr;
 export type TokenValue = TokenString | TokenNull | TokenTrue | TokenFalse | TokenNumber;
