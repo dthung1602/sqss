@@ -1,13 +1,13 @@
-h3, #target, .center, .page-title, ::before, [title="some text"], :hover {
+h3, #target, .center, .page-title, ::before, [title="some text"], :hover, :last-child, :nth-child(4) {
     background: red;
 }
 
-:hover, [title="some text"], .center, ::before, #target, h3, .page-title {
-    background: orangered;
+:hover, [title="some text"], .center, ::before, :last-child, :nth-child(4), #target, h3, .page-title {
+    background: red;
 }
 
 h3, #target, .center, .page-title, ::before, [title="some text"], :hover {
-    background: orange;
+    background: red;
 }
 
 h3 {
@@ -22,6 +22,6 @@ h3, .center, #target {
     background: red;
 }
 
-h3, .center, #target, .page-title {
+h3, .center, #target, .page-title, :nth-child(4) {
     background: red;
 }

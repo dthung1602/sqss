@@ -94,6 +94,7 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, void> {
     }
 
     postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: SAAgg<FuncCallExpression>) {
+        node.name = node.name.toUpperCase();
         assertTrue(functionNames.includes(node.name), `Invalid function name ${node.name}`);
         const validators = functionSignatures[node.name as keyof typeof functionSignatures];
         validators.forEach((validate, idx) => {

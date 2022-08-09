@@ -3,7 +3,8 @@ SET "background" = 'red'
 WHERE element = 'h3' AND id = 'target' AND class = 'center'
   OR class = 'page-title' AND "::before" = TRUE
   OR "[title]" = 'some text'
-  OR ":hover" = TRUE;
+  OR ":hover" = TRUE
+  OR IS_LAST_CHILD(node) = TRUE AND IS_NTH_CHILD(node, 4) = TRUE;
 
 UPDATE styles
 SET "background" = 'yellow'

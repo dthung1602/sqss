@@ -130,7 +130,7 @@ export default class Generator implements CSSVisitor<string, void> {
     }
 
     postVisitFirstChild(node: AllSelector, context: void, data: GAgg<FirstChild>): string {
-        return ":fist-child";
+        return ":first-child";
     }
 
     postVisitLastChild(node: AllSelector, context: void, data: GAgg<LastChild>): string {

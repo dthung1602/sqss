@@ -1,13 +1,13 @@
-h3#target.center.page-title:hover[title="some text"]::before {
+h3#target.center.page-title:hover:last-child:nth-child(4)[title="some text"]::before {
     background: red;
 }
 
-h3#target.center.page-title:hover[title="some text"]::before {
-    background: orangered;
+h3#target.center.page-title:hover:last-child:nth-child(4)[title="some text"]::before {
+    background: red;
 }
 
-h3#target.center.page-title:hover[title="some text"]::before {
-    background: orange;
+h3#target.center.page-title:hover:last-child:nth-child(4)[title="some text"]::before {
+    background: red;
 }
 
 h3 {

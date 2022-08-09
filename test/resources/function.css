@@ -1,0 +1,43 @@
+:first-child {
+    background: blue;
+}
+
+:first-child {
+    background: blue;
+}
+
+:not(:first-child) {
+    background: blue;
+}
+
+:not(:first-child) {
+    background: blue;
+}
+
+:first-child {
+    background: blue;
+}
+
+:last-child {
+    background: blue;
+}
+
+:not(:last-child) {
+    background: blue;
+}
+
+:nth-child(3) {
+    background: blue;
+}
+
+:not(:nth-child(3)) {
+    background: blue;
+}
+
+:nth-last-child(2) {
+    background: blue;
+}
+
+:not(:nth-last-child(2)) {
+    background: blue;
+}
