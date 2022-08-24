@@ -7,17 +7,21 @@ import {
     AndSelector,
     AtomicSelector,
     AttributeSelector,
+    ChildSelector,
     ClassSelector,
     CSSNode,
     CSSStyleSheet,
+    DescendantSelector,
     ElementSelector,
     FirstChild,
     IdSelector,
+    ImmediatePrecedeSelector,
     LastChild,
     NotSelector,
     NthChild,
     NthLastChild,
     OrSelector,
+    PrecedeSelector,
     PseudoClassSelector,
     PseudoElementSelector,
     StyleDeclaration,
@@ -141,7 +145,27 @@ export default class Generator implements CSSVisitor<string, void> {
         return `:nth-child(${node.n})`;
     }
 
-    postVisitNthLastChild(node: NthLastChild, context: void, data: GAgg<NthLastChild>) {
+    postVisitNthLastChild(node: NthLastChild, context: void, data: GAgg<NthLastChild>): string {
         return `:nth-last-child(${node.n})`;
+    }
+
+    postVisitDescendantSelector(node: DescendantSelector, context: void, data: GAgg<DescendantSelector>): string {
+        return `${data.ancestor} ${data.descendant}`;
+    }
+
+    postVisitChildSelector(node: ChildSelector, context: void, data: GAgg<ChildSelector>): string {
+        return `${data.parent} > ${data.child}`;
+    }
+
+    postVisitImmediatePrecedeSelector(
+        node: ImmediatePrecedeSelector,
+        context: void,
+        data: GAgg<ImmediatePrecedeSelector>,
+    ): string {
+        return `${data.before} + ${data.after}`;
+    }
+
+    postVisitPrecedeSelector(node: PrecedeSelector, context: void, data: GAgg<PrecedeSelector>): string {
+        return `${data.before} ~ ${data.after}`;
     }
 }

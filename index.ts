@@ -12,7 +12,7 @@ import SemanticAnalyzer, { SAContext } from "./src/sqss/semantic-analyzer ";
 import TokenStream from "./src/sqss/token-stream";
 import FlattenExpression from "./src/transpiler/flatten-expression";
 import NegationSimplifier from "./src/transpiler/negation-simplifier";
-import Transpiler from "./src/transpiler/transpiler";
+import Transpiler, { TPContext } from "./src/transpiler/transpiler";
 import Transverser from "./src/transverser";
 import { printTree } from "./src/utils";
 
@@ -47,7 +47,7 @@ function testStepByStep() {
     printTree(root, "AFTER FLATTEN");
 
     const transpiler = new Transpiler();
-    const cssTree: CSSNode = new Transverser<SqssNode, CSSNode, void>(SqssNode, root, transpiler).transverse();
+    const cssTree: CSSNode = new Transverser<SqssNode, CSSNode, TPContext>(SqssNode, root, transpiler).transverse({});
     printTree(cssTree, "CSS TREE");
 
     const validator = new Validator();

@@ -3,6 +3,7 @@ import {
     ComparisonExpression,
     EqualExpression,
     Expression,
+    FieldSelector,
     FuncCallExpression,
     IsExpression,
     JoinClause,
@@ -197,15 +198,26 @@ export default class Parser {
         return new IsExpression(selector, negate, value);
     }
 
-    private parseComparisonExpressionLeftHandSide(): string | FuncCallExpression {
+    private parseComparisonExpressionLeftHandSide(): FieldSelector | FuncCallExpression {
         const snapshot = this.stream.snapShot();
         try {
             return this.parseFuncCallExpression();
         } catch (e) {
             this.stream.restoreSnapShot(snapshot);
             const selector = this.stream.expectedNext(TokenIdentifier) as TokenIdentifier;
-            return selector.value;
+            return this.parseFieldSelector(selector.value);
         }
+    }
+
+    private parseFieldSelector(value: string): FieldSelector {
+        const s = value.split(".");
+        if (s.length === 2) {
+            return new FieldSelector(s[1], s[0]);
+        }
+        if (s.length === 1) {
+            return new FieldSelector(s[0]);
+        }
+        throw new Error(`Cannot parse field ${value}`);
     }
 
     private parseFuncCallExpression(): FuncCallExpression {

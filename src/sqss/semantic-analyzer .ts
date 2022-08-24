@@ -16,6 +16,7 @@ import { Agg, SQSSVisitor } from "../visitor";
 import {
     AndExpression,
     EqualExpression,
+    FieldSelector,
     FuncCallExpression,
     IsExpression,
     JoinClause,
@@ -38,6 +39,7 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, SAContext> {
 
     postVisitUpdateStatement(node: UpdateStatement, context: SAContext, data: SAAgg<UpdateStatement>) {
         assertEqual(node.table, "styles", "Must update table styles");
+        delete context.joinTableAliases;
     }
 
     postVisitJoinClause(node: JoinClause, context: SAContext, data: SAAgg<JoinClause>) {
@@ -60,18 +62,27 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, SAContext> {
         assertTrue(xor(on.negate, on.value as boolean), "The join condition cannot be a false value");
 
         // function call in the LHS
-        assertTrue(on.selector instanceof FuncCallExpression);
+        assertTrue(on.selector instanceof FuncCallExpression, "LHS of join condition must be a function");
         const selector = on.selector as FuncCallExpression;
-        assertTrue(joinConditionFunctions.includes(selector.name));
+        assertTrue(
+            joinConditionFunctions.includes(selector.name),
+            `Unsupported function ${selector.name} in join condition`,
+        );
+        const argsTableAliases: string[] = [];
         for (const arg of selector.args as string[]) {
             const [tableAlias, nodeStr] = arg.split(".");
             if (nodeStr != undefined) {
+                argsTableAliases.push(tableAlias);
                 assertTrue(
                     context.joinTableAliases.includes(tableAlias),
                     `Unknown table ${tableAlias} is referenced in join expression`,
                 );
             }
         }
+        assertTrue(
+            argsTableAliases.includes(node.alias),
+            `Join condition of table ${node.alias} must contain ${node.alias}.node`,
+        );
     }
 
     postVisitStyleAssignment(node: StyleAssignment, context: SAContext, data: SAAgg<StyleAssignment>) {}
@@ -85,51 +96,63 @@ export default class SemanticAnalyzer implements SQSSVisitor<void, SAContext> {
             assertTrue(isBool(node.value) || node.value === null, "Function must be compare against bool/null");
             return;
         }
-        if (isSimpleSelector(node.selector)) {
+        SemanticAnalyzer.validateIdentifier(node.selector, context);
+        if (isSimpleSelector(node.selector.field)) {
             assertTrue(isString(node.value), "The value of element/id/class must be a string");
             return;
         }
-        if (isAttrSelector(node.selector)) {
+        if (isAttrSelector(node.selector.field)) {
             assertTrue(!isBool(node.value), "The value of attribute must be a string/null");
             return;
         }
-        if (isPseudoClassSelector(node.selector)) {
+        if (isPseudoClassSelector(node.selector.field)) {
             assertTrue(isBool(node.value), "The value of pseudo class must be a boolean");
             return;
         }
-        if (isPseudoElementSelector(node.selector)) {
+        if (isPseudoElementSelector(node.selector.field)) {
             assertTrue(isBool(node.value), "The value of pseudo element must be a boolean");
             assertTrue(xor(node.value as boolean, node.negate), "The value of pseudo element must be evaluate to true");
             return;
         }
-        throw new Error(`Cannot recognize selector ${node.selector}`);
+        throw new Error(`Cannot recognize selector ${node.selector.field}`);
     }
 
     postVisitLikeExpression(node: LikeExpression, context: SAContext, data: SAAgg<LikeExpression>) {
         assertTrue(!(node.selector instanceof FuncCallExpression), "Like is not applicable to function call");
-        assertTrue(
-            isAttrSelector(node.selector as string),
-            "Like comparison is only applicable for attribute selector",
-        );
+        const fieldSelector = node.selector as FieldSelector;
+        SemanticAnalyzer.validateIdentifier(fieldSelector, context);
+        assertTrue(isAttrSelector(fieldSelector.field), "Like comparison is only applicable for attribute selector");
     }
 
     postVisitIsExpression(node: IsExpression, context: SAContext, data: SAAgg<IsExpression>) {
-        if (
-            node.selector instanceof FuncCallExpression ||
-            isPseudoClassSelector(node.selector) ||
-            isPseudoElementSelector(node.selector)
-        ) {
+        if (node.selector instanceof FuncCallExpression) {
+            assertTrue(isBool(node.value), "For function call, right hand side of IS must be a boolean");
+            return;
+        }
+        SemanticAnalyzer.validateIdentifier(node.selector, context);
+        if (isPseudoClassSelector(node.selector.field) || isPseudoElementSelector(node.selector.field)) {
             assertTrue(
                 isBool(node.value),
-                "For pseudo class, pseudo element and function call, right hand side of IS must be boolean",
+                "For pseudo class and pseudo element, right hand side of IS must be a boolean",
             );
             return;
         }
-        if (isAttrSelector(node.selector)) {
+        if (isAttrSelector(node.selector.field)) {
             assertTrue(node.value === null, "For attribute selector, right hand side of IS must be null");
             return;
         }
-        throw new Error(`Cannot recognize selector ${node.selector}`);
+        throw new Error(`Cannot recognize selector ${node.selector.field}`);
+    }
+
+    postVisitFieldSelector(node: FieldSelector, context: SAContext, data: SAAgg<FieldSelector>) {}
+
+    private static validateIdentifier(selector: FieldSelector, context: SAContext) {
+        if (context.joinTableAliases) {
+            assertTrue(
+                selector.table === "styles" || context.joinTableAliases.includes(selector.table),
+                `Unknown table ${selector.table} is used`,
+            );
+        }
     }
 
     postVisitFuncCallExpression(node: FuncCallExpression, context: SAContext, data: SAAgg<FuncCallExpression>) {

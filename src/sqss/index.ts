@@ -7,7 +7,7 @@ import SemanticAnalyzer, { SAContext } from "./semantic-analyzer ";
 import * as token from "./token";
 import TokenStream from "./token-stream";
 
-export { ast, Lexer, Parser, SemanticAnalyzer, token, TokenStream };
+export { ast, Lexer, Parser, SAContext, SemanticAnalyzer, token, TokenStream };
 
 export function tokenize(sqss: string): TokenStream {
     return new TokenStream(new Lexer(sqss));

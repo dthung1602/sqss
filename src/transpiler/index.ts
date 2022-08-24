@@ -3,7 +3,7 @@ import { SqssNode } from "../sqss/ast";
 import Transverser from "../transverser";
 import FlattenExpression from "./flatten-expression";
 import NegationSimplifier from "./negation-simplifier";
-import Transpiler from "./transpiler";
+import Transpiler, { TPContext } from "./transpiler";
 
 export { FlattenExpression, NegationSimplifier, Transpiler };
 
@@ -21,5 +21,5 @@ export function transpile(sqssNode: SqssNode): CSSNode {
     simplifyNegation(sqssNode);
     flattenExpression(sqssNode);
     const transpiler = new Transpiler();
-    return new Transverser<SqssNode, CSSNode, void>(SqssNode, sqssNode, transpiler).transverse();
+    return new Transverser<SqssNode, CSSNode, TPContext>(SqssNode, sqssNode, transpiler).transverse({});
 }

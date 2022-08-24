@@ -5,8 +5,10 @@ import {
     ComparisonExpression,
     EqualExpression,
     Expression,
+    FieldSelector,
     FuncCallExpression,
     IsExpression,
+    JoinClause,
     LikeExpression,
     OrExpression,
     SqssNode,
@@ -29,6 +31,10 @@ export default class FlattenExpression implements SQSSVisitor<ReplaceNode, void>
         if (data.where != null) {
             node.where = data.where;
         }
+        return null;
+    }
+
+    postVisitJoinClause(node: JoinClause, context: void, data: FCAgg<JoinClause>): null {
         return null;
     }
 
@@ -96,6 +102,10 @@ export default class FlattenExpression implements SQSSVisitor<ReplaceNode, void>
     }
 
     postVisitFuncCallExpression(node: FuncCallExpression, context: void, data: FCAgg<FuncCallExpression>): null {
+        return null;
+    }
+
+    postVisitFieldSelector(node: FieldSelector, context: void, data: FCAgg<FieldSelector>): null {
         return null;
     }
 }

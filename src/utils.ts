@@ -88,6 +88,14 @@ export function isPseudoClassSelector(str: string): boolean {
     return Boolean(str.match(PSEUDO_CLASS_REGEX));
 }
 
+export function extractTableFromSelector(str: string): string {
+    const parts = str.split(".");
+    if (parts.length === 2) {
+        return parts[0];
+    }
+    return "styles";
+}
+
 //=============================================
 //                 GENERIC
 //=============================================

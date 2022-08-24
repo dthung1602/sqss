@@ -8,17 +8,21 @@ import {
     AllSelector,
     AndSelector,
     AttributeSelector,
+    ChildSelector,
     ClassSelector,
     CSSNode,
     CSSStyleSheet,
+    DescendantSelector,
     ElementSelector,
     FirstChild,
     IdSelector,
+    ImmediatePrecedeSelector,
     LastChild,
     NotSelector,
     NthChild,
     NthLastChild,
     OrSelector,
+    PrecedeSelector,
     PseudoClassSelector,
     PseudoElementSelector,
     StyleDeclaration,
@@ -104,6 +108,18 @@ export default class Validator implements CSSVisitor<void, void> {
     postVisitNthChild(node: NthChild, context: void, data: VAgg<NthChild>) {}
 
     postVisitNthLastChild(node: NthLastChild, context: void, data: VAgg<NthLastChild>) {}
+
+    postVisitDescendantSelector(node: DescendantSelector, context: void, data: VAgg<DescendantSelector>) {}
+
+    postVisitChildSelector(node: ChildSelector, context: void, data: VAgg<ChildSelector>) {}
+
+    postVisitImmediatePrecedeSelector(
+        node: ImmediatePrecedeSelector,
+        context: void,
+        data: VAgg<ImmediatePrecedeSelector>,
+    ) {}
+
+    postVisitPrecedeSelector(node: PrecedeSelector, context: void, data: VAgg<PrecedeSelector>) {}
 }
 
 // from https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes

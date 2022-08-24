@@ -2,17 +2,21 @@ import {
     AllSelector,
     AndSelector,
     AttributeSelector,
+    ChildSelector,
     ClassSelector,
     CSSNode,
     CSSStyleSheet,
+    DescendantSelector,
     ElementSelector,
     FirstChild,
     IdSelector,
+    ImmediatePrecedeSelector,
     LastChild,
     NotSelector,
     NthChild,
     NthLastChild,
     OrSelector,
+    PrecedeSelector,
     PseudoClassSelector,
     PseudoElementSelector,
     StyleDeclaration,
@@ -21,6 +25,7 @@ import {
 import {
     AndExpression,
     EqualExpression,
+    FieldSelector,
     FuncCallExpression,
     IsExpression,
     JoinClause,
@@ -56,6 +61,7 @@ type PrePostHook<Name extends string, Node, BaseNode, Val, Ctx> = {
 
 export type SQSSVisitor<Val, Ctx> = PrePostHook<"AndExpression", AndExpression, SqssNode, Val, Ctx> &
     PrePostHook<"EqualExpression", EqualExpression, SqssNode, Val, Ctx> &
+    PrePostHook<"FieldSelector", FieldSelector, SqssNode, Val, Ctx> &
     PrePostHook<"FuncCallExpression", FuncCallExpression, SqssNode, Val, Ctx> &
     PrePostHook<"IsExpression", IsExpression, SqssNode, Val, Ctx> &
     PrePostHook<"JoinClause", JoinClause, SqssNode, Val, Ctx> &
@@ -81,6 +87,10 @@ export type CSSVisitor<Val, Ctx> = PrePostHook<"CSSStyleSheet", CSSStyleSheet, C
     PrePostHook<"FirstChild", FirstChild, CSSNode, Val, Ctx> &
     PrePostHook<"LastChild", LastChild, CSSNode, Val, Ctx> &
     PrePostHook<"NthChild", NthChild, CSSNode, Val, Ctx> &
-    PrePostHook<"NthLastChild", NthLastChild, CSSNode, Val, Ctx>;
+    PrePostHook<"NthLastChild", NthLastChild, CSSNode, Val, Ctx> &
+    PrePostHook<"DescendantSelector", DescendantSelector, CSSNode, Val, Ctx> &
+    PrePostHook<"ChildSelector", ChildSelector, CSSNode, Val, Ctx> &
+    PrePostHook<"ImmediatePrecedeSelector", ImmediatePrecedeSelector, CSSNode, Val, Ctx> &
+    PrePostHook<"PrecedeSelector", PrecedeSelector, CSSNode, Val, Ctx>;
 
 export type Visitor<Val, Ctx> = SQSSVisitor<Val, Ctx> | CSSVisitor<Val, Ctx>;

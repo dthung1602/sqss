@@ -46,9 +46,15 @@ export class OrExpression extends Expression {
 
 export abstract class AtomicExpression extends Expression {}
 
+export class FieldSelector extends Expression {
+    constructor(public field: string, public table: string = "styles") {
+        super();
+    }
+}
+
 export abstract class ComparisonExpression extends AtomicExpression {
     protected constructor(
-        public selector: string | FuncCallExpression,
+        public selector: FieldSelector | FuncCallExpression,
         public negate: boolean,
         public value: string | boolean | null,
     ) {
@@ -58,7 +64,7 @@ export abstract class ComparisonExpression extends AtomicExpression {
 
 export class EqualExpression extends ComparisonExpression {
     constructor(
-        public selector: string | FuncCallExpression,
+        public selector: FieldSelector | FuncCallExpression,
         public negate: boolean,
         public value: string | boolean | null,
     ) {
@@ -67,13 +73,17 @@ export class EqualExpression extends ComparisonExpression {
 }
 
 export class IsExpression extends ComparisonExpression {
-    constructor(public selector: string | FuncCallExpression, public negate: boolean, public value: boolean | null) {
+    constructor(
+        public selector: FieldSelector | FuncCallExpression,
+        public negate: boolean,
+        public value: boolean | null,
+    ) {
         super(selector, negate, value);
     }
 }
 
 export class LikeExpression extends ComparisonExpression {
-    constructor(public selector: string | FuncCallExpression, public negate: boolean, public value: string) {
+    constructor(public selector: FieldSelector | FuncCallExpression, public negate: boolean, public value: string) {
         super(selector, negate, value);
     }
 }
