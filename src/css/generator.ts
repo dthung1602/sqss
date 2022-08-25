@@ -102,11 +102,8 @@ export default class Generator implements CSSVisitor<string, void> {
     }
 
     postVisitAttributeSelector(node: AttributeSelector, context: void, data: GAgg<AttributeSelector>): string {
-        if (node.operator === "") {
-            // this is null -> must negate
-            return `:not([${node.attribute}])`;
-        }
-        return `[${node.attribute}${node.operator}"${node.value}"]`;
+        const value = node.value === "" ? "" : `"${node.value}"`;
+        return `[${node.attribute}${node.operator}${value}]`;
     }
 
     postVisitPseudoClassSelector(node: PseudoClassSelector, context: void, data: GAgg<PseudoClassSelector>): string {
@@ -123,9 +120,6 @@ export default class Generator implements CSSVisitor<string, void> {
     }
 
     postVisitNotSelector(node: NotSelector, context: void, data: GAgg<NotSelector>): string {
-        if (node.selector instanceof AttributeSelector && node.selector.operator === "") {
-            return data.selector.slice(5, data.selector.length - 1); // remove the negation by null
-        }
         return `:not(${data.selector})`;
     }
 

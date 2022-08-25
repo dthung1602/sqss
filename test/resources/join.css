@@ -1,0 +1,54 @@
+.outside .inside {
+    background: blue;
+    color: white;
+}
+
+.outside > .inside {
+    background: blue;
+    color: white;
+}
+
+.before + .target {
+    background: blue;
+    color: white;
+}
+
+.before ~ .target {
+    background: blue;
+    color: white;
+}
+
+.outside:nth-child(3)[href="abc"][title*="xyz"]:not(:nth-last-child(2)) h1#my_id.inside:hover:first-child[title][href^="abc"]:not(:last-child):not([src$="xyz"])::after {
+    background: blue;
+    color: white;
+}
+
+.outermost .outside .middle .inside {
+    background: blue;
+    color: white;
+}
+
+.outermost > .outside > .inside {
+    background: blue;
+    color: white;
+}
+
+.first + .before + .target {
+    background: blue;
+    color: white;
+}
+
+.first ~ .before ~ .target {
+    background: blue;
+    color: white;
+}
+
+[title] ~ div + #outside2 > .outside1 .inside {
+    background: blue;
+    color: white;
+}
+
+[title] ~ div + #outside2 > .outside1 .inside {
+    background: blue;
+    color: white;
+}

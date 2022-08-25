@@ -129,7 +129,12 @@ export default class Transpiler implements SQSSVisitor<CSSNode, TPContext> {
         data: TPAgg<EqualExpression>,
     ): AtomicSelector | NoOp {
         const selector = Transpiler.getSelectorForEqualExpression(node, data);
-        return node.negate ? new NotSelector(selector as AtomicSelector) : selector;
+        let { negate } = node;
+        // reverse negate for [attribute] = null case
+        if (selector instanceof AttributeSelector && selector.value === "") {
+            negate = !negate;
+        }
+        return negate ? new NotSelector(selector as AtomicSelector) : selector;
     }
 
     private static getSelectorForEqualExpression(
@@ -166,7 +171,7 @@ export default class Transpiler implements SQSSVisitor<CSSNode, TPContext> {
 
     postVisitLikeExpression(node: LikeExpression, context: TPContext, data: TPAgg<LikeExpression>): AtomicSelector {
         if (node.selector instanceof FuncCallExpression) {
-            throw new Error("Not implemented");
+            throw new Error("Left side of LIKE can't be a function call");
         }
         const attrSelector = new AttributeSelector(
             node.selector.field.slice(1, node.selector.field.length - 1),
@@ -182,7 +187,7 @@ export default class Transpiler implements SQSSVisitor<CSSNode, TPContext> {
 
     postVisitIsExpression(node: IsExpression, context: TPContext, data: TPAgg<IsExpression>): AtomicSelector {
         if (node.selector instanceof FuncCallExpression) {
-            throw new Error("Not implemented");
+            throw new Error("Left side of IS can't be a function call");
         }
         const attrSelector = new AttributeSelector(
             node.selector.field.slice(1, node.selector.field.length - 1),
@@ -190,7 +195,8 @@ export default class Transpiler implements SQSSVisitor<CSSNode, TPContext> {
             "",
             node.selector.table,
         );
-        if (node.negate) {
+        // reverse negate for [attribute] = null case
+        if (!node.negate) {
             return new NotSelector(attrSelector);
         }
         return attrSelector;

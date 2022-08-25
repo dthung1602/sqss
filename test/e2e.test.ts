@@ -4,6 +4,7 @@ import { join as joinPath } from "path";
 import { transpileSQSSToCSS } from "../src";
 
 const BASIC_SELECT = [
+    "join",
     "function",
     "basic",
     "class",
