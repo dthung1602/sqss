@@ -75,8 +75,8 @@ export default class NegationSimplifier implements SQSSVisitor<ReplaceNode, void
 
     postVisitIsExpression(node: IsExpression, context: void, data: NSAgg<IsExpression>): ReplaceNode {
         if (isBool(node.value)) {
-            const value = node.negate ? !node.value : node.value;
-            return new EqualExpression(node.selector, false, value);
+            const negate = !xor(node.negate, node.value as boolean);
+            return new EqualExpression(node.selector, negate, true);
         }
         return null;
     }

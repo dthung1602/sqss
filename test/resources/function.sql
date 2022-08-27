@@ -20,6 +20,24 @@ UPDATE styles
 SET "background"  = 'blue'
 WHERE IS_FIRST_CHILD(node) != false;
 
+-- first child with IS
+
+UPDATE styles
+SET "background"  = 'blue'
+WHERE is_first_child(node) IS TRUE;
+
+UPDATE styles
+SET "background"  = 'blue'
+WHERE is_first_child(node) IS FALSE;
+
+UPDATE styles
+SET "background"  = 'blue'
+WHERE is_first_child(node) IS NOT TRUE;
+
+UPDATE styles
+SET "background"  = 'blue'
+WHERE is_first_child(node) IS NOT FALSE;
+
 --last child
 
 UPDATE styles

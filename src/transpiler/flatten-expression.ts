@@ -28,9 +28,6 @@ export default class FlattenExpression implements SQSSVisitor<ReplaceNode, void>
     }
 
     postVisitUpdateStatement(node: UpdateStatement, context: void, data: FCAgg<UpdateStatement>): null {
-        if (data.where != null) {
-            node.where = data.where;
-        }
         return null;
     }
 

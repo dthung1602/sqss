@@ -18,6 +18,22 @@
     background: blue;
 }
 
+:first-child {
+    background: blue;
+}
+
+:not(:first-child) {
+    background: blue;
+}
+
+:not(:first-child) {
+    background: blue;
+}
+
+:first-child {
+    background: blue;
+}
+
 :last-child {
     background: blue;
 }
