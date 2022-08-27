@@ -52,3 +52,18 @@
     background: blue;
     color: white;
 }
+
+[title] ~ * + * > .outside1 .inside {
+    background: blue;
+    color: white;
+}
+
+* ~ div + #outside2 > .outside1 * {
+    background: blue;
+    color: white;
+}
+
+* {
+    background: blue;
+    color: white;
+}

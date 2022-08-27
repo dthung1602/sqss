@@ -90,11 +90,7 @@ export default class Transpiler implements SQSSVisitor<CSSNode, TPContext> {
         return new StyleDeclaration(node.property, node.value);
     }
 
-    postVisitAndExpression(
-        node: AndExpression,
-        context: TPContext,
-        data: TPAgg<AndExpression>,
-    ): AndSelector | JoinSelector {
+    postVisitAndExpression(node: AndExpression, context: TPContext, data: TPAgg<AndExpression>): AJSelector {
         if (!context.joinGraph?.length) {
             return new AndSelector(data.expressions as AtomicSelector[]);
         }
@@ -107,16 +103,23 @@ export default class Transpiler implements SQSSVisitor<CSSNode, TPContext> {
             groups[selector.group].push(selector);
         }
 
-        let selector: AJSelector = new AndSelector(groups[context.joinGraph[0].right]);
+        let selector: AJSelector = Transpiler.getSelectorFromGroup(groups, context.joinGraph[0].right);
         for (const { left, selectorClass } of context.joinGraph) {
-            const leftSelector = new AndSelector(groups[left]);
+            const leftSelector = Transpiler.getSelectorFromGroup(groups, left);
             selector = new selectorClass(leftSelector, selector);
         }
         return selector;
     }
 
-    private static getJoinSelectorClass() {
-        return {};
+    private static getSelectorFromGroup(
+        groups: Record<string, AtomicSelector[]>,
+        key: string,
+    ): AndSelector | AllSelector {
+        const selectors = groups[key];
+        if (selectors === undefined) {
+            return new AllSelector(key);
+        }
+        return new AndSelector(selectors);
     }
 
     postVisitOrExpression(node: OrExpression, context: TPContext, data: TPAgg<OrExpression>): OrSelector {

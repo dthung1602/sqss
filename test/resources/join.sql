@@ -117,3 +117,35 @@ WHERE style3.element = 'div'
   AND "style4.[title]" IS NOT NULL)
   AND (style1.class = 'outside1'
   AND style2.id = 'outside2');
+
+-- Multiple joins without style
+
+UPDATE styles
+    JOIN styles AS style1 ON IS_ANCESTOR(style1.node, node) = true
+    JOIN styles AS style2 ON IS_PARENT(style2.node, style1.node) = true
+    JOIN styles AS style3 ON IS_PREV(style3.node, style2.node) = true
+    JOIN styles AS style4 ON COMES_BEFORE(style4.node, style3.node) = true
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE class = 'inside'
+  AND style1.class = 'outside1'
+  AND "style4.[title]" IS NOT NULL;
+
+UPDATE styles
+    JOIN styles AS style1 ON IS_ANCESTOR(style1.node, node) = true
+    JOIN styles AS style2 ON IS_PARENT(style2.node, style1.node) = true
+    JOIN styles AS style3 ON IS_PREV(style3.node, style2.node) = true
+    JOIN styles AS style4 ON COMES_BEFORE(style4.node, style3.node) = true
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE style1.class = 'outside1'
+  AND style2.id = 'outside2'
+  AND style3.element = 'div';
+
+UPDATE styles
+    JOIN styles AS style1 ON IS_ANCESTOR(style1.node, node) = true
+    JOIN styles AS style2 ON IS_PARENT(style2.node, style1.node) = true
+    JOIN styles AS style3 ON IS_PREV(style3.node, style2.node) = true
+    JOIN styles AS style4 ON COMES_BEFORE(style4.node, style3.node) = true
+    SET "background" = 'blue',
+        "color" = 'white';
