@@ -2,11 +2,370 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SQSS</title>
+    <title>SQSS Documentation</title>
+    <meta name="description" content="Documentation for SQSS - Style your HTML with some good old SQL!">
+    <meta name="author" content="dthung1602">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./normalize.css">
+    <link rel="stylesheet" href="./skeleton.css">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/base16/dracula.min.css"
+          integrity="sha512-zKpFlhUX8c+WC6H/XTJavnEpWFt2zH9BU9vu0Hry5Y+SEgG21pRMFcecS7DgDXIegXBQ3uK9puwWPP3h6WSR9g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 </head>
 <body>
-documentation
+
+<nav>
+    <div class="logo">
+        <a href="./"><img src="img/logo3.png" alt="SQSS"></a>
+        <h5>Style your <b class="hl1">HTML</b> with some good old <b class="hl2">SQL</b> !</h5>
+    </div>
+    <div>
+        <a href="demo.html">Try in browser</a>
+        <a href="https://www.npmjs.com/package/sqss">NPM</a>
+        <a href="https://github.com/dthung1602/sqss">Github</a>
+    </div>
+</nav>
+
+<main class="documentation">
+    <aside>
+        <div>
+            <h5><a href="#getting-started">Getting started</a></h5>
+            <ul>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#basic-syntax">Basic syntax</a></li>
+            </ul>
+            <h5><a href="#supported-features">Supported features</a></h5>
+            <ul>
+                <li><a href="#select-by-id">Select by id</a></li>
+                <li><a href="#select-by-class">Select by class</a></li>
+                <li><a href="#select-by-element">Select by element</a></li>
+                <li><a href="#select-by-attribute">Select by attribute</a></li>
+                <li><a href="#select-by-pseudo">Select by pseudo element & pseudo class</a></li>
+                <li><a href="#select-by-first-child">Last child, first child</a></li>
+                <li><a href="#select-by-nth-child">n-th child, n-th last child</a></li>
+                <li><a href="#and">And</a></li>
+                <li><a href="#or">Or</a></li>
+                <li><a href="#parent">Parent, ancestor selector</a></li>
+                <li><a href="#sibling">Sibling selector</a></li>
+                <li><a href="#other">Other stuff</a></li>
+            </ul>
+            <h5><a href="#">Internal working</a></h5>
+            <footer>
+                <a href="https://github.com/dthung1602/sqss">
+                    <img class="icon" src="img/icon-github.svg" alt="Github">
+                </a>
+                <a href="https://www.npmjs.com/package/sqss">
+                    <img class="icon" src="img/icon-npm.svg" alt="NPM">
+                </a>
+                <a href="mailto:dthung1602@gmail.com">
+                    <img class="icon" src="img/icon-email.svg" alt="Email">
+                </a>
+            </footer>
+        </div>
+    </aside>
+    <article>
+        <section>
+            <h2 id="getting-started">Getting started</h2>
+
+            <h4 id="installation">Installation</h4>
+            <p>To use SQSS directly on your website, add the following lines:</p>
+            <pre><code class="language-html">&lt;script src=&quot;TO BE ADDED&quot; /&gt;
+&lt;script&gt;
+   const sqlString = `
+        -- All your styles go here
+        UPDATE styles
+        SET &quot;background&quot; = 'blue'
+        WHERE class = 'target';
+   `;
+
+   const cssString = transpileSQSSToCSS(cssString);
+   document.head.innerHTML += `&lt;style&gt;${cssString}&lt;/style&gt;`;
+&lt;/script&gt;</code></pre>
+
+            <p>To bundle it with your project, call the transpile function in your build script:</p>
+
+            <pre><code class="language-javascript">const sqss = require("sqss");
+const fs = require("fs");
+
+const sqlString = fs.readFileSync("path/to/your/stylesheet.sql", "utf-8");
+const cssString = sqss.transpileSQSSToCSS(sqlString);
+
+fs.writeFileSync("path/to/your/build/folder/output.css", cssString);</code></pre>
+
+            <h4 id="basic-syntax">Basic syntax</h4>
+            <p>Let's have a look at this code</p>
+            <pre><code class="language-sql">UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE id = 'target';</code></pre>
+
+            <p>This will transpiled to </p>
+            <pre><code class="language-css">#target {
+    background: blue;
+    color: white;
+}</code></pre>
+            <p>A few note here:</p>
+            <ul>
+                <li>Only <code>UPDATE</code> statement is supported, no <code>SELECT</code>, <code>DELETE</code> or
+                    anything else
+                </li>
+                <li>There's only one table - <code>styles</code></li>
+                <li>The <code>SET</code> clause is requiblue, while <code>WHERE</code> is optional (this will result in
+                    the <code>*</code> CSS selector)
+                </li>
+                <li>If the column name contains the special characters, <code>border-radius</code> for example, it <b>must</b>
+                    be double-quoted
+                </li>
+            </ul>
+
+        </section>
+
+        <section>
+            <h2 id="supported-features">Supported features</h2>
+
+            <h4 id="select-by-id">Select by id</h4>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background"  = 'blue',
+    "color"       = 'white',
+    "font-family" = '"Droid Sans", serif'
+WHERE id = 'target';</code></pre>
+                <pre class="six columns"><code class="language-css">#target {
+    background: blue;
+    color: white;
+    font-family: "Droid Sans", serif;
+}</code></pre>
+            </div>
+
+            <h4 id="select-by-class">Select by class</h4>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE class = 'target';</code></pre>
+                <pre class="six columns"><code class="language-css">.target {
+    background: blue;
+    color: white;
+}</code></pre>
+            </div>
+
+            <h4 id="select-by-element">Select by element</h4>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE element = 'div'</code></pre>
+                <pre class="six columns"><code class="language-css">div {
+    background: blue;
+    color: white;
+}</code></pre>
+            </div>
+
+            <h4 id="select-by-attribute">Select by attribute</h4>
+            <p>Use <code>"[attribute-name]"</code> to select the desiblue attribute</p>
+            <p>Remember, the double quote is requiblue</p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "[title]" IS NOT NULL;
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "[title]" = 'help test';
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "[title]" LIKE '%help test';
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "[title]" LIKE 'help test%';
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "[title]" LIKE '%help test%';</code></pre>
+                <pre class="six columns"><code class="language-css">[title] {
+    background: blue;
+    color: white;
+}
+
+[title='help test'] {
+    background: blue;
+    color: white;
+}
+
+[title^='help test'] {
+    background: blue;
+    color: white;
+}
+
+[title$='help test'] {
+    background: blue;
+    color: white;
+}
+
+[title*='help test'] {
+    background: blue;
+    color: white;
+}</code></pre>
+            </div>
+
+            <h4 id="select-by-pseudo">Select by pseudo element & pseudo class</h4>
+            <p>SQSS supports all pseudo elements and classes that <b>do not</b> require parenthesis.</p>
+            <p>For the full list of pseudo elements and classes,
+                see <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements">here</a>
+                and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">here</a>
+            </p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE ":hover" = TRUE;
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "::after" = TRUE;</code></pre>
+                <pre class="six columns"><code class="language-css">:hover {
+    background: blue;
+    color: white;
+}
+
+::after {
+    background: blue;
+    color: white;
+}</code></pre>
+            </div>
+
+            <h4 id="select-by-first-child">Select by first child, last child</h4>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE IS_FIRST_CHILD(node) = TRUE;
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE IS_LAST_CHILD(node) = TRUE;</code></pre>
+                <pre class="six columns"><code class="language-css">:first-child {
+    background: blue;
+    color: white;
+}
+
+:last-child {
+    background: blue;
+    color: white;
+}</code></pre>
+            </div>
+
+            <h4 id="select-by-nth-child">Select by n-th child, n-th last child</h4>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE IS_NTH_CHILD(node, 2) = TRUE;
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE IS_NTH_LAST_CHILD(node, 6) = TRUE;</code></pre>
+                <pre class="six columns"><code class="language-css">:nth-child(2) {
+    background: blue;
+    color: white;
+}
+
+:nth-last-child(6) {
+    background: blue;
+    color: white;
+}</code></pre>
+            </div>
+
+            <h4 id="and">And</h4>
+            <p>We can add multiple conditions to the <code>WHERE</code> clause. Parenthesis are also allowed.</p>
+            <p>For multiple classes, just add more <code>class = '...'</code></p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue'
+WHERE (element = 'h3' AND class = 'center')
+  AND (id = 'target' AND class = 'page-title');</code></pre>
+                <pre class="six columns"><code class="language-css">h3#target.center.page-title {
+    background: blue;
+}</code></pre>
+            </div>
+
+            <h4 id="or">Or</h4>
+            <p><code>OR</code> is pretty much the same to <code>AND</code></p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue'
+WHERE (element = 'h3' OR class = 'center') OR id = 'target';</code></pre>
+                <pre class="six columns"><code class="language-css">h3, .center, #target {
+    background: blue;
+}</code></pre>
+            </div>
+            <p>Mixing <code>AND</code> with <code>OR</code> is also supported</p>
+            <p>
+                Keep in mind that <code>AND</code> has higher precedence than <code>OR</code>.
+                The SQSS transpiler will flatten the condition using <a href="https://en.wikipedia.org/wiki/Boolean_algebra">boolean algebra</a>
+            </p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'yellow'
+WHERE (element = 'h3' OR id = 'target') AND class = 'center'
+   OR (class = 'page-title')
+   OR ("::before" = TRUE OR "[title]" = 'some text' AND ":hover" = TRUE);</code></pre>
+                <pre class="six columns"><code class="language-css">h3.center, #target.center, .page-title, ::before, :hover[title="some text"] {
+    background: yellow;
+}</code></pre>
+            </div>
+
+            <h4 id="parent">Parent, ancestor selector</h4>
+            <p>We can add multiple conditions to the <code>WHERE</code> clause. Parenthesis are also allowed.</p>
+            <p>For multiple classes, just add more <code>class = '...'</code></p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background" = 'blue'
+WHERE (element = 'h3' AND class = 'center')
+  AND (id = 'target' AND class = 'page-title');</code></pre>
+                <pre class="six columns"><code class="language-css">h3#target.center.page-title {
+    background: blue;
+}</code></pre>
+            </div>
+
+        </section>
+    </article>
+</main>
+
+<div onclick="topFunction()" id="to-top-button" title="Go to top">⇧</div>
+
+<script>
+    hljs.highlightAll();
+
+    window.onscroll = function() {scrollFunction()};
+
+    const toTopButton = document.getElementById("to-top-button");
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            toTopButton.style.display = "block";
+        } else {
+            toTopButton.style.display = "none";
+        }
+    }
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
 </body>
 </html>

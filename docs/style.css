@@ -1,13 +1,23 @@
+/*------------------------------------------------------------------
+ *      THEME
+ *-----------------------------------------------------------------*/
+
 :root {
     --primary: #F73D93;
     --primary-light: #fd62aa;
     --secondary: #16003B;
-    --secondary-light: #190043;
-    --dark-gray: #413F42;
+    --secondary-light: #23054d;
+    --dark-gray: #282936;
     --gray: #7F8487;
     --highlight-1: #ffff83;
     --highlight-2: rgba(122, 242, 223);
+
+    --nav-bar-height: 6rem;
 }
+
+/*------------------------------------------------------------------
+ *      UTIL CLASSES
+ *-----------------------------------------------------------------*/
 
 .hlp {
     color: var(--primary);
@@ -21,6 +31,14 @@
     color: var(--highlight-2);
 }
 
+/*------------------------------------------------------------------
+ *      GLOBAL STYLE
+ *-----------------------------------------------------------------*/
+
+* {
+    scroll-behavior: smooth !important;
+}
+
 body {
     background: var(--secondary);
     color: white;
@@ -31,6 +49,99 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
+
+::selection {
+    color: white;
+    background: var(--primary-light);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--nav-bar-height);
+    background: var(--secondary-light);
+
+    /*box-shadow: 0px 10px 10px -10px rgba(247,61,147,0.5);*/
+    /*-webkit-box-shadow: 0px 10px 10px -10px rgba(247,61,147,0.5);*/
+    /*-moz-box-shadow: 0px 10px 10px -10px rgba(247,61,147,0.5);*/
+
+    box-shadow: 0px -5px 25px 0px rgba(247,61,147,0.15) inset;
+    -webkit-box-shadow: 0px -5px 25px 0px rgba(247,61,147,0.15) inset;
+    -moz-box-shadow: 0px -5px 25px 0px rgba(247,61,147,0.15) inset;
+    z-index: 1000;
+}
+
+nav .logo {
+    display: flex;
+    align-items: center;
+}
+
+nav .logo h5 {
+    margin: 0;
+}
+
+nav img {
+    height: 4.5rem;
+    margin: 1rem 3rem;
+}
+
+nav div:last-child a {
+    font-weight: bolder;
+    text-decoration: none;
+    padding: 2rem;
+    margin: 0;
+}
+
+nav div:last-child a:hover {
+    background: var(--primary);
+    color: white;
+}
+
+footer {
+    background: var(--secondary-light);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer .icon {
+    height: 2rem;
+    padding: 0 2rem;
+    cursor: pointer;
+    transform: scale(1);
+    transition: all ease-in-out 0.25s;
+}
+
+footer .icon:hover {
+    transform: scale(1.5);
+}
+
+#to-top-button {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    background-color: var(--primary-light);
+    color: white;
+    cursor: pointer;
+    border-radius: 2rem;
+    width: 4rem;
+    height: 4rem;
+    text-align: center;
+    font-size: x-large;
+    transition: background-color ease-in-out 0.25s;
+}
+
+#to-top-button:hover {
+    background-color: var(--primary);
+}
+
+/*------------------------------------------------------------------
+ *      HOME PAGE
+ *-----------------------------------------------------------------*/
 
 .home {
     display: flex;
@@ -152,23 +263,57 @@ body {
     }
 }
 
-footer {
-    background: var(--secondary-light);
-    margin-top: 2rem;
-    padding: 2rem;
+/*------------------------------------------------------------------
+ *      DOCUMENTATION PAGE
+ *-----------------------------------------------------------------*/
+
+.documentation {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
 }
 
-footer .icon {
-    height: 2rem;
-    padding: 0 2rem;
-    cursor: pointer;
-    transform: scale(1);
-    transition: all ease-in-out 0.25s;
+.documentation aside {
+    background: var(--secondary-light);
+    flex-grow: 1;
+    max-width: 400px;
+    padding: 4rem 2rem;
 }
 
-footer .icon:hover {
-    transform: scale(1.5);
+.documentation aside > div {
+    position: -webkit-sticky;
+    position: sticky;
+    top: var(--nav-bar-height);
+}
+
+.documentation aside a {
+    text-decoration: none;
+    color: var(--highlight-2);
+}
+
+.documentation aside a:hover {
+    text-decoration: underline;
+    color: var(--highlight-1);
+}
+
+.documentation aside h5 a {
+    color: var(--primary);
+}
+
+.documentation footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    max-width: 400px;
+    width: 20%;
+}
+
+.documentation article {
+    flex-grow: 4;
+    padding: 8rem;
+}
+
+.documentation code {
+    max-width: 1000px;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
 }

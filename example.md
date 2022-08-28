@@ -19,18 +19,18 @@ WHERE class = 'target';
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE element = 'div'
+WHERE element = 'div';
 
 UPDATE styles
 SET "background" = 'blue',
-    "color"      = 'white'
+    "color"      = 'white';
 ```
 
 ```css
 #target {
     background: blue;
     color: white;
-    font-family: "Droid Sans", serif
+    font-family: "Droid Sans", serif;
 }
 
 .target {
@@ -55,27 +55,27 @@ div {
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE "[title]" IS NOT NULL
+WHERE "[title]" IS NOT NULL;
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE "[title]" = 'help test'
+WHERE "[title]" = 'help test';
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE "[title]" LIKE '%help test'
+WHERE "[title]" LIKE '%help test';
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE "[title]" LIKE 'help test%'
+WHERE "[title]" LIKE 'help test%';
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE "[title]" LIKE '%help test%'
+WHERE "[title]" LIKE '%help test%';
 ```
 
 ```css
@@ -111,12 +111,12 @@ WHERE "[title]" LIKE '%help test%'
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE ":hover" = TRUE
+WHERE ":hover" = TRUE;
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE "::after" = TRUE
+WHERE "::after" = TRUE;
 ```
 
 ```css
@@ -137,25 +137,25 @@ WHERE "::after" = TRUE
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE IS_NTH_CHILD(node, 2) == TRUE
+WHERE IS_FIRST_CHILD(node) = TRUE;
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE IS_FIRST_CHILD(node) == TRUE
+WHERE IS_LAST_CHILD(node) = TRUE;
 
 UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE IS_LAST_CHILD(node) == TRUE
+WHERE IS_NTH_CHILD(node, 2) = TRUE;
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE IS_NTH_LAST_CHILD(node, 2) = TRUE;
 ```
 
 ```css
-:nth-child(2) {
-    background: blue;
-    color: white;
-}
-
 :first-child {
     background: blue;
     color: white;
@@ -165,6 +165,17 @@ WHERE IS_LAST_CHILD(node) == TRUE
     background: blue;
     color: white;
 }
+
+:nth-child(2) {
+    background: blue;
+    color: white;
+}
+
+:nth-last-child(2) {
+    background: blue;
+    color: white;
+}
+
 ```
 
 ### 5. Multiple classes
