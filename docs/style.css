@@ -155,7 +155,11 @@ footer .icon:hover {
 }
 
 .home > * {
-    margin: 4rem;
+    margin: 3rem;
+}
+
+.home h3 {
+    font-weight: bold;
 }
 
 .home .logo {

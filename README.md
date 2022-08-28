@@ -35,7 +35,7 @@ After all [Cascading Server Sheets](https://dev.to/thormeier/dont-try-this-at-ho
 real thing, you know.
 
 <p align="center">
-    <img src="docs/img/commic.png" width="300"/>
+    <img src="docs/img/comic.png" width="300"/>
     <br />
     <a href="https://www.smbc-comics.com/comic/qc">Source: smbc comics</a>
 </p>
