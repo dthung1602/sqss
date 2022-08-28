@@ -279,14 +279,21 @@ footer .icon:hover {
 .documentation aside {
     background: var(--secondary-light);
     flex-grow: 1;
-    max-width: 400px;
-    padding: 4rem 2rem;
 }
 
 .documentation aside > div {
+    max-width: 400px;
+    padding: 4rem 2rem;
+
     position: -webkit-sticky;
     position: sticky;
     top: var(--nav-bar-height);
+
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 2 * 4rem - var(--nav-bar-height));
+    overflow-y: scroll;
+    justify-content: space-between;
 }
 
 .documentation aside a {
@@ -303,17 +310,13 @@ footer .icon:hover {
     color: var(--primary);
 }
 
-.documentation footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    max-width: 400px;
-    width: 20%;
-}
-
 .documentation article {
     flex-grow: 4;
     padding: 8rem;
+}
+
+.documentation article h2, .documentation article h4 {
+    font-weight: bold;
 }
 
 .documentation code {
@@ -328,4 +331,9 @@ footer .icon:hover {
     margin-top: 2rem;
     margin-bottom: 4rem;
     max-width: 90%;
+}
+
+.try-box {
+    text-align: center;
+    margin: 4rem 0;
 }
