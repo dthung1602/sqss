@@ -45,15 +45,15 @@
                 <li><a href="#select-by-element">Select by element</a></li>
                 <li><a href="#select-by-attribute">Select by attribute</a></li>
                 <li><a href="#select-by-pseudo">Select by pseudo element & pseudo class</a></li>
+                <li><a href="#negation">Negation</a></li>
                 <li><a href="#select-by-first-child">Last child, first child</a></li>
                 <li><a href="#select-by-nth-child">n-th child, n-th last child</a></li>
                 <li><a href="#and">And</a></li>
                 <li><a href="#or">Or</a></li>
-                <li><a href="#parent">Parent, ancestor selector</a></li>
+                <li><a href="#parent">Parent & ancestor selector</a></li>
                 <li><a href="#sibling">Sibling selector</a></li>
-                <li><a href="#other">Other stuff</a></li>
             </ul>
-            <h5><a href="#">Internal working</a></h5>
+            <h5><a href="#internal-working">Internal working</a></h5>
             <footer>
                 <a href="https://github.com/dthung1602/sqss">
                     <img class="icon" src="img/icon-github.svg" alt="Github">
@@ -95,12 +95,19 @@ const sqlString = fs.readFileSync("path/to/your/stylesheet.sql", "utf-8");
 const cssString = sqss.transpileSQSSToCSS(sqlString);
 
 fs.writeFileSync("path/to/your/build/folder/output.css", cssString);</code></pre>
+            <pre><code class="language-javascript">const sqss = require("sqss");
+const fs = require("fs");
+
+const sqlString = fs.readFileSync("path/to/your/stylesheet.sql", "utf-8");
+const cssString = sqss.transpileSQSSToCSS(sqlString);
+
+fs.writeFileSync("path/to/your/build/folder/output.css", cssString);</code></pre>
 
             <h4 id="basic-syntax">Basic syntax</h4>
             <p>Let's have a look at this code</p>
             <pre><code class="language-sql">UPDATE styles
 SET "background" = 'blue',
-    "color"      = 'white'
+    "color"      = 'white'  -- just a comment
 WHERE id = 'target';</code></pre>
 
             <p>This will transpiled to </p>
@@ -114,12 +121,14 @@ WHERE id = 'target';</code></pre>
                     anything else
                 </li>
                 <li>There's only one table - <code>styles</code></li>
-                <li>The <code>SET</code> clause is requiblue, while <code>WHERE</code> is optional (this will result in
+                <li>The <code>SET</code> clause is required, while <code>WHERE</code> is optional (this will result in
                     the <code>*</code> CSS selector)
                 </li>
                 <li>If the column name contains the special characters, <code>border-radius</code> for example, it <b>must</b>
                     be double-quoted
                 </li>
+                <li>Comments are allowed, but will not be transpiled</li>
+                <li>Keywords and functions are case-insensitive, while tables & columns are not</li>
             </ul>
 
         </section>
@@ -166,8 +175,8 @@ WHERE element = 'div'</code></pre>
             </div>
 
             <h4 id="select-by-attribute">Select by attribute</h4>
-            <p>Use <code>"[attribute-name]"</code> to select the desiblue attribute</p>
-            <p>Remember, the double quote is requiblue</p>
+            <p>Use <code>"[attribute-name]"</code> to select the desired attribute</p>
+            <p>Remember, the double quote is required</p>
             <div class="row">
                 <pre class="six columns"><code class="language-sql">UPDATE styles
 SET "background" = 'blue',
@@ -220,8 +229,8 @@ WHERE "[title]" LIKE '%help test%';</code></pre>
             </div>
 
             <h4 id="select-by-pseudo">Select by pseudo element & pseudo class</h4>
-            <p>SQSS supports all pseudo elements and classes that <b>do not</b> require parenthesis.</p>
-            <p>For the full list of pseudo elements and classes,
+            <p>SQSS supports all pseudo-elements and classes that <b>do not</b> require parenthesis.</p>
+            <p>For the full list of pseudo-elements and classes,
                 see <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements">here</a>
                 and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes">here</a>
             </p>
@@ -243,6 +252,35 @@ WHERE "::after" = TRUE;</code></pre>
 ::after {
     background: blue;
     color: white;
+}</code></pre>
+            </div>
+
+            <h4 id="negation">Negation</h4>
+            <p>Negation is supported for every selector type</p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+SET "background"  = 'blue'
+WHERE id != 'target';
+
+UPDATE styles
+SET "background" = 'blue',
+    "color"      = 'white'
+WHERE "[title]" NOT LIKE '%help text';
+
+UPDATE styles
+SET "background"  = 'blue'
+WHERE ":hover" IS NOT FALSE;</code></pre>
+                <pre class="six columns"><code class="language-css">:not(#target) {
+    background: blue;
+}
+
+:not([title^="help text"]) {
+    background: blue;
+    color: white;
+}
+
+:hover {
+    background: blue;
 }</code></pre>
             </div>
 
@@ -292,7 +330,7 @@ WHERE IS_NTH_LAST_CHILD(node, 6) = TRUE;</code></pre>
 
             <h4 id="and">And</h4>
             <p>We can add multiple conditions to the <code>WHERE</code> clause. Parenthesis are also allowed.</p>
-            <p>For multiple classes, just add more <code>class = '...'</code></p>
+            <p>For multiple classes, just add more <code>class = '...'</code>. This is not applied to id nor element</p>
             <div class="row">
                 <pre class="six columns"><code class="language-sql">UPDATE styles
 SET "background" = 'blue'
@@ -304,7 +342,7 @@ WHERE (element = 'h3' AND class = 'center')
             </div>
 
             <h4 id="or">Or</h4>
-            <p><code>OR</code> is pretty much the same to <code>AND</code></p>
+            <p><code>OR</code> is pretty much the same as <code>AND</code></p>
             <div class="row">
                 <pre class="six columns"><code class="language-sql">UPDATE styles
 SET "background" = 'blue'
@@ -316,7 +354,8 @@ WHERE (element = 'h3' OR class = 'center') OR id = 'target';</code></pre>
             <p>Mixing <code>AND</code> with <code>OR</code> is also supported</p>
             <p>
                 Keep in mind that <code>AND</code> has higher precedence than <code>OR</code>.
-                The SQSS transpiler will flatten the condition using <a href="https://en.wikipedia.org/wiki/Boolean_algebra">boolean algebra</a>
+                The SQSS transpiler will flatten the condition using <a
+                href="https://en.wikipedia.org/wiki/Boolean_algebra">boolean algebra</a>
             </p>
             <div class="row">
                 <pre class="six columns"><code class="language-sql">UPDATE styles
@@ -329,19 +368,158 @@ WHERE (element = 'h3' OR id = 'target') AND class = 'center'
 }</code></pre>
             </div>
 
-            <h4 id="parent">Parent, ancestor selector</h4>
-            <p>We can add multiple conditions to the <code>WHERE</code> clause. Parenthesis are also allowed.</p>
-            <p>For multiple classes, just add more <code>class = '...'</code></p>
+            <h4 id="parent">Parent & ancestor selector</h4>
+            <p>Use the <code>JOIN</code> clause to describe CSS parent/child, ancestor/descendant relationship</p>
             <div class="row">
                 <pre class="six columns"><code class="language-sql">UPDATE styles
-SET "background" = 'blue'
-WHERE (element = 'h3' AND class = 'center')
-  AND (id = 'target' AND class = 'page-title');</code></pre>
-                <pre class="six columns"><code class="language-css">h3#target.center.page-title {
+    JOIN styles AS ancestor ON IS_ANCESTOR(ancestor.node, styles.node) = TRUE
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE class = 'inside'
+  AND ancestor.class = 'outside';
+
+UPDATE styles
+    JOIN styles AS prt ON IS_PARENT(prt.node, node) = TRUE
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE class = 'inside'
+  AND prt.class = 'outside';</code></pre>
+                <pre class="six columns"><code class="language-css">.outside .inside {
     background: blue;
+    color: white;
+}
+
+
+
+.outside > .inside {
+    background: blue;
+    color: white;
 }</code></pre>
             </div>
+            <p>There's only one <code>styles</code> table, but we can join/reference it using aliases.</p>
+            <p>Aliases, of course, can be any valid name and not limited to <code>prt</code>,
+                <code>ancestor</code> as in the example
+            </p>
+            <p>All style updates are made to the first <code>styles</code> table
+                (i.e. no updates to <code>prt</code> or <code>ancestor</code>)
+            </p>
+            <p>Alias to the to-be-updated <code>styles</code> table is not supported (yet)</p>
+            <p>Any column without a table is implicitly understood as a column in the <code>styles</code> table</p>
 
+            <h4 id="sibling">Sibling selector</h4>
+            <p>Sibling selectors are pretty much the same as parent/ancestor selector</p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+    JOIN styles AS pre ON IS_PREV(pre.node, node) = true
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE class = 'target'
+  AND pre.class = 'before';
+
+UPDATE styles
+    JOIN styles AS pre ON COMES_BEFORE(pre.node, node) = true
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE class = 'target'
+  AND pre.class = 'before';
+</code></pre>
+                <pre class="six columns"><code class="language-css">.before + .target {
+    background: blue;
+    color: white;
+}
+
+
+
+.before ~ .target {
+    background: blue;
+    color: white;
+}
+</code></pre>
+            </div>
+
+            <p>Joining multiple tables is possible</p>
+            <div class="row">
+                <pre class="six columns"><code class="language-sql">UPDATE styles
+    JOIN styles AS style1 ON IS_ANCESTOR(style1.node, node) = true
+    JOIN styles AS style2 ON IS_PARENT(style2.node, style1.node) = true
+    JOIN styles AS style3 ON IS_PREV(style3.node, style2.node) = true
+    JOIN styles AS style4 ON COMES_BEFORE(style4.node, style3.node) = true
+    SET "background" = 'blue',
+        "color" = 'white'
+WHERE class = 'inside'
+  AND style1.id = 'outside'
+  AND style3.element = 'div'
+  AND "style4.[title]" IS NOT NULL;</code></pre>
+                <pre class="six columns"><code class="language-css">[title] ~ div + * > #outside .inside {
+    background: blue;
+    color: white;
+}</code></pre>
+            </div>
+            <p>The joins must form a chain:
+                <code>styles</code> joins <code>style1</code>,
+                <code>style1</code> joins <code>style2</code>,
+                <code>style2</code> joins <code>style3</code>,
+                <code>style3</code> joins <code>style4</code>
+            </p>
+            <p>Note that in this example, we do not specify any condition for <code>style2</code>,
+                hence the <code>*</code> in the result CSS
+            </p>
+            <p>The join condition cannot be <code>FALSE</code></p>
+        </section>
+
+        <section>
+            <h2 id="internal-working">Internal working</h2>
+            <p><code>SQSS</code> is a transpiler and pretty much follows the typical architecture of such one</p>
+            <div class="text-center architect">
+                <img src="img/overview.drawio.png" alt="Overview" />
+            </div>
+            <p>Let's zoom in each module</p>
+
+            <h4>Sqss module</h4>
+            <div class="text-center architect">
+                <img src="img/sqss.drawio.png" alt="sqss module"/>
+            </div>
+            <p> The Lexer breaks the raw string to tokens, like <code>UPDATE</code>, <code>SET</code>, <code>(</code>
+                <code>)</code>, <code>'blue'</code>, <code>"styles.[title]"</code>, <code>IS_FIRST_CHILD</code>, etc.
+            </p>
+            <p>TokenStream is just an abstraction over the tokens so that the Parser can easily manipulate them</p>
+            <p>Most of the hard work is done in the Parser. Usually, a parser is generated from a grammar by some tool
+                like <a href="https://www.gnu.org/software/bison/">GNU Bison</a> or <a href="https://www.antlr.org/">ANTLR</a>.
+            </p>
+            <p>Since the grammar of sqss is quite small, the parser is handwritten.</p>
+            <p>The SemanticAnalyzer makes sure that the SQL actually make senses and meet all the constraints. For
+                example:</p>
+            <ul>
+                <li>The table name must always be <code>styles</code></li>
+                <li>The join conditions must form a chain</li>
+                <li>The function arguments are of correct type</li>
+                <li>...</li>
+            </ul>
+            <p>Should any is not right, the SemanticAnalyzer throws and exception</p>
+
+            <h4>Transpiler module</h4>
+            <div class="text-center architect">
+                <img src="img/transpiler.drawio.png" alt="sqss module"/>
+            </div>
+            <p>Before the transpiling magic happens, we need to modify the SQL abstract syntax tree first to make our
+                life easier:</p>
+            <ul>
+                <li>The NegationSimplifier takes a double negation and converts it to a positive one, while the</li>
+                <li>The ExpressionFlattener performs all the necessary boolean algebra to the condition and outputs a
+                    flattened expression. Basically, it distributes all the AND to the OR
+                    <pre><code>(A or B) and (C or D) = (A and C)  or  (A and D)  or  (B and C)  or  (B and D)</code></pre>
+                </li>
+            </ul>
+
+            <h4>Css module</h4>
+            <div class="text-center architect">
+                <img src="img/css.drawio.png" alt="sqss module"/>
+            </div>
+            <p>At this point, most of the hard work is already done</p>
+            <p>Validator just checks that the CSS properties have valid names before the Generator generates CSS
+            string from the CSS abstract syntax tree</p>
+
+            <h5>And that's all there is to it!</h5>
         </section>
     </article>
 </main>
@@ -351,9 +529,12 @@ WHERE (element = 'h3' AND class = 'center')
 <script>
     hljs.highlightAll();
 
-    window.onscroll = function() {scrollFunction()};
+    window.onscroll = function() {
+        scrollFunction();
+    };
 
     const toTopButton = document.getElementById("to-top-button");
+
     function scrollFunction() {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             toTopButton.style.display = "block";
@@ -361,6 +542,7 @@ WHERE (element = 'h3' AND class = 'center')
             toTopButton.style.display = "none";
         }
     }
+
     function topFunction() {
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
