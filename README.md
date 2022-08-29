@@ -21,10 +21,13 @@
 
 <br />
 <div align="center">
-   <h3>You can now style your HTML with some good old SQL !</h3>
-   <a href="https://dthung1602.github.io/sqss" ><h3>Try it in your browser!</h3></a>
-   <br />
-   <img src="docs/img/demo.png" width="500" />
+    <p>You can now style your HTML with some good old SQL !</p>
+    <a href="https://dthung1602.github.io/sqss/" >Project homepage</a>
+    <br />
+    <a href="https://dthung1602.github.io/sqss" >Try it in your browser!</a>
+    <br />
+    <br />
+    <img src="docs/img/demo.png" width="500" />
 </div>
 
 ## But why?
@@ -37,21 +40,22 @@ real thing, you know.
 <p align="center">
     <img src="docs/img/comic.png" width="300"/>
     <br />
-    <a href="https://www.smbc-comics.com/comic/qc">Source: smbc comics</a>
+    <a href="https://www.smbc-comics.com/comic/qc">Sauce for 🍝</a>
 </p>
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-- For all supported features, see [examples](https://github.com/dthung1602/sqss/blob/master/example.md)
+- For all supported features, see [examples.md](https://github.com/dthung1602/sqss/blob/master/example.md) or the 
+[Online Documentation](https://dthung1602.github.io/sqss/documentation.html#supported-features)
 
-- To try SQSS in browser visit [demo page](https://dthung1602.github.io/sqss)
+- To try SQSS in browser visit [playground page](https://dthung1602.github.io/sqss/playground.html)
 
 - To include the transpiler on your website, add the following line:
 
 ```html
-<script src="TO BE ADDED" />
+<script src="CDN TO BE ADDED" />
 <script>
    const sqlString = `
         -- Add all of your styles here
@@ -81,9 +85,9 @@ fs.writeFileSync("path/to/your/build/folder/output.css", cssString);
 
 ## Put SQSS to production
 
-No. 
+You can. 
 
-Don't. 
+But don't. 
 
 Please.
 
