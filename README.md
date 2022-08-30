@@ -5,7 +5,9 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![WTFPL License][license-shield]][license-url]
+[![NPM][npm-shield]][npm-url]
+[![TypeScript][typescript-shield]][npm-url]
 
 <!-- PROJECT LOGO -->
 <br />
@@ -158,3 +160,6 @@ Project Link: [https://github.com/dthung1602/sqss](https://github.com/dthung1602
 [issues-url]: https://github.com/dthung1602/sqss/issues
 [license-shield]: https://img.shields.io/github/license/dthung1602/sqss.svg?style=flat-square
 [license-url]: https://github.com/dthung1602/sqss/blob/master/LICENSE
+[typescript-shield]: https://img.shields.io/npm/types/@dthung1602/sqss?style=flat-square
+[npm-url]: https://www.npmjs.com/package/@dthung1602/sqss
+[npm-shield]: https://img.shields.io/npm/v/@dthung1602/sqss?style=flat-square

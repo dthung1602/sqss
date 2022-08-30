@@ -395,6 +395,15 @@ footer .icon:hover {
     margin: 4rem 0;
 }
 
+.documentation .important {
+    color: var(--highlight-1);
+}
+
+.documentation .important::first-letter {
+    font-size: x-large;
+    font-weight: bold;
+}
+
 @media (max-width: 900px) {
     .documentation aside {
         display: none;
