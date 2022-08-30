@@ -1,0 +1,12 @@
+import * as ast from "./ast";
+import { SqssNode } from "./ast";
+import Lexer from "./lexer";
+import Parser from "./parser";
+import SemanticAnalyzer, { SAContext } from "./semantic-analyzer ";
+import * as token from "./token";
+import TokenStream from "./token-stream";
+export { ast, Lexer, Parser, SAContext, SemanticAnalyzer, token, TokenStream };
+export declare function tokenize(sqss: string): TokenStream;
+export declare function parse(tokenStream: TokenStream): ast.SqssNode;
+export declare function analyze(sqssNode: SqssNode): void;
+export declare function toAST(sqss: string): ast.SqssNode;

@@ -24,7 +24,7 @@
     <p>You can now style your HTML with some good old SQL !</p>
     <a href="https://dthung1602.github.io/sqss/" >Project homepage</a>
     <br />
-    <a href="https://dthung1602.github.io/sqss" >Try it in your browser!</a>
+    <a href="https://dthung1602.github.io/sqss/playground.html" >Try it in your browser!</a>
     <br />
     <br />
     <img src="docs/img/demo.png" width="500" />
@@ -69,10 +69,18 @@ real thing, you know.
 </script>
 ```
 
-- To bundle it with your project, call the transpile function in your build script:
+- To install from `npm`:
+
+```bash
+$ npm i @dthung1602/sqss
+# or if you prefer yarn
+$ yarn add @dthung1602/sqss
+```
+
+- To use it in your project, call the transpile function in your build script:
 
 ```js
-const sqss = require("sqss");
+const sqss = require("@dthung1602/sqss");
 const fs = require("fs");
 
 const sqlString = fs.readFileSync("path/to/your/stylesheet.sql", "utf-8");

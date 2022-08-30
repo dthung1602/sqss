@@ -99,9 +99,15 @@
    document.head.innerHTML += `&lt;style&gt;${cssString}&lt;/style&gt;`;
 &lt;/script&gt;</code></pre>
 
-            <p>To bundle it with your project, call the transpile function in your build script:</p>
+            <p>To install with <code>npm</code></p>
 
-            <pre><code class="language-javascript">const sqss = require("sqss");
+            <pre><code class="language-bash">$ npm i @dthung1602/sqss
+# or if you prefer yarn
+$ yarn add @dthung1602/sqss</code></pre>
+
+            <p>To use it in your project, call the transpile function in your build script:</p>
+
+            <pre><code class="language-javascript">const sqss = require("@dthung1602/sqss");
 const fs = require("fs");
 
 const sqlString = fs.readFileSync("path/to/your/stylesheet.sql", "utf-8");

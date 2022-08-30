@@ -1,8 +1,9 @@
 {
-  "name": "sqss",
+  "name": "@dthung1602/sqss",
   "version": "0.0.1",
   "description": "Style your HTML with some good old SQL",
   "repository": "https://github.com/dthung1602/sqss.git",
+  "homepage": "https://dthung1602.github.io/sqss/",
   "author": "dthung1602 <dthung1602@gmail.com>",
   "license": "WTFPL",
   "main": "dist/index.js",
