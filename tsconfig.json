@@ -4,7 +4,7 @@
     "module": "commonjs",
     "target": "es2019",
     "sourceMap": true,
-    "outDir": "build",
+    "outDir": "dist",
     "types": ["jest", "node"]
   },
   "exclude": [
@@ -12,6 +12,6 @@
     "build"
   ],
   "include": [
-    "index.ts"
+    "src/index.ts"
   ]
 }

@@ -3,7 +3,6 @@
 .idea
 
 # Build
-build
 coverage
 
 # Dependency directories
