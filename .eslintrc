@@ -19,7 +19,7 @@
   ],
   "ignorePatterns": [
     "node_modules",
-    "build"
+    "dist"
   ],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "off",
