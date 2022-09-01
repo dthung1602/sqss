@@ -24,9 +24,12 @@
 <br />
 <div align="center">
     <p>You can now style your HTML with some good old SQL !</p>
-    <a href="https://dthung1602.github.io/sqss/" >Project homepage</a>
-    <br />
-    <a href="https://dthung1602.github.io/sqss/playground.html" >Try it in your browser!</a>
+    <a href="https://dthung1602.github.io/sqss/playground.html" ><b>Try it in your browser!</b></a>
+    <br />    
+    <br />    
+    • &nbsp; <a href="https://dthung1602.github.io/sqss/" >Project homepage</a>
+    &nbsp; • &nbsp;
+    <a href="https://www.npmjs.com/package/@dthung1602/sqss" >NPM Package</a>
     <br />
     <br />
     <img src="docs/img/demo.png" width="500" />
