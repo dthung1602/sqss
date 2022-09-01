@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SQSS Embedded playground result</title>
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <script>
         window.onmessage = function(event) {
             switch (event.data.type) {
@@ -26,18 +27,46 @@
         }
 
     </script>
-    <style id="__style__">
 
+    <style id="__style__">
+        body {
+            background: #23054d;
+            color: white;
+            font-size: large;
+            padding: 16px;
+            font-family: "Raleway", sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #F73D93;
+        }
+
+        .highlight {
+            color: #7AF2DF;
+        }
+
+        code {
+            border: 1px solid gray;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
 
-<h1>Heading 1</h1>
-<h2>Heading 2</h2>
-<h3>Heading 3</h3>
+<div><span class="highlight">&lt;---</span> On the left is the style of this demo!</div>
+<h3 class="highlight">How to use this page</h3>
+<ul>
+    <li>Edit the styles in <code>SQL STYLES</code> box on the left. Check out the <a href="documentation.html" target="_blank">SQSS syntax</a></li>
+    <li>Click on the <code>HTML CODE</code> tab above to edit the HTML</li>
+    <li>Finally, click the <code>Run</code> button at the top right conner</li>
+    <li>The compiled CSS is in the bottom left box</li>
+    <li>Now switch to the <code>RESULT</code> tab above to see the styled document!</li>
+</ul>
 
-<div>Div</div>
-<span>Span</span>
+<br />
+
+<p><a>&lt;---</a> Drag the bottom right conner here to resize the editors</p>
 
 </body>
 </html>

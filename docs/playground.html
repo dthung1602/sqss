@@ -36,17 +36,51 @@
             <div>SQL styles</div>
         </div>
         <div id="sql-editor">UPDATE styles
-SET color = 'blue'
-WHERE class = 'target';
+SET background = '#23054d',
+    color = 'white',
+    "font-size" = 'large',
+    padding = '16px',
+    "font-family" = '"Raleway", sans-serif',
+    "line-height" = '1.6'
+WHERE element = 'body';
+
+UPDATE styles SET color = '#F73D93' WHERE element = 'a';
+
+UPDATE styles SET color = '#7AF2DF' WHERE class = 'highlight';
+
+UPDATE styles
+SET border = '1px solid gray',
+    "border-radius" = '4px'
+WHERE element = 'code';
         </div>
     </section>
     <section id="css">
         <div class="box-header">
             <div>CSS output</div>
+            <div id="error" class="hidden">⚠ Transpiling error</div>
         </div>
-        <div id="css-editor">.target {
-    color: blue;
-}</div>
+        <div id="css-editor">body {
+    background: #23054d;
+    color: white;
+    font-size: large;
+    padding: 16px;
+    font-family: "Raleway", sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    color: #F73D93;
+}
+
+.highlight {
+    color: #7AF2DF;
+}
+
+code {
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+        </div>
     </section>
     <section id="display">
         <div class="box-header">
@@ -54,12 +88,30 @@ WHERE class = 'target';
                 <button onclick="showHTMLCode()">HTML Code</button>
                 <button onclick="showResult()" class="selected">Result</button>
             </div>
-            <div id="run" title="Apply changes" onclick="run()">&nbsp;▶</div>
+            <div id="run" title="RUN" onclick="run()">&nbsp;▶</div>
         </div>
         <div class="html-content">
             <iframe src="embedded.html"></iframe>
-            <div id="html-editor" class="hidden">&lt;div id=&quot;target&quot;&gt;Hello world!&lt;/div&gt;</div>
-        </div>
+            <div id="html-editor" class="hidden">&lt;!-- No need to add &lt;document&gt;, &lt;html&gt; or &lt;head&gt; --&gt;
+&lt;!-- The HTML in this box will be added directly into &lt;body&gt; of the demo --&gt;
+
+&lt;div&gt;&lt;span class=&quot;highlight&quot;&gt;&amp;lt;---&lt;/span&gt; On the left is the style of this demo!&lt;/div&gt;
+
+&lt;h3 class=&quot;highlight&quot;&gt;How to use this page&lt;/h3&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;Edit the styles in &lt;code&gt;SQL STYLES&lt;/code&gt; box on the left.
+        Check out the &lt;a href=&quot;documentation.html&quot; target=&quot;_blank&quot;&gt;SQSS syntax&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;Click on the &lt;code&gt;HTML CODE&lt;/code&gt; tab above to edit the HTML&lt;/li&gt;
+    &lt;li&gt;Finally, click the &lt;code&gt;Run&lt;/code&gt; button at the top right conner&lt;/li&gt;
+    &lt;li&gt;The compiled CSS is in the bottom left box&lt;/li&gt;
+    &lt;li&gt;Now switch to the &lt;code&gt;RESULT&lt;/code&gt; tab above to see the styled document!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;br /&gt;
+
+&lt;p&gt;&lt;a&gt;&amp;lt;---&lt;/a&gt; Drag the bottom right conner here to resize the editors&lt;/p&gt;
+            </div>
     </section>
 </main>
 
@@ -114,6 +166,7 @@ WHERE class = 'target';
         }
         setCSSContent(css);
         sendCSSContent(css);
+        showResult();
     }
 
     function getHTMLContent() {
@@ -132,11 +185,15 @@ WHERE class = 'target';
     }
 
     function setCSSContent(css) {
+        document.getElementById("error").classList.add("hidden");
+        cssEditor.session.setMode("ace/mode/css");
         cssEditor.session.setValue(css);
     }
 
-    function setTranspileError() {
-
+    function setTranspileError(err) {
+        document.getElementById("error").classList.remove("hidden");
+        cssEditor.session.setMode("ace/mode/text");
+        cssEditor.session.setValue(err + "\n\n" + err.stack);
     }
 
     function sendCSSContent(css) {

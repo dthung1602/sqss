@@ -10,7 +10,7 @@
     --dark-gray: #282936;
     --gray: #7F8487;
     --highlight-1: #ffff83;
-    --highlight-2: rgba(122, 242, 223);
+    --highlight-2: #7AF2DF;
 
     --nav-bar-height: 6rem;
     --box-header-height: 3.5rem;
@@ -462,9 +462,9 @@ footer .icon:hover {
     grid-area: sql;
     overflow: auto;
     resize: both;
-    min-width: 400px;
+    min-width: 500px;
     max-width: 75vw;
-    min-height: 300px;
+    min-height: 400px;
     max-height: calc(100vh - 300px);
 }
 
@@ -515,6 +515,15 @@ footer .icon:hover {
     font-weight: bold;
     text-transform: uppercase;
     height: 100%;
+}
+
+.playground #error {
+    color: red;
+}
+
+.playground #error::first-letter {
+    font-weight: bolder;
+    font-size: large;
 }
 
 .playground #sql-editor,
