@@ -19,7 +19,7 @@ export default class Transverser<Node, Val, Ctx> {
         }
 
         const data: Record<string, any> = {};
-        for (const [property, value] of Object.entries(node)) {
+        for (const [property, value] of Object.entries(node as any)) {
             if (value instanceof this.nodeClass) {
                 data[property] = this._transverse(value, context);
             } else if (Array.isArray(value)) {
