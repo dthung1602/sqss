@@ -5,10 +5,10 @@
     "target": "es2019",
     "sourceMap": true,
     "declaration": true,
-    "outDir": "dist/module"
+    "outDir": "dist/module",
+    "types": ["node", "jest"]
   },
   "exclude": [
-    "webpack.config.js",
     "node_modules",
     "dist"
   ],
