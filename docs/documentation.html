@@ -86,16 +86,23 @@
 
             <h4 id="installation">Installation</h4>
             <p>To use SQSS directly on your website, add the following lines:</p>
-            <pre><code class="language-html">&lt;script src=&quot;TO BE ADDED&quot; /&gt;
+            <pre><code class="language-html">&lt;!-- To use the latest version--&gt;
+&lt;script src=&quot;https://unpkg.com/@dthung1602/sqss/dist/bundle/index.js&quot; /&gt;
+
+&lt;!-- Or to specify a version --&gt;
+&lt;script src=&quot;https://unpkg.com/@dthung1602/sqss@&lt;version go here&gt;/dist/bundle/index.js&quot; /&gt;
+
+&lt;!-- `transpileSQSSToCSS` is now available in your global scope!--&gt;
+&lt;!-- To add style to your website, use the following snippet--&gt;
 &lt;script&gt;
    const sqlString = `
-        -- All your styles go here
+        -- All of your styles go here
         UPDATE styles
         SET &quot;background&quot; = 'blue'
         WHERE class = 'target';
    `;
 
-   const cssString = transpileSQSSToCSS(cssString);
+   const cssString = transpileSQSSToCSS(sqlString);
    document.head.innerHTML += `&lt;style&gt;${cssString}&lt;/style&gt;`;
 &lt;/script&gt;</code></pre>
 

@@ -12,9 +12,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="">
     <img src="docs/img/logo3.png" alt="SQSS" width="300">
-  </a>
 </p>
 
 
@@ -24,12 +22,12 @@
 <br />
 <div align="center">
     <p>You can now style your HTML with some good old SQL !</p>
-    <a href="https://dthung1602.github.io/sqss/playground.html" ><b>Try it in your browser!</b></a>
+    <a href="https://dthung1602.github.io/sqss/playground.html" target="_blank"><b>Try it in your browser!</b></a>
     <br />    
     <br />    
-    • &nbsp; <a href="https://dthung1602.github.io/sqss/" >Project homepage</a>
+    • &nbsp; <a href="https://dthung1602.github.io/sqss/" target="_blank">Project homepage</a>
     &nbsp; • &nbsp;
-    <a href="https://www.npmjs.com/package/@dthung1602/sqss" >NPM Package</a>
+    <a href="https://www.npmjs.com/package/@dthung1602/sqss" target="_blank">NPM Package</a>
     <br />
     <br />
     <img src="docs/img/demo.png" width="500" />
@@ -45,7 +43,7 @@ real thing, you know.
 <p align="center">
     <img src="docs/img/comic.png" width="300"/>
     <br />
-    <a href="https://www.smbc-comics.com/comic/qc">Sauce for 🍝</a>
+    <a href="https://www.smbc-comics.com/comic/qc" target="_blank">Sauce for 🍝</a>
 </p>
 
 
@@ -60,25 +58,32 @@ real thing, you know.
 - To include the transpiler on your website, add the following line:
 
 ```html
-<script src="CDN TO BE ADDED" />
+<!-- To use the latest version-->
+<script src="https://unpkg.com/@dthung1602/sqss/dist/bundle/index.js" />
+
+<!-- Or to specify a version -->
+<script src="https://unpkg.com/@dthung1602/sqss@<version go here>/dist/bundle/index.js" />
+
+<!-- `transpileSQSSToCSS` is now available in your global scope!-->
+<!-- To add style to your website, use the following snippet-->
 <script>
    const sqlString = `
-        -- Add all of your styles here
+        -- All of your styles go here
         UPDATE styles
         SET "background" = 'blue'
         WHERE class = 'target';
    `;
    
-   const cssString = transpileSQSSToCSS(cssString);
+   const cssString = transpileSQSSToCSS(sqlString);
    document.head.innerHTML += `<style>${cssString}</style>`;
 </script>
 ```
 
-- To install from `npm`:
+- Or you can install from `npm`:
 
 ```bash
 $ npm i @dthung1602/sqss
-# or if you prefer yarn
+# or yarn
 $ yarn add @dthung1602/sqss
 ```
 
@@ -95,15 +100,6 @@ fs.writeFileSync("path/to/your/build/folder/output.css", cssString);
 ```
 
 **_We do support TypeScript!_**
-
-## Put SQSS to production
-
-You can. 
-
-But don't. 
-
-Please.
-
 
 <!-- LICENSE -->
 ## License

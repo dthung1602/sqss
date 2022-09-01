@@ -8,3 +8,6 @@ dist
 
 # Dependency directories
 node_modules/
+
+# Dummy files
+foo*

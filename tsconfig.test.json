@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "module": "Node16",
+    "module": "commonjs",
     "target": "es2019",
     "sourceMap": true,
     "declaration": true,
@@ -9,6 +9,7 @@
     "types": ["node", "jest"]
   },
   "exclude": [
+    "webpack.config.js",
     "node_modules",
     "dist"
   ],

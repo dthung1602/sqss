@@ -417,6 +417,10 @@ footer .icon:hover {
         height: 100%;
     }
 
+    .documentation aside > div {
+        max-width: unset;
+    }
+
     .documentation {
         display: unset;
     }
