@@ -2,7 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Embedded playground result</title>
+    <title>SQSS Embedded playground result</title>
+    <script>
+        window.onmessage = function(event) {
+            switch (event.data.type) {
+                case "html":
+                    setHTML(event.data.payload);
+                    return;
+                case "css":
+                    setCSS(event.data.payload);
+                    return;
+                default:
+                    console.log(`Unknown type ${event.data.type}`);
+            }
+        };
+
+        function setCSS(css) {
+            document.getElementById("__style__").innerText = css;
+        }
+
+        function setHTML(html) {
+            document.body.innerHTML = html;
+        }
+
+    </script>
+    <style id="__style__">
+
+    </style>
 </head>
 <body>
 

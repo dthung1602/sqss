@@ -14,14 +14,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.10.0/ace.js"
             integrity="sha512-7s3F2rOCm3IxjF8NjYsmlhE8gNOiaj2i9Uq6MZch73ApkLH2/iuoB7q3Z4NFiS8GTmRhyHKSKulosEgwDZf2Iw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/base16/dracula.min.css"
-          integrity="sha512-zKpFlhUX8c+WC6H/XTJavnEpWFt2zH9BU9vu0Hry5Y+SEgG21pRMFcecS7DgDXIegXBQ3uK9puwWPP3h6WSR9g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 </head>
 
-<body style="overflow: hidden">
+<body style="overflow-y: hidden">
 
 <nav>
     <div class="logo">
@@ -49,19 +44,22 @@ WHERE class = 'target';
         <div class="box-header">
             <div>CSS output</div>
         </div>
-        <pre id="css-editor"><code class="language-css">.target {
+        <div id="css-editor">.target {
     color: blue;
-}</code></pre>
+}</div>
     </section>
     <section id="display">
         <div class="box-header">
             <div class="tab">
-                <button>HTML Code</button>
-                <button class="selected">Result</button>
+                <button onclick="showHTMLCode()">HTML Code</button>
+                <button onclick="showResult()" class="selected">Result</button>
             </div>
-            <div id="run" title="Apply changes">&nbsp;▶</div>
+            <div id="run" title="Apply changes" onclick="run()">&nbsp;▶</div>
         </div>
-        <iframe src="embedded.html"></iframe>
+        <div class="html-content">
+            <iframe src="embedded.html"></iframe>
+            <div id="html-editor" class="hidden">&lt;div id=&quot;target&quot;&gt;Hello world!&lt;/div&gt;</div>
+        </div>
     </section>
 </main>
 
@@ -70,7 +68,83 @@ WHERE class = 'target';
     sqlEditor.setTheme("ace/theme/dracula");
     sqlEditor.session.setMode("ace/mode/sql");
 
-    hljs.highlightAll();
+    const cssEditor = ace.edit("css-editor");
+    cssEditor.setTheme("ace/theme/dracula");
+    cssEditor.session.setMode("ace/mode/css");
+    cssEditor.setReadOnly(true);
+
+    const htmlEditor = ace.edit("html-editor");
+    htmlEditor.setTheme("ace/theme/dracula");
+    htmlEditor.session.setMode("ace/mode/html");
+
+    const iframeNode = document.querySelector("iframe");
+    const htmlEditorNode = document.getElementById("html-editor");
+
+    const showHTMLCodeButton = document.querySelector("#display .tab button:first-child");
+    const showResultButton = document.querySelector("#display .tab button:last-child");
+
+    function showHTMLCode() {
+        showHTMLCodeButton.classList.add("selected");
+        showResultButton.classList.remove("selected");
+        htmlEditorNode.classList.remove("hidden");
+        iframeNode.classList.add("hidden");
+    }
+
+    function showResult() {
+        showHTMLCodeButton.classList.remove("selected");
+        showResultButton.classList.add("selected");
+        htmlEditorNode.classList.add("hidden");
+        iframeNode.classList.remove("hidden");
+    }
+</script>
+
+<script src="https://unpkg.com/@dthung1602/sqss/dist/bundle/index.js"></script>
+<script>
+    function run() {
+        const html = getHTMLContent();
+        sendHTMLContent(html);
+
+        const sql = getSQLContent();
+        let css = "";
+        try {
+            css = transpileSQSSToCSS(sql);
+        } catch (e) {
+            setTranspileError(e);
+            return;
+        }
+        setCSSContent(css);
+        sendCSSContent(css);
+    }
+
+    function getHTMLContent() {
+        return htmlEditor.getValue()
+    }
+
+    function sendHTMLContent(html) {
+        iframeNode.contentWindow.postMessage({
+            "type": "html",
+            "payload": html,
+        })
+    }
+
+    function getSQLContent() {
+        return sqlEditor.getValue();
+    }
+
+    function setCSSContent(css) {
+        cssEditor.session.setValue(css);
+    }
+
+    function setTranspileError() {
+
+    }
+
+    function sendCSSContent(css) {
+        iframeNode.contentWindow.postMessage({
+            "type": "css",
+            "payload": css,
+        })
+    }
 </script>
 
 </body>
