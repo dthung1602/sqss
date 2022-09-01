@@ -1,6 +1,6 @@
 {
   "name": "@dthung1602/sqss",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Style your HTML with some good old SQL",
   "repository": "https://github.com/dthung1602/sqss.git",
   "homepage": "https://dthung1602.github.io/sqss/",
@@ -55,6 +55,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^28.1.3",
     "prettier": "^2.7.1",
+    "terser-webpack-plugin": "^5.3.6",
     "ts-jest": "^28.0.7",
     "ts-loader": "^9.3.1",
     "typescript": "^4.7.4",
