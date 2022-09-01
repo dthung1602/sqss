@@ -2,11 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SQSS playground</title>
+    <title>SQSS Playground</title>
+    <meta name="description" content="Playground for SQSS - Style your HTML with some good old SQL!">
+    <meta name="author" content="dthung1602">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./normalize.css">
+    <link rel="stylesheet" href="./skeleton.css">
     <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.10.0/ace.js"
+            integrity="sha512-7s3F2rOCm3IxjF8NjYsmlhE8gNOiaj2i9Uq6MZch73ApkLH2/iuoB7q3Z4NFiS8GTmRhyHKSKulosEgwDZf2Iw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/base16/dracula.min.css"
+          integrity="sha512-zKpFlhUX8c+WC6H/XTJavnEpWFt2zH9BU9vu0Hry5Y+SEgG21pRMFcecS7DgDXIegXBQ3uK9puwWPP3h6WSR9g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 </head>
-<body>
-playground
+
+<body style="overflow: hidden">
+
+<nav>
+    <div class="logo">
+        <a href="./"><img src="img/logo3.png" alt="SQSS"></a>
+        <h5>Style your <b class="hl1">HTML</b> with some good old <b class="hl2">SQL</b> !</h5>
+    </div>
+    <div>
+        <a href="documentation.html" target="_blank">Documentation</a>
+        <a href="https://www.npmjs.com/package/@dthung1602/sqss">NPM</a>
+        <a href="https://github.com/dthung1602/sqss">Github</a>
+    </div>
+</nav>
+
+<main class="playground">
+    <section id="sql">
+        <div class="box-header">
+            <div>SQL styles</div>
+        </div>
+        <div id="sql-editor">UPDATE styles
+SET color = 'blue'
+WHERE class = 'target';
+        </div>
+    </section>
+    <section id="css">
+        <div class="box-header">
+            <div>CSS output</div>
+        </div>
+        <pre id="css-editor"><code class="language-css">.target {
+    color: blue;
+}</code></pre>
+    </section>
+    <section id="display">
+        <div class="box-header">
+            <div class="tab">
+                <button>HTML Code</button>
+                <button class="selected">Result</button>
+            </div>
+            <div id="run" title="Apply changes">&nbsp;▶</div>
+        </div>
+        <iframe src="embedded.html"></iframe>
+    </section>
+</main>
+
+<script>
+    const sqlEditor = ace.edit("sql-editor");
+    sqlEditor.setTheme("ace/theme/dracula");
+    sqlEditor.session.setMode("ace/mode/sql");
+
+    hljs.highlightAll();
+</script>
+
 </body>
 </html>

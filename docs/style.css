@@ -13,6 +13,8 @@
     --highlight-2: rgba(122, 242, 223);
 
     --nav-bar-height: 6rem;
+    --box-header-height: 3.5rem;
+    --playground-main-gap: 2rem;
 }
 
 /*------------------------------------------------------------------
@@ -434,4 +436,116 @@ footer .icon:hover {
     .documentation .container {
         padding: 1rem;
     }
+}
+
+.playground {
+    height: calc(100vh - var(--nav-bar-height) - 1rem);
+    display: grid;
+    padding: var(--playground-main-gap);
+    grid-gap: var(--playground-main-gap);
+
+    grid-template:
+    "sql display" min-content
+    "css display" 1fr / min-content 1fr;
+}
+
+[id$="-editor"] {
+    height: calc(100% - var(--box-header-height) - 2px - 1.5rem);
+    margin-top: 0;
+}
+
+#sql {
+    grid-area: sql;
+    overflow: auto;
+    resize: both;
+    min-width: 400px;
+    max-width: 75vw;
+    min-height: 300px;
+    max-height: calc(100vh - 300px);
+}
+
+#sql > * {
+    margin: 0
+}
+
+#css {
+    grid-area: css;
+    min-width: 400px;
+    max-width: 75vw;
+    /*height: fit-content;*/
+}
+
+#display {
+    grid-area: display;
+    /*height: fit-content;*/
+}
+
+.box-header {
+    height: var(--box-header-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.box-header .tab {
+    border-radius: 4px 4px 0 0;
+    background: var(--secondary-light);
+    border-bottom: none;
+}
+
+.box-header .tab button {
+    background: var(--secondary-light);
+    /*border: 1px solid var(--gray);*/
+}
+
+.box-header .tab button.selected {
+    color: var(--primary);
+    border-color: var(--primary);
+
+    /*background: var(--primary);*/
+    /*color: white;*/
+    /*border-color: var(--primary);*/
+}
+
+.box-header > div {
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 100%;
+}
+
+#sql-editor {
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+    font-size: 1.35rem;
+}
+
+iframe {
+    background: white;
+    border: 1px solid #bbb;
+    border-top: none;
+    border-radius: 0 4px 4px 4px;
+    width: 100%;
+    height: calc(100% - var(--box-header-height) - var(--box-header-height));
+}
+
+#run {
+    background: #5eba7d;
+    color: white;
+    cursor: pointer;
+
+    font-size: 11px;
+    height: 2.5rem;
+    padding: 0 30px 0 30px;
+    border-radius: 4px;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+
+    transition: background-color ease-in-out 0.2s;
+}
+
+#run:hover {
+    background: #55ab72;
 }
