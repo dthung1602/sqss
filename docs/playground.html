@@ -148,6 +148,12 @@ code {
         htmlEditorNode.classList.add("hidden");
         iframeNode.classList.remove("hidden");
     }
+
+    if (window.innerWidth < 900 || window.innerHeight < 700) {
+        alert("You are on a mobile device or your window is too small\n" +
+            "I'm too lazy to make the playground responsive so the layout might break\n" +
+            "You have been warned")
+    }
 </script>
 
 <script src="https://unpkg.com/@dthung1602/sqss/dist/bundle/index.js"></script>
