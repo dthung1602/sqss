@@ -12,7 +12,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <img src="docs/img/logo3.png" alt="SQSS" width="300">
+    <img src="docs/img/logo.png" alt="SQSS" width="300">
 </p>
 
 
