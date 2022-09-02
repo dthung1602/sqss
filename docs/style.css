@@ -237,6 +237,29 @@ footer .icon:hover {
     border-radius: 1rem;
 }
 
+.home .acknowledgement {
+    margin-top: 0;
+}
+
+.home .acknowledgement a {
+    text-decoration: none;
+    color: white;
+}
+
+.home .acknowledgement a:hover {
+    color: var(--highlight-2);
+}
+
+.home .acknowledgement div {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.home .acknowledgement li  {
+    font-size: 90%;
+    margin-bottom: 6px;
+}
+
 @media (max-width: 480px)  {
     .home > * {
         margin: 2rem;

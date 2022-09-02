@@ -136,14 +136,16 @@ Project Link: [https://github.com/dthung1602/sqss](https://github.com/dthung1602
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* [Best README template](https://github.com/othneildrew/Best-README-Template)
-* [Img Shields](https://shields.io)
 * [Cascading Server Sheets](https://dev.to/thormeier/dont-try-this-at-home-css-as-the-backend-what-3oih)
 * [IaSQL](https://iasql.com/)
+* [Introduction to Compilers and Language Design](https://www3.nd.edu/~dthain/compilerbook/)
 * [SMBC Comics](https://www.smbc-comics.com/comic/qc)
-
-
-
+* [Font awesome](https://fontawesome.com/icons)
+* [Color hunt](https://colorhunt.co)
+* [Ace editor](https://ace.c9.io/)
+* [Highlight js](https://highlightjs.org/)
+* [Img Shields](https://shields.io)
+* [Best README template](https://github.com/othneildrew/Best-README-Template)
 
 
 
