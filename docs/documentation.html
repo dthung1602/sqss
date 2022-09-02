@@ -123,7 +123,10 @@ const cssString = sqss.transpileSQSSToCSS(sqlString);
 
 fs.writeFileSync("path/to/your/build/folder/output.css", cssString);</code></pre>
 
-            <p><b>>> TypeScript is supported! <<</b></p>
+            <p><b>TypeScript is supported</b></p>
+
+            <pre><code class="language-typescript">import { transpileSQSSToCSS } from "@dthung1602/sqss";
+const css: string = transpileSQSSToCSS(`UPDATE styles SET color = 'blue' where id = 'target';`);</code></pre>
 
             <h4 id="basic-syntax">Basic syntax</h4>
             <p>Let's have a look at this code</p>
@@ -195,7 +198,7 @@ WHERE class = 'target';</code></pre>
                 <pre class="six columns"><code class="language-sql">UPDATE styles
 SET "background" = 'blue',
     "color"      = 'white'
-WHERE element = 'div'</code></pre>
+WHERE element = 'div';</code></pre>
                 <pre class="six columns"><code class="language-css">div {
     background: blue;
     color: white;
@@ -235,22 +238,22 @@ WHERE "[title]" LIKE '%help test%';</code></pre>
     color: white;
 }
 
-[title='help test'] {
+[title="help test"] {
     background: blue;
     color: white;
 }
 
-[title^='help test'] {
+[title^="help test"] {
     background: blue;
     color: white;
 }
 
-[title$='help test'] {
+[title$="help test"] {
     background: blue;
     color: white;
 }
 
-[title*='help test'] {
+[title*="help test"] {
     background: blue;
     color: white;
 }</code></pre>

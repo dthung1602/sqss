@@ -99,7 +99,12 @@ const cssString = sqss.transpileSQSSToCSS(sqlString);
 fs.writeFileSync("path/to/your/build/folder/output.css", cssString);
 ```
 
-**_We do support TypeScript!_**
+**TypeScript is supported**
+
+```ts
+import { transpileSQSSToCSS } from "@dthung1602/sqss";
+const css: string = transpileSQSSToCSS(`UPDATE styles SET color = 'blue' where id = 'target';`);
+```
 
 <!-- LICENSE -->
 ## License
