@@ -1,6 +1,6 @@
--- begin of file comment
-UPDATE styles
-SET -- in line comment color = 'blue'
+    -- begin of file comment
+    UPDATE styles
+	SET -- in line comment color = 'blue'
 color = 'red',
 "--moz-extension" = '--not-a-comment'
 WHERE id = 'target'

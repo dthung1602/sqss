@@ -1,8 +1,8 @@
-UPDATE styles
+    UPDATE styles
 SET background = 'blue';
 
-UPDATE styles
-SET "background" = 'blue';
+	UPDATE styles
+	SET "background" = 'blue';
 
 UPDATE styles
 SET "background" = 'blue',

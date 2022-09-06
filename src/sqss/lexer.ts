@@ -55,7 +55,7 @@ export default class Lexer {
     input: string;
 
     constructor(input: string) {
-        this.input = input;
+        this.input = input.trim();
     }
 
     scan(): Token[] {

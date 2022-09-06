@@ -60,10 +60,10 @@ real thing, you know.
 
 ```html
 <!-- To use the latest version-->
-<script src="https://unpkg.com/@dthung1602/sqss/dist/bundle/index.js" />
+<script src="https://unpkg.com/@dthung1602/sqss/dist/bundle/index.js"></script>
 
 <!-- Or to specify a version -->
-<script src="https://unpkg.com/@dthung1602/sqss@<version go here>/dist/bundle/index.js" />
+<script src="https://unpkg.com/@dthung1602/sqss@<version go here>/dist/bundle/index.js"></script>
 
 <!-- `transpileSQSSToCSS` is now available in your global scope!-->
 <!-- To add style to your website, use the following snippet-->
