@@ -251,12 +251,12 @@ footer .icon:hover {
 }
 
 .home .acknowledgement div {
-    font-weight: bold;
+    font-weight: bolder;
+    font-size: 120%;
     margin-bottom: 6px;
 }
 
 .home .acknowledgement li  {
-    font-size: 90%;
     margin-bottom: 6px;
 }
 
@@ -364,6 +364,13 @@ footer .icon:hover {
 .documentation aside {
     background: var(--secondary-light);
     flex-grow: 1;
+
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.documentation aside::-webkit-scrollbar {
+    display: none; /* Chrome */
 }
 
 .documentation aside > div {
@@ -379,6 +386,13 @@ footer .icon:hover {
     height: calc(100vh - 2 * 4rem - var(--nav-bar-height));
     overflow-y: scroll;
     justify-content: space-between;
+
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.documentation aside > div::-webkit-scrollbar {
+    display: none; /* Chrome */
 }
 
 .documentation aside a {
@@ -439,7 +453,7 @@ footer .icon:hover {
     }
 
     .documentation aside.show {
-        display: flow;
+        display: block;
         position: fixed;
         z-index: 500;
         width: 100%;

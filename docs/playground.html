@@ -169,9 +169,9 @@ code {
         iframeNode.classList.remove("hidden");
     }
 
-    if (window.innerWidth < 900 || window.innerHeight < 700) {
-        alert("You are on a mobile device or your window is too small\n" +
-            "I'm too lazy to make the playground responsive so the layout might break\n" +
+    if (document.documentElement.clientWidth < 900 || document.documentElement.clientHeight < 700) {
+        alert("You are on a mobile device or your window is too small\n\n" +
+            "I'm too lazy to make the playground responsive so the layout might break\n\n" +
             "You have been warned")
     }
 </script>

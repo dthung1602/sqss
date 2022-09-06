@@ -21,7 +21,8 @@
 
 <br />
 <div align="center">
-    <p>You can now style your HTML with some good old SQL !</p>
+    <p>Structured Query Style Sheet</p>
+    <p>Style your HTML with some good old SQL !</p>
     <a href="https://dthung1602.github.io/sqss/playground.html" target="_blank"><b>Try it in your browser!</b></a>
     <br />    
     <br />    
